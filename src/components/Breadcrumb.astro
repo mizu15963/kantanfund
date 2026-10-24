@@ -1,0 +1,44 @@
+---
+// パンくず（画面に表示するもの）。構造化データ（BreadcrumbList）も同じ項目からここで出す（src/libs/structuredData.ts）
+// この部品を置いたページには自動でパンくずのデータが入るので、ページ側では BreadcrumbList を出さない（2重になるため）
+import {
+  breadcrumbJsonLd,
+  toJsonLdString,
+  type BreadcrumbItem,
+} from "@libs/structuredData.ts";
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+const { items } = Astro.props;
+const site = Astro.site ?? new URL(Astro.url.origin);
+---
+
+<script
+  type="application/ld+json"
+  set:html={toJsonLdString(breadcrumbJsonLd(items, site))}
+/>
+
+<nav
+  aria-label="パンくずリスト"
+  class="text-xs text-muted-foreground md:text-sm"
+>
+  <ol class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+    {
+      items.map((item, index) => (
+        <li class="flex min-w-0 items-center gap-x-1.5">
+          {index > 0 && <span aria-hidden="true">&gt;</span>}
+          {item.url ? (
+            <a href={item.url} class="hover:text-link hover:underline">
+              {item.name}
+            </a>
+          ) : (
+            <span aria-current="page" class="line-clamp-1">
+              {item.name}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

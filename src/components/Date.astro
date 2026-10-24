@@ -1,0 +1,25 @@
+---
+// 日付（例: 2026.10.04）。日本時間で表示する（ビルド・配信の環境の時刻帯に左右されないように）
+interface Props {
+  date: string;
+  class?: string;
+}
+
+const { date, class: className } = Astro.props;
+
+const parts = new Intl.DateTimeFormat("ja-JP", {
+  timeZone: "Asia/Tokyo",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).formatToParts(new Date(date));
+const part = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+const ymd = [part("year"), part("month"), part("day")];
+---
+
+<time
+  datetime={ymd.join("-")}
+  class:list={["tabular-nums text-muted-foreground", className]}
+>
+  {ymd.join(".")}
+</time>

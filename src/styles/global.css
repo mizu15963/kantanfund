@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@theme {
+  --font-body: "Noto Sans JP", sans-serif;
+
+  /* ブランドカラー。サイトの色はここで一括管理する（docs/design.md の「配色」）
+     新デザインの配色が決まるまでの仮の色（緑みの青） */
+  --color-brand-50: #effaf8;
+  --color-brand-100: #d7f2ed;
+  --color-brand-200: #b0e4db;
+  --color-brand-300: #7dcfc3;
+  --color-brand-400: #4bb3a6;
+  --color-brand-500: #1a7f75; /* イメージカラー。CSS の変数を使えない Layout の theme-color と public/manifest.webmanifest にも同じ値を書いている */
+  --color-brand-600: #166b63;
+  --color-brand-700: #145e55;
+  --color-brand-800: #124b45;
+  --color-brand-900: #0f3d39;
+
+  /* 役割ごとの色（ページ側はなるべくこちらを使う） */
+  --color-background: #ffffff; /* 基本背景 */
+  --color-foreground: #252b33; /* 見出し・本文 */
+  --color-section: #f5f6f8; /* セクション背景 */
+  --color-highlight: var(--color-brand-50); /* 注目情報の背景 */
+  --color-muted: var(--color-section); /* 控えめな背景（フッターなど） */
+  --color-muted-foreground: #6b7280; /* 補足テキスト */
+  --color-line: #e3e6ea; /* 区切り線・枠線 */
+  --color-card: #ffffff;
+  --color-card-foreground: #252b33;
+  /* ロゴ・主要ボタン・選択中のタブ。白文字とのコントラスト比 4.84 */
+  --color-primary: var(--color-brand-500);
+  --color-primary-hover: var(--color-brand-600);
+  /* 角丸（ルールは CLAUDE.md の「形の管理ルール」）
+     rounded-box: カード・表・パネルなどの箱 / rounded-button: ボタン
+     チップ・バッジは rounded-full のまま */
+  --radius-box: 4px;
+  --radius-button: 6px;
+
+  /* リンク文字。白背景とのコントラスト比 7.6 */
+  --color-link: var(--color-brand-700);
+  --color-link-hover: var(--color-brand-800);
+}
+
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  .border {
+    border-color: var(--color-line);
+  }
+  .border-b {
+    border-bottom-color: var(--color-line);
+  }
+  .border-t {
+    border-top-color: var(--color-line);
+  }
+  .border-l {
+    border-left-color: var(--color-line);
+  }
+  .border-r {
+    border-right-color: var(--color-line);
+  }
+  .border-x {
+    border-left-color: var(--color-line);
+    border-right-color: var(--color-line);
+  }
+  .border-y {
+    border-top-color: var(--color-line);
+    border-bottom-color: var(--color-line);
+  }
+}
+
+@layer components {
+  .prose code::before,
+  .prose code::after {
+    content: none !important;
+  }
+}
+
+body {
+  @apply font-body bg-background text-foreground;
+  text-underline-offset: 0.3em;
+}
+
+/*
+  記事の本文（microCMS のリッチエディタの HTML。旧サイトの本文をそのまま移したものを含む）。仕様: docs/article.md
+  色・角丸はサイトの決まりに合わせる（@theme の役割の色。gray などの色は直接使わない）
+*/
+.entry-content {
+  /* typography プラグイン（prose）の色をサイトの色に置き換える */
+  --tw-prose-body: var(--color-foreground);
+  --tw-prose-headings: var(--color-foreground);
+  --tw-prose-links: var(--color-link);
+  --tw-prose-bold: var(--color-foreground);
+  --tw-prose-counters: var(--color-muted-foreground);
+  --tw-prose-bullets: var(--color-primary);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-foreground);
+  --tw-prose-quote-borders: var(--color-primary);
+  --tw-prose-captions: var(--color-muted-foreground);
+  --tw-prose-code: var(--color-foreground);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+  @apply text-[0.95rem] leading-loose md:text-base;
+}
+
+/* 段落 */
+.entry-content p {
+  @apply mt-0 mb-5;
+}
+
+/* リンク */
+.entry-content a {
+  @apply font-normal text-link underline decoration-1 hover:text-link-hover;
+}
+
+/* 画像とキャプション */
+.entry-content img {
+  @apply h-auto max-w-full rounded-box;
+}
+
+.entry-content figure {
+  @apply mt-0 mb-6;
+}
+
+.entry-content figure figcaption {
+  @apply pt-2 text-sm leading-relaxed text-muted-foreground;
+}
+
+/* 見出し: h2 は左に線＋下に区切り線、h3 は左に線 */
+.entry-content h2 {
+  @apply mt-12 mb-5 border-b border-l-4 border-line border-l-primary pb-2 pl-3 text-xl leading-snug font-bold md:text-2xl;
+}
+
+.entry-content h3 {
+  @apply mt-10 mb-4 border-l-2 border-primary pl-3 text-lg leading-snug font-bold;
+}
+
+.entry-content h4 {
+  @apply mt-8 mb-3 text-base leading-snug font-bold;
+}
+
+/* 区切り線 */
+.entry-content hr {
+  @apply my-10 border-t border-line;
+}
+
+/* 引用 */
+.entry-content blockquote {
+  @apply my-6 border-l-4 border-line bg-section py-1 pl-4 font-normal not-italic text-foreground;
+}
+
+.entry-content blockquote p::before,
+.entry-content blockquote p::after {
+  content: none;
+}
+
+/* テーブル（スマホではみ出す場合は横にスクロール） */
+.entry-content table {
+  @apply my-6 block w-full overflow-x-auto border-collapse text-sm md:table;
+}
+
+.entry-content table p {
+  @apply mb-0;
+}
+
+.entry-content th,
+.entry-content td {
+  @apply border border-line px-3 py-2 align-top;
+}
+
+.entry-content th {
+  @apply bg-section font-bold whitespace-nowrap;
+}
+
+/* 箇条書き */
+.entry-content ul {
+  @apply mb-5 list-disc pl-5;
+}
+
+.entry-content ol {
+  @apply mb-5 list-decimal pl-5;
+}
+
+.entry-content li {
+  @apply mb-1.5;
+}

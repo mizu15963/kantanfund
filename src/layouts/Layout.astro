@@ -1,0 +1,115 @@
+---
+// src/layouts/Layout.astro
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import { ANALYTICS, SITE } from "@constants/index.ts";
+import { isPreviewBuild } from "@libs/env.ts";
+import "@styles/global.css";
+
+interface Props {
+  Meta: {
+    title: string;
+    description?: string | null;
+    image?: string | URL | null;
+    ogType?: string;
+    noindex?: boolean | null;
+  };
+  // true のページは右サイドバー用の2列を使わず、1列で横幅いっぱいに表示する
+  fullWidth?: boolean;
+  // true のページは main の幅・余白を付けない（背景の帯を画面幅いっぱいに敷くページ用。幅と余白はページ側で付ける）
+  bleed?: boolean;
+}
+
+const siteTitle = SITE.title;
+const siteDescription = SITE.description;
+// canonical は常に本番のドメイン（astro.config.mjs の site）。プレビューや workers.dev で開いても変わらない
+const url = new URL(Astro.url.pathname, Astro.site);
+const isHome = Astro.url.pathname === "/";
+const { Meta, fullWidth = false, bleed = false } = Astro.props;
+const pageTitle = isHome ? siteTitle : `${Meta.title} | ${siteTitle}`;
+const pageDescription = Meta.description ? Meta.description : siteDescription;
+const ogImage = new URL(Meta.image ? Meta.image : "/images/og.png", Astro.site);
+const ogType = Meta.ogType ? Meta.ogType : "website";
+// SITE.noindex は全ページ、Meta.noindex はそのページだけ、isPreviewBuild はプレビューのビルド（docs/site.md の「プレビュー」）
+const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    {/* テーマの色（brand-500。CSS の変数は使えないため値を直接書く） */}
+    <meta name="theme-color" content="#1a7f75" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- OG settings -->
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={url} />
+    <meta property="og:type" content={ogType} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="canonical" href={url} />
+    {
+      /*
+      Google アナリティクス 4（docs/site.md の「アクセス解析」）。
+      本番のドメイン（astro.config.mjs の site）で開いたときだけ計測する（手元の確認や workers.dev のアクセスを混ぜないため）
+    */
+    }
+    <script
+      is:inline
+      define:vars={{
+        measurementId: ANALYTICS.ga4MeasurementId,
+        productionHost: Astro.site?.hostname ?? "",
+      }}
+    >
+      // 測定ID が空のあいだは計測しない
+      if (measurementId && location.hostname === productionHost) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag("js", new Date());
+        window.gtag("config", measurementId);
+        const script = document.createElement("script");
+        script.async = true;
+        script.src =
+          "https://www.googletagmanager.com/gtag/js?id=" + measurementId;
+        document.head.appendChild(script);
+      }
+    </script>
+    {
+      /* ページごとに head へ足すもの（例: 記事ページの構造化データ）。<Fragment slot="head"> で渡す */
+    }
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header title={siteTitle} />
+    <main
+      class:list={[
+        "flex-1",
+        bleed
+          ? ""
+          : fullWidth
+            ? "container mx-auto px-4 md:px-6 py-8 md:py-12"
+            : "container mx-auto px-4 md:px-6 py-12 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-8",
+      ]}
+    >
+      <slot />
+    </main>
+    <Footer title={siteTitle} />
+  </body>
+</html>

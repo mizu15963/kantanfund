@@ -1,0 +1,26 @@
+---
+// 運営者情報（仕様: docs/site.md の「固定ページ」）。本文は旧サイトの内容をもとに新デザインで作る（docs/todo.md）
+import Layout from "@layouts/Layout.astro";
+import PageHeader from "@components/PageHeader.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import { SITE } from "@constants/index.ts";
+export const prerender = true;
+
+const Meta = {
+  title: "運営者情報",
+  description: `${SITE.title}の運営者情報です。`,
+};
+---
+
+<Layout Meta={Meta} fullWidth>
+  <div class="max-w-3xl space-y-10 pb-8">
+    <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: "運営者情報" }]} />
+    <PageHeader title="運営者情報">
+      <p
+        class="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base"
+      >
+        準備中です。
+      </p>
+    </PageHeader>
+  </div>
+</Layout>

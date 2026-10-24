@@ -1,0 +1,4 @@
+# workers.dev のアドレス（本番の kantan-fund.<アカウント>.workers.dev と、プレビューのアドレス）は検索エンジンに載せない
+# 本番のドメイン www.kantanfund.net には付かない（仕様: docs/site.md の「プレビュー」）
+https://:worker.:account.workers.dev/*
+  X-Robots-Tag: noindex

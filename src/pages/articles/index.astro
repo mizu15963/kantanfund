@@ -1,0 +1,45 @@
+---
+// 記事一覧（/articles/。仕様: docs/site.md の「記事一覧」）
+// 全記事を1ページに並べ、カテゴリで絞り込む（カテゴリごとの一覧ページは作らない）
+import Layout from "@layouts/Layout.astro";
+import PageHeader from "@components/PageHeader.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import BlogList from "@components/BlogList.astro";
+import CategoryFilter from "@components/CategoryFilter.astro";
+import { SITE } from "@constants/index.ts";
+import { getAllBlogSummaries, getAllCategories } from "@libs/microcms.ts";
+import { blogPublishedAt } from "@libs/format.ts";
+export const prerender = true;
+
+const [blogs, categories] = await Promise.all([
+  getAllBlogSummaries(),
+  getAllCategories(),
+]);
+// 新しい順（移行した記事は旧サイトの公開日で並べる）
+blogs.sort((a, b) => blogPublishedAt(b).localeCompare(blogPublishedAt(a)));
+// 記事が1本もないカテゴリは絞り込みに出さない
+const usedCategories = categories.filter((category) =>
+  blogs.some((blog) => blog.category?.some((c) => c.id === category.id))
+);
+
+const Meta = {
+  title: "記事一覧",
+  description: `${SITE.title}の記事の一覧です。カテゴリで絞り込めます。`,
+};
+---
+
+<Layout Meta={Meta} fullWidth>
+  <div class="max-w-3xl space-y-8 pb-8">
+    <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: "記事一覧" }]} />
+    <PageHeader title="記事一覧" />
+    <CategoryFilter categories={usedCategories} />
+    <BlogList blogs={blogs} />
+    <p
+      data-blog-empty
+      hidden
+      class="border-y border-line py-10 text-center text-sm text-muted-foreground"
+    >
+      このカテゴリの記事はまだありません。
+    </p>
+  </div>
+</Layout>

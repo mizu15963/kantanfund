@@ -1,0 +1,88 @@
+---
+// 記事一覧のカテゴリの絞り込み（チップを横に並べる。仕様: docs/site.md の「記事一覧」）
+// カテゴリごとの一覧ページは作らず、/articles/?category={カテゴリID} で絞り込んだ状態を表す（URL を共有・リンクできるように）
+// JavaScript が動かないときは全記事を表示する
+import type { Category } from "@libs/microcms.ts";
+import { BLOG } from "@constants/index.ts";
+
+interface Props {
+  categories: Category[];
+}
+const { categories } = Astro.props;
+
+const chips = [
+  { id: "", href: BLOG.listPath, label: "すべて" },
+  ...categories.map((category) => ({
+    id: category.id,
+    href: `${BLOG.listPath}?category=${category.id}`,
+    label: category.name,
+  })),
+];
+---
+
+{
+  categories.length > 0 && (
+    <nav aria-label="カテゴリで絞り込む" data-category-filter>
+      {/* スマホは横スクロール、PC は折り返し */}
+      <ul class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 text-sm [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
+        {chips.map((chip) => (
+          <li class="shrink-0">
+            <a
+              href={chip.href}
+              data-category={chip.id}
+              aria-current={chip.id === "" ? "page" : undefined}
+              class="inline-block rounded-full border border-line bg-background px-4 py-2 font-medium whitespace-nowrap hover:border-primary aria-[current=page]:border-primary aria-[current=page]:bg-primary aria-[current=page]:font-bold aria-[current=page]:text-white"
+            >
+              {chip.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  // URL の ?category= に合わせて、チップの選択と記事の表示を切り替える
+  const filter = document.querySelector<HTMLElement>("[data-category-filter]");
+  const items = document.querySelectorAll<HTMLElement>("[data-blog-list] > li");
+  const empty = document.querySelector<HTMLElement>("[data-blog-empty]");
+
+  const apply = () => {
+    const chips =
+      filter?.querySelectorAll<HTMLAnchorElement>("a[data-category]") ?? [];
+    const requested = new URL(location.href).searchParams.get("category") ?? "";
+    // 存在しないカテゴリが指定されたときは「すべて」
+    const current = [...chips].some(
+      (chip) => chip.dataset.category === requested
+    )
+      ? requested
+      : "";
+    chips.forEach((chip) => {
+      if (chip.dataset.category === current)
+        chip.setAttribute("aria-current", "page");
+      else chip.removeAttribute("aria-current");
+    });
+    let shown = 0;
+    items.forEach((item) => {
+      const visible =
+        !current ||
+        (item.dataset.categories ?? "").split(" ").includes(current);
+      item.hidden = !visible;
+      if (visible) shown += 1;
+    });
+    if (empty) empty.hidden = shown > 0;
+  };
+
+  filter?.addEventListener("click", (event) => {
+    const chip = (event.target as HTMLElement).closest<HTMLAnchorElement>(
+      "a[data-category]"
+    );
+    if (!chip) return;
+    event.preventDefault();
+    history.pushState(null, "", chip.href);
+    apply();
+  });
+  window.addEventListener("popstate", apply);
+  apply();
+</script>

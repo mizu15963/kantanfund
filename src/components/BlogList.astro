@@ -1,0 +1,62 @@
+---
+// 記事の並び（仕様: docs/article.md）。区切り線で区切ったリスト（左に小さめの画像）
+// 記事一覧の絞り込み（CategoryFilter）は、各行の data-categories を見て表示・非表示を切り替える
+import Date from "@components/Date.astro";
+import type { BlogSummary } from "@libs/microcms.ts";
+import { blogPath, blogPublishedAt, blogThumbnail } from "@libs/format.ts";
+
+interface Props {
+  blogs: BlogSummary[];
+}
+
+const { blogs }: Props = Astro.props;
+---
+
+{
+  blogs.length === 0 ? (
+    <p class="border-y border-line py-10 text-center text-sm text-muted-foreground">
+      まだ記事がありません。
+    </p>
+  ) : (
+    <ul class="border-t border-line" data-blog-list>
+      {blogs.map((blog) => (
+        <li
+          class="border-b border-line"
+          data-categories={(blog.category ?? [])
+            .map((category) => category.id)
+            .join(" ")}
+        >
+          <a
+            href={blogPath(blog)}
+            class="group flex gap-4 py-5 md:gap-6 md:py-6"
+          >
+            <img
+              src={blogThumbnail(blog, 480)}
+              alt=""
+              width="480"
+              height="270"
+              loading="lazy"
+              class="aspect-video w-28 shrink-0 self-start rounded-box object-cover sm:w-44 md:w-60"
+            />
+            <div class="min-w-0">
+              <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                <Date date={blogPublishedAt(blog)} />
+                {(blog.category ?? []).map((category) => (
+                  <span class="font-bold text-link">{category.name}</span>
+                ))}
+              </p>
+              <h2 class="mt-1.5 font-bold leading-snug group-hover:text-primary md:text-lg">
+                {blog.title}
+              </h2>
+              {blog.description && (
+                <p class="mt-1.5 hidden text-sm leading-relaxed text-muted-foreground sm:line-clamp-2">
+                  {blog.description}
+                </p>
+              )}
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

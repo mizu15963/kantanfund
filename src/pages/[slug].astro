@@ -1,0 +1,92 @@
+---
+// 記事（/{スラッグ}/。旧サイトと同じ URL。仕様: docs/article.md）
+// すべての記事をビルド時に作る。microCMS で公開・更新すると Webhook で再ビルドされる
+import Layout from "@layouts/Layout.astro";
+import BlogPost from "@components/BlogPost.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import { BLOG } from "@constants/index.ts";
+import { getAllBlogs, type Blog } from "@libs/microcms.ts";
+import { blogPath, blogSlug, blogThumbnail } from "@libs/format.ts";
+import { blogPostingJsonLd, toJsonLdString } from "@libs/structuredData.ts";
+export const prerender = true;
+
+export async function getStaticPaths() {
+  // 固定ページ（src/pages/ 直下のページとフォルダ）と同じ URL の記事は作れない。重なったらビルドを止める
+  const fixedPages = Object.keys(
+    import.meta.glob(["./*.astro", "./*/index.astro"])
+  )
+    .map((path) => path.replace(/^\.\//, "").replace(/(\/index)?\.astro$/, ""))
+    .filter(
+      (name) => !name.startsWith("[") && name !== "index" && name !== "404"
+    );
+  const blogs = await getAllBlogs();
+  const seen = new Map<string, string>();
+  for (const blog of blogs) {
+    const slug = blogSlug(blog);
+    if (fixedPages.includes(slug)) {
+      throw new Error(
+        `記事「${blog.title}」（${blog.id}）の URL /${slug}/ が固定ページと重なっています`
+      );
+    }
+    if (seen.has(slug)) {
+      throw new Error(
+        `記事「${blog.title}」（${blog.id}）の URL /${slug}/ が記事 ${seen.get(slug)} と重なっています`
+      );
+    }
+    seen.set(slug, blog.id);
+  }
+  return blogs.map((blog) => ({
+    params: { slug: blogSlug(blog) },
+    props: { blog },
+  }));
+}
+
+interface Props {
+  blog: Blog;
+}
+const { blog } = Astro.props;
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const pageUrl = new URL(blogPath(blog), site).href;
+const thumbnail = blogThumbnail(blog, 1200);
+// サムネイルがない記事は、サイト共通の OG 画像（Layout の既定）
+const ogImage = blog.thumbnail?.url || blog.legacyThumbnail ? thumbnail : null;
+const category = blog.category?.[0];
+
+const Meta = {
+  title: blog.seoTitle || blog.title,
+  description: blog.description,
+  image: ogImage,
+  ogType: "article",
+  noindex: blog.noindex,
+};
+---
+
+<Layout Meta={Meta} fullWidth>
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={toJsonLdString(
+        blogPostingJsonLd(blog, pageUrl, ogImage ?? "/images/og.png", site)
+      )}
+    />
+  </Fragment>
+  <div class="mx-auto max-w-3xl space-y-6 pb-8">
+    <Breadcrumb
+      items={[
+        { name: "TOP", url: "/" },
+        { name: "記事一覧", url: BLOG.listPath },
+        ...(category
+          ? [
+              {
+                name: category.name,
+                url: `${BLOG.listPath}?category=${category.id}`,
+              },
+            ]
+          : []),
+        { name: blog.title },
+      ]}
+    />
+    <BlogPost blog={blog} />
+  </div>
+</Layout>

@@ -1,0 +1,70 @@
+---
+// TOP（仕様: docs/site.md の「TOP」）。中身は新デザインで作る（docs/todo.md）。いまはハブページへの入口と新着記事だけ
+import Layout from "@layouts/Layout.astro";
+import BlogList from "@components/BlogList.astro";
+import { BLOG, CATEGORY, SITE } from "@constants/index.ts";
+import { getAllBlogSummaries } from "@libs/microcms.ts";
+import { blogPublishedAt } from "@libs/format.ts";
+import { siteJsonLd, toJsonLdString } from "@libs/structuredData.ts";
+export const prerender = true;
+
+const blogs = await getAllBlogSummaries();
+const latest = blogs
+  .sort((a, b) => blogPublishedAt(b).localeCompare(blogPublishedAt(a)))
+  .slice(0, BLOG.latestCount);
+
+const Meta = { title: SITE.title };
+const site = Astro.site ?? new URL(Astro.url.origin);
+---
+
+<Layout Meta={Meta} fullWidth>
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={toJsonLdString(siteJsonLd(site))}
+    />
+  </Fragment>
+  <div class="space-y-14 pb-8 md:space-y-20">
+    <section class="pt-2 md:pt-6">
+      <span class="block h-1 w-10 bg-primary" aria-hidden="true"></span>
+      <h1
+        class="mt-5 text-[1.6rem] font-bold leading-snug tracking-tight sm:text-4xl"
+      >
+        {SITE.title}
+      </h1>
+      <p
+        class="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base"
+      >
+        {SITE.description}
+      </p>
+    </section>
+
+    <section class="space-y-5">
+      <h2 class="text-lg font-bold md:text-xl">カテゴリから探す</h2>
+      <ul class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {
+          CATEGORY.hubs.map((hub) => (
+            <li>
+              <a
+                href={`/${hub.id}/`}
+                class="block rounded-box border border-line px-4 py-5 text-center font-bold hover:border-primary hover:text-link"
+              >
+                {hub.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="max-w-3xl space-y-5">
+      <h2 class="text-lg font-bold md:text-xl">新着記事</h2>
+      <BlogList blogs={latest} />
+      <a
+        href={BLOG.listPath}
+        class="inline-block text-sm font-bold text-link hover:underline"
+        >記事一覧へ →</a
+      >
+    </section>
+  </div>
+</Layout>

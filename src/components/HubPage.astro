@@ -1,0 +1,50 @@
+---
+// ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
+// カテゴリの入口のページ。本文は新デザインで作る（docs/todo.md）。いまは新着記事と記事一覧へのリンクだけ
+import Layout from "@layouts/Layout.astro";
+import PageHeader from "@components/PageHeader.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import BlogList from "@components/BlogList.astro";
+import { BLOG, CATEGORY } from "@constants/index.ts";
+import { getAllBlogSummaries } from "@libs/microcms.ts";
+
+interface Props {
+  id: (typeof CATEGORY.hubs)[number]["id"];
+}
+const { id } = Astro.props;
+const hub = CATEGORY.hubs.find((hub) => hub.id === id)!;
+
+const blogs = await getAllBlogSummaries({
+  filters: `category[contains]${id}`,
+  orders: "-publishedAt",
+});
+
+const Meta = {
+  title: hub.title,
+  description: `${hub.title}の始め方や、各サービスの特徴をまとめています。`,
+};
+---
+
+<Layout Meta={Meta} fullWidth>
+  <div class="max-w-3xl space-y-10 pb-8 md:space-y-14">
+    <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: hub.title }]} />
+    <PageHeader title={hub.title}>
+      <p
+        class="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base"
+      >
+        {Meta.description}
+      </p>
+    </PageHeader>
+
+    <section class="space-y-5">
+      <h2 class="text-lg font-bold md:text-xl">新着記事</h2>
+      <BlogList blogs={blogs.slice(0, BLOG.latestCount)} />
+      <a
+        href={`${BLOG.listPath}?category=${id}`}
+        class="inline-block text-sm font-bold text-link hover:underline"
+      >
+        {hub.title}の記事をすべて見る →
+      </a>
+    </section>
+  </div>
+</Layout>
