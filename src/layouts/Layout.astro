@@ -41,8 +41,8 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    {/* テーマの色（brand-500。CSS の変数は使えないため値を直接書く） */}
-    <meta name="theme-color" content="#e1ff00" />
+    {/* テーマの色（background の白。CSS の変数は使えないため値を直接書く） */}
+    <meta name="theme-color" content="#ffffff" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
@@ -100,7 +100,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     {
       /*
         ヘッダー・フッターは画面幅いっぱい。その間は、どの画面幅でもスマホの画面幅の表示領域（max-w-app）を中央に置く（docs/design.md の「レイアウト」）
-        左右の余った幅は黄色の背景（bg-outside）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
+        左右の余った幅は薄いグレーの背景（bg-outside）。境目は影（shadow-app）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
       */
     }
     <Header />
@@ -114,7 +114,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
       </aside>
       <main
         class:list={[
-          "mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-app bg-background lg:min-h-[calc(100vh-4rem)] lg:border-x-2 lg:border-x-primary",
+          "mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-app bg-background lg:min-h-[calc(100vh-4rem)] lg:shadow-app",
           bleed ? "" : "px-5 pt-5 pb-14",
         ]}
       >
