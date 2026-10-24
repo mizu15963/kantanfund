@@ -18,7 +18,7 @@
 | 本番のブランチ | `main` |
 | ビルドコマンド | `npm run build` |
 | デプロイコマンド | `npx wrangler deploy` |
-| 本番以外のブランチのビルド | オン（デプロイコマンドは `npx wrangler versions upload`。プレビュー用のアドレスができる） |
+| 本番以外のブランチのビルド | オフ（ビルド回数を節約するため。PR はマージ前に手元で確認する） |
 | ルートディレクトリ | 空（リポジトリ直下） |
 
 ## 2. ビルド用の変数を入れる
@@ -32,13 +32,13 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
 | `NODE_VERSION` | テキスト | `24` |
 
 - 実行時の変数（Settings → Variables and Secrets）は不要です（お問い合わせフォームを作るときに追加します）。
-- `WORKERS_CI_BRANCH` は Cloudflare がビルド時に自動で入れます。`main` 以外のブランチのビルドは、全ページが noindex になります（[site.md](site.md) の「プレビュー」）。
+- `WORKERS_CI_BRANCH` は Cloudflare がビルド時に自動で入れます。本番以外のブランチのビルドはオフにしていますが、オンに戻した場合は全ページが noindex になります（[site.md](site.md) の「プレビュー」）。
 
 ## 3. 動作を確かめる
 
 1. `main` にプッシュすると、ビルドとデプロイが走る。
 2. `https://kantan-fund.<アカウント名>.workers.dev/` で表示を確かめる（このアドレスは `X-Robots-Tag: noindex` が付くので検索エンジンには載らない）。
-3. `main` 以外のブランチをプッシュすると、プレビュー用のアドレスができる（Worker の **デプロイ（Deployments）** に表示される）。
+3. `main` 以外のブランチをプッシュしてもビルドは走らない（本番以外のブランチのビルドはオフ。設定 → ビルド → ブランチの管理）。PR は手元で `npm run build`・`npm run preview` で確認してからマージする。
 
 ## 4. microCMS の更新で再ビルドする
 

@@ -39,7 +39,7 @@
 
 ## プレビュー
 
-`main` 以外のブランチは、Cloudflare がプレビュー用のアドレス（`*.workers.dev`）にデプロイします。プレビューが検索エンジンに載らないよう、次の3つで防いでいます。
+今は Cloudflare の本番以外のブランチのビルドをオフにしていて、プレビューは作られません（ビルド回数を節約するため。[cloudflare.md](cloudflare.md)）。オンに戻すと、`main` 以外のブランチがプレビュー用のアドレス（`*.workers.dev`）にデプロイされます。プレビューが検索エンジンに載らないよう、次の3つで防いでいます。
 
 1. ビルド時に Cloudflare が入れる `WORKERS_CI_BRANCH` が `main` 以外なら、全ページに `<meta name="robots" content="noindex, nofollow">` を入れる（`src/libs/env.ts`）。
 2. 同じく `robots.txt` を `Disallow: /` にする。
