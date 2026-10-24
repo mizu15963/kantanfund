@@ -9,7 +9,7 @@
 ## 1. Worker を作って GitHub とつなぐ
 
 1. Cloudflare ダッシュボード → **Workers & Pages** → **作成（Create）** → **リポジトリをインポート（Import a repository）**。
-2. GitHub を連携し、`shinji0214/astro-pjk-kantanfund` を選ぶ。
+2. GitHub を連携し、`mizu15963/kantanfund` を選ぶ。
 3. 次のように設定する。
 
 | 項目 | 値 |
