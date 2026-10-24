@@ -1,36 +1,67 @@
 ---
-// src/components/Header.astro
+// ヘッダー（中央の表示領域の上に固定）。左にロゴ、右にメニューのボタン（仕様: docs/design.md の「レイアウト」）
+// メニューは details で開閉する（JavaScript なしで動く）
+import Logo from "@components/Logo.astro";
+import HubIcon from "@components/HubIcon.astro";
 import { BLOG, CATEGORY } from "@constants/index.ts";
-
-const { title } = Astro.props;
-
-// ロゴ・ナビの形は新デザインで決める（docs/todo.md）
-const nav = [
-  ...CATEGORY.hubs.map((hub) => ({ href: `/${hub.id}/`, label: hub.title })),
-  { href: BLOG.listPath, label: "記事一覧" },
-];
 ---
 
-<header class="bg-background border-b-2 border-primary">
-  <div
-    class="container mx-auto px-4 md:px-6 py-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:gap-x-4"
-  >
-    <a href="/" class="shrink-0 text-lg font-bold text-primary md:text-xl"
-      >{title}</a
-    >
-    <nav
-      class="-mx-4 flex gap-4 overflow-x-auto px-4 whitespace-nowrap [scrollbar-width:none] md:mx-0 md:px-0"
-    >
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="text-xs font-medium hover:text-link hover:underline md:text-sm"
-          >
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
+<header class="sticky top-0 z-20 border-b border-line bg-background">
+  <div class="flex h-14 items-center justify-between px-4">
+    <a href="/" aria-label="TOP へ"><Logo /></a>
+    <details class="group" data-menu>
+      <summary
+        class="grid size-10 cursor-pointer list-none place-items-center rounded-full hover:bg-section [&::-webkit-details-marker]:hidden"
+        aria-label="メニュー"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          class="size-6"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16" class="group-open:hidden"></path>
+          <path d="M6 6l12 12M18 6 6 18" class="hidden group-open:block"></path>
+        </svg>
+      </summary>
+      <nav
+        aria-label="メニュー"
+        class="absolute inset-x-0 top-full border-b border-line bg-background px-4 pt-2 pb-6"
+      >
+        <ul class="divide-y divide-line">
+          {
+            CATEGORY.hubs.map((hub) => (
+              <li>
+                <a
+                  href={`/${hub.id}/`}
+                  class="flex items-center gap-3 py-4 font-bold hover:underline"
+                >
+                  <span class="grid size-9 place-items-center rounded-full bg-highlight">
+                    <HubIcon id={hub.id} class="size-5" />
+                  </span>
+                  {hub.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href={BLOG.listPath}
+          class="mt-4 block rounded-button bg-primary py-3.5 text-center text-sm font-bold text-white hover:bg-primary-hover"
+          >記事一覧を見る</a
+        >
+      </nav>
+    </details>
   </div>
 </header>
+
+<script>
+  // メニューを開いたまま、メニューの外を押したら閉じる
+  const menu = document.querySelector<HTMLDetailsElement>("[data-menu]");
+  document.addEventListener("click", (event) => {
+    if (menu?.open && !menu.contains(event.target as Node)) menu.open = false;
+  });
+</script>

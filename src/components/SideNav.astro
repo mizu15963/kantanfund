@@ -1,0 +1,32 @@
+---
+// PC 幅の左側（中央の表示領域の外）。ロゴ・キャッチコピー・カテゴリのリンク（仕様: docs/design.md の「レイアウト」）
+// スマホ・タブレット幅では出さない（同じリンクはヘッダーのメニューにある）
+import Logo from "@components/Logo.astro";
+import HubIcon from "@components/HubIcon.astro";
+import { CATEGORY } from "@constants/index.ts";
+---
+
+<div class="w-full max-w-xs">
+  <a href="/" aria-label="TOP へ" class="inline-block"><Logo /></a>
+  {
+    /* キャッチコピー（SITE.catchphrase と同じ文。改行の位置を決めるため直接書く） */
+  }
+  <p class="mt-8 text-3xl leading-snug font-black tracking-tight">
+    投資の<br />「わからない」を<br />「わかる！」に変える
+  </p>
+  <ul class="mt-10 space-y-2">
+    {
+      CATEGORY.hubs.map((hub) => (
+        <li>
+          <a
+            href={`/${hub.id}/`}
+            class="flex items-center gap-3 rounded-button border-2 border-primary bg-background px-5 py-3 font-bold hover:bg-primary hover:text-white"
+          >
+            <HubIcon id={hub.id} class="size-5" />
+            {hub.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

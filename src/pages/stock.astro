@@ -1,6 +1,17 @@
 ---
+// ハブページ: 株式投資（見出し・導入文は旧サイトの /stock/ をもとにしている）
 import HubPage from "@components/HubPage.astro";
 export const prerender = true;
 ---
 
-<HubPage id="stock" />
+<HubPage
+  id="stock"
+  heading="【焦らなくて大丈夫】「投資って何？」から始める安心の資産運用ガイド"
+  listHeading="難しいは卒業！株式・投資信託の基本を学ぶ記事"
+  description="株式投資の始め方や、少額から専門家に運用を任せられる投資信託のしくみを、はじめての方向けに解説した記事をまとめています。"
+>
+  <p>
+    株式投資の始め方や、少額から専門家に運用を任せられる投資信託のしくみを、はじめての方向けに解説した記事をまとめました。
+  </p>
+  <p>NISA のことや証券会社の選び方も、自分のペースで読み進めてください。</p>
+</HubPage>

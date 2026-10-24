@@ -1,20 +1,34 @@
 ---
-// src/components/Footer.astro
+// フッター（中央の表示領域の下。黒地に白文字）
 // お問い合わせ・プライバシーポリシーは、ページを作ったらここにリンクを足す（docs/todo.md）
-const { title } = Astro.props;
+import Logo from "@components/Logo.astro";
+import { BLOG, CATEGORY, SITE } from "@constants/index.ts";
+
+const links = [
+  ...CATEGORY.hubs.map((hub) => ({ href: `/${hub.id}/`, label: hub.title })),
+  { href: BLOG.listPath, label: "記事一覧" },
+  { href: "/operator/", label: "運営者情報" },
+];
 ---
 
-<footer class="bg-muted border-t border-line">
-  <div
-    class="container mx-auto px-4 md:px-6 py-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3"
-  >
-    <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-      <a href="/operator/" class="hover:text-link hover:underline">運営者情報</a
-      >
-    </nav>
-    <p class="text-sm text-muted-foreground">
-      &copy; {new Date().getFullYear()}
-      {title}
-    </p>
-  </div>
+<footer class="bg-primary px-5 pt-10 pb-8 text-white">
+  <a href="/" aria-label="TOP へ"><Logo inverted /></a>
+  <p class="mt-3 text-xs leading-relaxed text-white/70">{SITE.catchphrase}</p>
+  <nav class="mt-8">
+    <ul class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="hover:underline">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <p class="mt-10 text-xs text-white/60">
+    &copy; {new Date().getFullYear()}
+    {SITE.title}
+  </p>
 </footer>

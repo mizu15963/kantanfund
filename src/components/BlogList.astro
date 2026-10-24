@@ -26,33 +26,27 @@ const { blogs }: Props = Astro.props;
             .map((category) => category.id)
             .join(" ")}
         >
-          <a
-            href={blogPath(blog)}
-            class="group flex gap-4 py-5 md:gap-6 md:py-6"
-          >
+          <a href={blogPath(blog)} class="group flex gap-4 py-4">
             <img
               src={blogThumbnail(blog, 480)}
               alt=""
               width="480"
               height="270"
               loading="lazy"
-              class="aspect-video w-28 shrink-0 self-start rounded-box object-cover sm:w-44 md:w-60"
+              class="aspect-video w-28 shrink-0 self-start rounded-box border border-line object-cover"
             />
             <div class="min-w-0">
               <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 <Date date={blogPublishedAt(blog)} />
                 {(blog.category ?? []).map((category) => (
-                  <span class="font-bold text-link">{category.name}</span>
+                  <span class="rounded-full bg-highlight px-2 py-0.5 font-bold text-highlight-foreground">
+                    {category.name}
+                  </span>
                 ))}
               </p>
-              <h2 class="mt-1.5 font-bold leading-snug group-hover:text-primary md:text-lg">
+              <h2 class="mt-1.5 line-clamp-3 text-[0.95rem] font-bold leading-snug group-hover:underline">
                 {blog.title}
               </h2>
-              {blog.description && (
-                <p class="mt-1.5 hidden text-sm leading-relaxed text-muted-foreground sm:line-clamp-2">
-                  {blog.description}
-                </p>
-              )}
             </div>
           </a>
         </li>

@@ -23,15 +23,15 @@ const chips = [
 {
   categories.length > 0 && (
     <nav aria-label="カテゴリで絞り込む" data-category-filter>
-      {/* スマホは横スクロール、PC は折り返し */}
-      <ul class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 text-sm [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
+      {/* 横にスクロール（表示領域の端まで） */}
+      <ul class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 text-sm [scrollbar-width:none]">
         {chips.map((chip) => (
           <li class="shrink-0">
             <a
               href={chip.href}
               data-category={chip.id}
               aria-current={chip.id === "" ? "page" : undefined}
-              class="inline-block rounded-full border border-line bg-background px-4 py-2 font-medium whitespace-nowrap hover:border-primary aria-[current=page]:border-primary aria-[current=page]:bg-primary aria-[current=page]:font-bold aria-[current=page]:text-white"
+              class="inline-block rounded-full border-2 border-primary bg-background px-4 py-2 font-bold whitespace-nowrap hover:bg-section aria-[current=page]:bg-primary aria-[current=page]:text-white"
             >
               {chip.label}
             </a>
