@@ -402,7 +402,10 @@ const buildContent = async (post, warnings) => {
       title,
       description:
         decodeEntities(post.seo_description ?? "").trim() ||
-        stripTags(post.excerpt).replace(/\s*\[…\]$/, ""),
+        // 抜粋は「&amp;hellip;」のように二重に符号化されていることがあるため、もう一度戻してから末尾の「[…]」を消す
+        decodeEntities(stripTags(post.excerpt))
+          .replace(/\s*\[(?:…|\.\.\.)\]\s*$/, "")
+          .trim(),
       content: await convertContent(html, warnings),
       // 確認だけのときは旧サイトの URL のまま（microCMS には送らない）
       thumbnail: thumbnail ?? undefined,

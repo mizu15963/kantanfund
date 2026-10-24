@@ -12,6 +12,7 @@
 - [ ] Cloudflare Workers Builds に接続し、変数を入れる（[cloudflare.md](cloudflare.md)）
 - [ ] 記事を3本だけ microCMS に入れて表示を確かめる（[migration.md](migration.md)）
 - [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（`npm run wp:export` を取り直してから `npm run wp:import -- --write --all`）
+- [ ] 旧サイトで Yoast の description がない記事は抜粋が入り、【PR】の注意書きから始まるものがある。全件を入れた後に microCMS で直すか決める
 - [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
 - [ ] GA4 の測定ID を `ANALYTICS.ga4MeasurementId` に入れる
 - [ ] Search Console の確認用ファイル（`google*.html`）を `public/` に置く
