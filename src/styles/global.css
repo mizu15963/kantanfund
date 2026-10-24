@@ -4,13 +4,14 @@
   --font-body: "Noto Sans JP", sans-serif;
 
   /* ブランドカラー（蛍光イエロー）。サイトの色はここで一括管理する（docs/design.md の「配色」）
-     参考: みんなの銀行の白・黒・蛍光イエロー。黄色は文字には使わず、背景・飾りにだけ使う（白地では読めないため） */
+     参考: みんなの銀行の白・黒・蛍光イエロー。黄色はボタン・バッジ・アイコンなどのワンポイントにだけ使い、広い面には使わない
+     黄色は文字には使わない（白地では読めないため）。黄色の上には黒文字を載せる */
   --color-brand-50: #fdffe0;
   --color-brand-100: #f9ffb3;
   --color-brand-200: #f4ff80;
   --color-brand-300: #efff4d;
   --color-brand-400: #e8ff1a;
-  --color-brand-500: #e1ff00; /* イメージカラー。CSS の変数を使えない Layout の theme-color と public/manifest.webmanifest・public/favicon.svg にも同じ値を書いている */
+  --color-brand-500: #e1ff00; /* イメージカラー。CSS の変数を使えない public/favicon.svg・public/images/noimg.svg にも同じ値を書いている */
   --color-brand-600: #c4dd00;
   --color-brand-700: #9fb300;
   --color-brand-800: #6f7d00;
@@ -20,9 +21,9 @@
   --color-background: #ffffff; /* 基本背景（中央の表示領域） */
   --color-foreground: #111111; /* 見出し・本文 */
   --color-section: #f3f3f3; /* セクション背景 */
-  --color-highlight: var(
-    --color-brand-500
-  ); /* 注目情報の背景（黒文字を載せる） */
+  /* ワンポイントの黄色（目立たせたいボタン・バッジ・アイコンの背景・文字のマーカー）。黒文字を載せる */
+  --color-highlight: var(--color-brand-500);
+  --color-highlight-hover: var(--color-brand-600);
   --color-highlight-foreground: #111111;
   --color-muted: var(--color-section); /* 控えめな背景 */
   --color-muted-foreground: #5f5f5f; /* 補足テキスト。白背景とのコントラスト比 6.5 */
@@ -30,7 +31,7 @@
   --color-card: #ffffff;
   --color-card-foreground: #111111;
   /* PC 幅で中央の表示領域の左右に見える背景 */
-  --color-outside: var(--color-brand-500);
+  --color-outside: #ffffff;
   /* 主要ボタン・選択中のチップ・フッター（黒地に白文字） */
   --color-primary: #111111;
   --color-primary-hover: #3a3a3a;
@@ -139,9 +140,9 @@ body {
   @apply pt-2 text-sm leading-relaxed text-muted-foreground;
 }
 
-/* 見出し: h2 は黄色の箱、h3 は左に黒い線 */
+/* 見出し: h2 は灰色の箱＋左に黄色の線、h3 は左に黒い線 */
 .entry-content h2 {
-  @apply mt-12 mb-5 rounded-box bg-highlight px-4 py-3 text-xl leading-snug font-bold text-highlight-foreground;
+  @apply mt-12 mb-5 rounded-box border-l-[6px] border-highlight bg-section px-4 py-3 text-xl leading-snug font-bold;
 }
 
 .entry-content h3 {

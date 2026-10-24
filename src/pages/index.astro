@@ -34,14 +34,17 @@ const site = Astro.site ?? new URL(Astro.url.origin);
     />
   </Fragment>
 
-  {/* キャッチコピー: 黄色の帯を表示領域の幅いっぱいに敷く */}
-  <section class="bg-highlight px-5 pt-10 pb-12 text-highlight-foreground">
+  {/* キャッチコピー: 「わかる！」に黄色のマーカー */}
+  <section class="border-b border-line px-5 pt-10 pb-12">
     <span
       class="inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-white"
       >はじめての投資ガイド</span
     >
     <h1 class="mt-5 text-[2rem] leading-tight font-black tracking-tight">
-      投資の<br />「わからない」を<br />「わかる！」に変える
+      投資の<br />「わからない」を<br /><span
+        class="bg-[linear-gradient(transparent_55%,var(--color-highlight)_55%)]"
+        >「わかる！」</span
+      >に変える
     </h1>
     <p class="mt-5 text-sm leading-relaxed">
       株式・FX・不動産・暗号資産の始め方や、各サービスの特徴を、はじめての方にもわかる言葉で解説しています。
@@ -49,7 +52,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
     <div class="mt-8 flex flex-wrap gap-3">
       <a
         href={BLOG.listPath}
-        class="rounded-button bg-primary px-6 py-3.5 text-sm font-bold text-white hover:bg-primary-hover"
+        class="rounded-button border-2 border-primary bg-highlight px-6 py-3 text-sm font-bold text-highlight-foreground hover:bg-highlight-hover"
         >記事一覧を見る</a
       >
       <a
