@@ -17,4 +17,5 @@
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
 - [ ] TOP・ハブページ・運営者情報を新デザインで作る
 - [ ] お問い合わせフォーム、プライバシーポリシーを作り、フッターにリンクを足す
+- [ ] 公開日: `SITE.noindex` を `false` に戻して `main` に出す（戻し忘れると検索結果から消える。[site.md](site.md) の「公開前の noindex」）
 - [ ] 公開日: DNS を Cloudflare に移し、本番ドメインに切り替える（[cloudflare.md](cloudflare.md) の5）

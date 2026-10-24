@@ -6,8 +6,9 @@ export const SITE = {
   // 仮の文。TOP のデザインが決まったら差し替える（docs/todo.md）
   description:
     "かんたんファンドは、株式・FX・不動産・暗号資産の始め方や各サービスの特徴を、はじめての方にも分かるように解説する投資の情報メディアです。",
-  // true にすると全ページを noindex にする（公開前の確認用）。プレビューのビルドは自動で noindex になる（src/libs/env.ts）
-  noindex: false,
+  // true にすると全ページを noindex にする。公開前は true のままにし、公開日に false にする（docs/todo.md・docs/site.md の「公開前の noindex」）
+  // プレビューのビルドは false でも自動で noindex になる（src/libs/env.ts）
+  noindex: true,
 } as const;
 
 // 記事

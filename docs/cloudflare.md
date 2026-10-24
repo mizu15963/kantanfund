@@ -57,3 +57,5 @@ DNS はさくらインターネットから Cloudflare に移す前提です（�
 4. `kantanfund.net`（www なし）と http の転送を設定する（[redirects.md](redirects.md) の「Cloudflare 側で設定する転送」）。
 5. Search Console の確認用ファイル（`google*.html`）を旧サーバーから取り出して `public/` に置き、切り替え後も確認が通ることを見る。
 6. Search Console に `https://www.kantanfund.net/sitemap.xml` を送信する。
+
+切り替えの前に、`SITE.noindex` を `false` に戻して `main` に出しておきます（[site.md](site.md) の「公開前の noindex」）。

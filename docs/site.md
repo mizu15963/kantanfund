@@ -45,7 +45,12 @@
 2. 同じく `robots.txt` を `Disallow: /` にする。
 3. `public/_headers` で、`*.workers.dev` のアドレスで開いたときは `X-Robots-Tag: noindex` を付ける（本番のビルドを workers.dev のアドレスで開いた場合も含む）。
 
-手元のビルド（`WORKERS_CI_BRANCH` がない）は本番と同じ扱いです。公開前に全ページを noindex にしたいときは `SITE.noindex` を `true` にします。
+手元のビルド（`WORKERS_CI_BRANCH` がない）は本番と同じ扱いです。
+
+## 公開前の noindex
+
+公開日までは `SITE.noindex`（`src/constants/index.ts`）を `true` にしていて、`main` のビルドも含めて全ページに `<meta name="robots" content="noindex, nofollow">` が入ります。
+**公開日に `false` に戻します**（戻し忘れると、本番のサイトが検索結果から消えます）。`robots.txt` は巡回を止めないので、noindex の指定は検索エンジンに届きます。
 
 ## サイトマップ
 
