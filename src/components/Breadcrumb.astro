@@ -19,17 +19,17 @@ const site = Astro.site ?? new URL(Astro.url.origin);
   set:html={toJsonLdString(breadcrumbJsonLd(items, site))}
 />
 
-<nav
-  aria-label="パンくずリスト"
-  class="text-xs text-muted-foreground md:text-sm"
->
+<nav aria-label="パンくずリスト" class="text-xs text-muted-foreground">
   <ol class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
     {
       items.map((item, index) => (
         <li class="flex min-w-0 items-center gap-x-1.5">
           {index > 0 && <span aria-hidden="true">&gt;</span>}
           {item.url ? (
-            <a href={item.url} class="hover:text-link hover:underline">
+            <a
+              href={item.url}
+              class="underline-offset-2 hover:text-foreground hover:underline"
+            >
               {item.name}
             </a>
           ) : (

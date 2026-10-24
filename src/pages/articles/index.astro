@@ -28,10 +28,14 @@ const Meta = {
 };
 ---
 
-<Layout Meta={Meta} fullWidth>
-  <div class="max-w-3xl space-y-8 pb-8">
+<Layout Meta={Meta}>
+  <div class="space-y-6">
     <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: "記事一覧" }]} />
-    <PageHeader title="記事一覧" />
+    <PageHeader title="記事一覧">
+      <p class="mt-3 text-sm leading-relaxed text-muted-foreground">
+        カテゴリを選ぶと、記事を絞り込めます。
+      </p>
+    </PageHeader>
     <CategoryFilter categories={usedCategories} />
     <BlogList blogs={blogs} />
     <p

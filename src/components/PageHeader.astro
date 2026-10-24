@@ -1,19 +1,30 @@
 ---
 // ページ見出し（TOP・記事以外のページの先頭）
-// 短い線＋太字の見出し＋（スロットで）説明文。Layout の fullWidth のページで、main の先頭に置く
+// 黄色のラベル（任意）＋太字の見出し＋（スロットで）説明文。main の先頭（パンくずの下）に置く
 interface Props {
   // 見出しの文字（見出しに改行の指定などが必要なときは title スロットを使う）
   title?: string;
+  // 見出しの上の小さなラベル（例: 「株式投資」）
+  label?: string;
   // header に足すクラス（例: 下の余白）
   class?: string;
 }
-const { title, class: className } = Astro.props;
+const { title, label, class: className } = Astro.props;
 ---
 
-<header class:list={["pt-2 md:pt-6", className]}>
-  <span class="block h-1 w-10 bg-primary" aria-hidden="true"></span>
+<header class:list={["pt-2", className]}>
+  {
+    label && (
+      <span class="inline-block rounded-full bg-highlight px-3 py-1 text-xs font-bold text-highlight-foreground">
+        {label}
+      </span>
+    )
+  }
   <h1
-    class="mt-5 text-[1.4rem] font-bold leading-snug tracking-tight sm:text-3xl md:text-4xl md:leading-tight"
+    class:list={[
+      "text-[1.6rem] leading-snug font-black tracking-tight",
+      label ? "mt-3" : "",
+    ]}
   >
     <slot name="title">{title}</slot>
   </h1>

@@ -1,0 +1,27 @@
+---
+// ロゴ（文字のロゴ。黒い丸に黄色の「か」＋サイト名）。正式なロゴができたら差し替える（docs/design.md の「画像・アイコン」）
+import { SITE } from "@constants/index.ts";
+
+interface Props {
+  // 黒い背景の上に置くとき（フッター）
+  inverted?: boolean;
+  class?: string;
+}
+const { inverted = false, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-2 font-black tracking-tight",
+    className,
+  ]}
+>
+  <span
+    class:list={[
+      "grid size-8 shrink-0 place-items-center rounded-full text-base",
+      inverted ? "bg-brand-500 text-primary" : "bg-primary text-brand-500",
+    ]}
+    aria-hidden="true">か</span
+  >
+  <span class="text-lg leading-none">{SITE.title}</span>
+</span>
