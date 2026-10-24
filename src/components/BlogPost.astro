@@ -17,7 +17,7 @@ interface Props {
 const { blog } = Astro.props;
 
 // microCMS の画像だけ、画面幅に合わせた大きさ・webp で読み込む
-// （旧サイトから移した /wp-content/uploads/ の画像は、そのファイルのまま出す。ライブラリの responsiveImageTransformer は全画像を書き換えるため使わない）
+// （microCMS 以外の画像はそのまま出す。ライブラリの responsiveImageTransformer は全画像を書き換えるため使わない）
 const MICROCMS_IMAGE_HOST = "https://images.microcms-assets.io/";
 const IMAGE_WIDTHS = [640, 828, 1200, 1600];
 const microcmsImageTransformer: Transformer = ($) => {
@@ -44,7 +44,16 @@ const headingIdTransformer: Transformer = ($) => {
   });
 };
 
-const { html, data } = await microCMSRichEditorHandler(blog.content ?? "", {
+// 本文の「［広告画像:URL|幅x高さ］」を ASP のバナー画像に戻す（microCMS には外部の画像を入れられないため。docs/article.md の「広告の画像」）
+const AD_IMAGE_MARK =
+  /［広告画像:(https?:\/\/[^|］\s"<>]+)(?:\|(\d+)x(\d+))?］/g;
+const content = (blog.content ?? "").replace(
+  AD_IMAGE_MARK,
+  (_, src, width, height) =>
+    `<img src="${src}" alt=""${width ? ` width="${width}" height="${height}"` : ""} class="ad-image">`
+);
+
+const { html, data } = await microCMSRichEditorHandler(content, {
   transformers: [microcmsImageTransformer, headingIdTransformer],
   extractors: {
     toc: [tocExtractor({ ignoreLevels: [1, 4, 5] })],

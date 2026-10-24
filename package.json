@@ -7,7 +7,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "redirects": "node scripts/build-redirects.mjs"
+    "redirects": "node scripts/build-redirects.mjs",
+    "wp:export": "node scripts/wp-export.mjs",
+    "wp:import": "node scripts/wp-import.mjs"
   },
   "engines": {
     "node": ">=24.x"
