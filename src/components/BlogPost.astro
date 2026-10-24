@@ -65,7 +65,9 @@ const toc = data.toc;
 // 印だけの段落は段落ごと置き換える。名前が見つからない印は何も出さない
 const EMBED_MARK = /(<p>)?［埋め込み:([^］<]+)］(<\/p>)?/g;
 const embeds = new Map(
-  (blog.embeds ?? []).map((embed) => [embed.name.trim(), embed.html])
+  [blog.embeds ?? []]
+    .flat()
+    .map((embed) => [embed.name.trim(), embed.html ?? ""])
 );
 const bodyHtml = html.replace(EMBED_MARK, (_, open, name, close) => {
   const embed = embeds.get(name.trim());
