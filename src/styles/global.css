@@ -31,7 +31,7 @@
   --color-card: #ffffff;
   --color-card-foreground: #111111;
   /* PC 幅で中央の表示領域の左右に見える背景 */
-  --color-outside: #ffffff;
+  --color-outside: #f4f4f5;
   /* 主要ボタン・選択中のチップ・フッター（黒地に白文字） */
   --color-primary: #111111;
   --color-primary-hover: #3a3a3a;
@@ -40,6 +40,9 @@
      チップ・バッジは rounded-full のまま */
   --radius-box: 16px;
   --radius-button: 9999px;
+
+  /* 中央の表示領域の左右に落とす影（影は原則使わないが、表示領域の境目だけは使う。docs/design.md の「形」） */
+  --shadow-app: 0 0 32px rgb(0 0 0 / 0.08);
 
   /* リンク文字（黒＋下線で表す）。白背景とのコントラスト比 18.9 */
   --color-link: #111111;

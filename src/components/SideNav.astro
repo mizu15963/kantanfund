@@ -10,18 +10,30 @@ import { CATEGORY } from "@constants/index.ts";
     /* キャッチコピー（SITE.catchphrase と同じ文。改行の位置を決めるため直接書く） */
   }
   <p class="text-3xl leading-snug font-black tracking-tight">
-    投資の<br />「わからない」を<br />「わかる！」に変える
+    投資の<br />「わからない」を<br /><span
+      class="bg-[linear-gradient(transparent_55%,var(--color-highlight)_55%)]"
+      >「わかる！」</span
+    >に変える
   </p>
   <ul class="mt-10 space-y-2">
     {
       CATEGORY.hubs.map((hub) => (
         <li>
+          {/* 左に黄色の丸のアイコン、右に矢印。ホバーで全体が黄色になり、矢印が右に動く */}
           <a
             href={`/${hub.id}/`}
-            class="flex items-center gap-3 rounded-button border-2 border-primary bg-background px-5 py-3 font-bold hover:bg-primary hover:text-white"
+            class="group flex items-center gap-3 rounded-button border-2 border-primary bg-background py-2 pr-5 pl-2 font-bold hover:bg-highlight"
           >
-            <HubIcon id={hub.id} class="size-5" />
+            <span class="grid size-9 shrink-0 place-items-center rounded-full bg-highlight text-highlight-foreground group-hover:bg-background">
+              <HubIcon id={hub.id} class="size-5" />
+            </span>
             {hub.title}
+            <span
+              class="ml-auto transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            >
+              →
+            </span>
           </a>
         </li>
       ))

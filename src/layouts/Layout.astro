@@ -100,7 +100,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     {
       /*
         ヘッダー・フッターは画面幅いっぱい。その間は、どの画面幅でもスマホの画面幅の表示領域（max-w-app）を中央に置く（docs/design.md の「レイアウト」）
-        左右の余った幅は白の背景（bg-outside）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
+        左右の余った幅は薄いグレーの背景（bg-outside）。境目は影（shadow-app）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
       */
     }
     <Header />
@@ -114,7 +114,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
       </aside>
       <main
         class:list={[
-          "mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-app bg-background lg:min-h-[calc(100vh-4rem)] lg:border-x lg:border-x-line",
+          "mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-app bg-background lg:min-h-[calc(100vh-4rem)] lg:shadow-app",
           bleed ? "" : "px-5 pt-5 pb-14",
         ]}
       >
