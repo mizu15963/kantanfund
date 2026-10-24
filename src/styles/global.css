@@ -122,6 +122,11 @@ body {
   @apply my-0 inline-block rounded-none;
 }
 
+/* 埋め込み HTML（ASP の広告タグなど）: 段落と同じ間隔をあけ、はみ出さないようにする */
+.entry-content .embed {
+  @apply mb-5 max-w-full overflow-x-auto;
+}
+
 .entry-content figure {
   @apply mt-0 mb-6;
 }

@@ -61,6 +61,23 @@ const { html, data } = await microCMSRichEditorHandler(content, {
 });
 const toc = data.toc;
 
+// 本文の「［埋め込み:名前］」を、記事の埋め込み HTML（embeds）に置き換える（script・iframe の広告タグなど。リッチエディタには入れられないため。docs/article.md の「埋め込み HTML」）
+// 印だけの段落は段落ごと置き換える。名前が見つからない印は何も出さない
+const EMBED_MARK = /(<p>)?［埋め込み:([^］<]+)］(<\/p>)?/g;
+const embeds = new Map(
+  (blog.embeds ?? []).map((embed) => [embed.name.trim(), embed.html])
+);
+const bodyHtml = html.replace(EMBED_MARK, (_, open, name, close) => {
+  const embed = embeds.get(name.trim());
+  if (embed === undefined) {
+    console.warn(
+      `記事「${blog.title}」（${blog.id}）の埋め込み「${name}」がありません`
+    );
+  }
+  if (open && close) return embed ? `<div class="embed">${embed}</div>` : "";
+  return `${open ?? ""}${embed ?? ""}${close ?? ""}`;
+});
+
 const publishedAt = blogPublishedAt(blog);
 const revisedAt = blogRevisedAt(blog);
 // 更新日は公開日と日付が違うときだけ出す
@@ -140,5 +157,8 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
     )
   }
 
-  <div set:html={html} class="entry-content prose mt-8 max-w-none md:mt-10" />
+  <div
+    set:html={bodyHtml}
+    class="entry-content prose mt-8 max-w-none md:mt-10"
+  />
 </article>
