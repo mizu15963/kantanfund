@@ -25,12 +25,12 @@
 | `category` | カテゴリ | 複数コンテンツ参照（categories） | | 複数選べる。ハブページと記事一覧の絞り込みに使う |
 | `urlSlug` | URL（例外用） | テキストフィールド | | 旧スラッグが日本語の記事だけ |
 | `seoTitle` | 検索結果用のタイトル | テキストフィールド | | `<title>` を記事タイトルと変えたいときだけ |
-| `legacyThumbnail` | 旧サイトのサムネイル画像 | テキストフィールド | | 移行した記事用。`/wp-content/uploads/...` のパス |
+| `legacyThumbnail` | 旧サイトのサムネイル画像 | テキストフィールド | | 使っていない（旧サイトの画像も microCMS に上げ直すことにしたため。[todo.md](todo.md)） |
 | `originalPublishedAt` | 旧サイトの公開日 | 日時 | | 移行した記事用 |
 | `originalRevisedAt` | 旧サイトの更新日 | 日時 | | 移行した記事用 |
 | `noindex` | 検索エンジンに載せない | 真偽値 | | 既定はオフ |
 
-移行の進め方: まず3本をリッチエディタに入れて表示を確かめ、問題なければ残りをまとめて入れる。
+移行の進め方: まず3本をリッチエディタに入れて表示を確かめ、問題なければ残りをまとめて入れる（[migration.md](migration.md)）。
 
 ## categories（カテゴリ）
 
@@ -76,6 +76,8 @@
 | キー | 権限 | 使う場所 |
 |---|---|---|
 | ビルド用（`MICROCMS_API_KEY`） | `blog`・`categories` の GET のみ | ビルド（手元と Cloudflare） |
+
+旧サイトの記事を取り込む間だけ、このキーに `blog` の PUT・PATCH とマネジメント API の「メディアのアップロード」を足します（Hobby プランはキーを増やせないため。[migration.md](migration.md)）。終わったら GET のみに戻してください。
 
 お問い合わせ用のキー（`contacts` の POST のみ）は、フォームを作るときに追加します。
 

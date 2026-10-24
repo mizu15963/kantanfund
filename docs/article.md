@@ -23,9 +23,15 @@ microCMS の公開日時・更新日時は、移行した記事では「microCMS
 
 ## 画像
 
-- 旧サイトの画像は、旧サイトと同じパス（`/wp-content/uploads/...`）で `public/wp-content/uploads/` に置いて配信する（本文の画像の URL を書き換えないため）。
-- 新しく書く記事の画像は microCMS のメディアに置く。本文中の microCMS の画像は、画面幅に合わせた大きさ・webp で読み込む（`BlogPost.astro`）。旧サイトの画像はそのまま。
-- サムネイル: `thumbnail`（microCMS の画像）→ `legacyThumbnail`（旧サイトの画像のパス）→ 仮の画像（`/images/noimg.svg`）の順に使う。OG 画像も同じ（どちらもなければサイト共通の `/images/og.png`）。
+- 画像はすべて microCMS のメディアに置く。リッチエディタには microCMS の画像しか入れられないため、旧サイトの画像も取り込むときに microCMS に上げ直し、本文とサムネイルの URL を差し替える（[migration.md](migration.md)）。旧サイトの画像の URL（`/wp-content/uploads/...`）は引き継がない。
+- 本文中の microCMS の画像は、画面幅に合わせた大きさ・webp で読み込む（`BlogPost.astro`）。
+- サムネイル: `thumbnail`（microCMS の画像）→ `legacyThumbnail`（旧サイトの画像のパス。取り込みでは使わない）→ 仮の画像（`/images/noimg.svg`）の順に使う。OG 画像も同じ（どちらもなければサイト共通の `/images/og.png`）。
+
+## 広告の画像
+
+- ASP のバナー画像と計測用の画像（1×1）は、ASP のサーバーの画像をそのまま出す必要がある（表示回数の計測と規約のため）。リッチエディタには外部の画像を入れられないので、本文には印を書き、表示するときに画像に戻す（`BlogPost.astro`）。
+- 印の書き方: `［広告画像:画像のURL］`、大きさを指定するときは `［広告画像:画像のURL|300x250］`（全角の［］）。バナーをリンクにするときは、印ごとリンクにする。
+- 旧サイトの記事は取り込みのときに自動で印になる（[migration.md](migration.md)）。新しい記事で ASP のバナーを貼るときも同じ書き方にする。
 
 ## 本文
 

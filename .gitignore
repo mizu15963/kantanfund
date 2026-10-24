@@ -16,6 +16,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# 旧サイトから書き出した記事・画像（npm run wp:export）
+wp-export/
+
 # environment variables
 .env
 .env.production

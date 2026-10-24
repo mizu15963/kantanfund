@@ -10,8 +10,9 @@
 
 - [ ] microCMS に `categories`・`blog`・`contacts` を作り、ビルド用の API キーを発行する（[microcms.md](microcms.md)）
 - [ ] Cloudflare Workers Builds に接続し、変数を入れる（[cloudflare.md](cloudflare.md)）
-- [ ] 記事を3本だけ microCMS に入れて表示を確かめ、問題なければ残りを入れる（旧サイトの日付・サムネイル・description も入れる）
-- [ ] 旧サイトの画像を `public/wp-content/uploads/` に置く
+- [ ] 記事を3本だけ microCMS に入れて表示を確かめる（[migration.md](migration.md)）
+- [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（`npm run wp:export` を取り直してから `npm run wp:import -- --write --all`）
+- [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
 - [ ] GA4 の測定ID を `ANALYTICS.ga4MeasurementId` に入れる
 - [ ] Search Console の確認用ファイル（`google*.html`）を `public/` に置く
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
