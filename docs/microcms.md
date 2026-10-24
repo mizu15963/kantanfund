@@ -29,7 +29,7 @@
 | `originalPublishedAt` | 旧サイトの公開日 | 日時 | | 移行した記事用 |
 | `originalRevisedAt` | 旧サイトの更新日 | 日時 | | 移行した記事用 |
 | `noindex` | 検索エンジンに載せない | 真偽値 | | 既定はオフ |
-| `embeds` | 埋め込み HTML | カスタムフィールド `embed`（1記事に1つ。複数要るときは繰り返しフィールドに変える。表示側はどちらでも読める） | | script・iframe を使う広告タグなど。本文に `［埋め込み:名前］` と書いた場所に出る（[article.md](article.md) の「埋め込み HTML」） |
+| `embeds` | 埋め込み HTML | 繰り返しフィールド（カスタムフィールド `embed`） | | script・iframe を使う広告タグなど。本文に `［埋め込み:名前］` と書いた場所に出る（[article.md](article.md) の「埋め込み HTML」） |
 
 カスタムフィールド `embed`（埋め込み HTML）:
 

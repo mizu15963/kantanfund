@@ -76,7 +76,12 @@ const bodyHtml = html.replace(EMBED_MARK, (_, open, name, close) => {
       `記事「${blog.title}」（${blog.id}）の埋め込み「${name}」がありません`
     );
   }
-  if (open && close) return embed ? `<div class="embed">${embed}</div>` : "";
+  // 段落ごとの広告には、広告だと分かるよう「PR」の小さなラベルを付ける
+  if (open && close) {
+    return embed
+      ? `<div class="embed"><span class="embed-label">PR</span>${embed}</div>`
+      : "";
+  }
   return `${open ?? ""}${embed ?? ""}${close ?? ""}`;
 });
 

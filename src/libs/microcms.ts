@@ -27,11 +27,11 @@ export type Blog = {
   originalPublishedAt?: string | null;
   originalRevisedAt?: string | null;
   noindex?: boolean | null;
-  // いまはカスタムフィールド（1記事に1つ）。繰り返しフィールドに変えても読めるよう配列も受ける
+  // 繰り返しフィールド（1記事に複数）。カスタムフィールド1つのときの形も読めるようにしている
   embeds?: BlogEmbed | BlogEmbed[] | null;
 } & MicroCMSListContent;
 
-// 埋め込み HTML（blog の embeds。カスタムフィールド embed）
+// 埋め込み HTML（blog の embeds。繰り返しフィールドのカスタムフィールド embed）
 // 本文の「［埋め込み:名前］」の場所に html をそのまま出す（docs/article.md の「埋め込み HTML」）
 export type BlogEmbed = {
   fieldId: "embed";

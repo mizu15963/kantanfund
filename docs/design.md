@@ -19,4 +19,4 @@
 
 - ファビコン（`public/favicon.svg`）、OG 画像（`public/images/og.png`）、サムネイルのない記事の画像（`public/images/noimg.svg`）は仮。ロゴが決まったら差し替える。
 - 記事の本文の画像は角丸（`rounded-box`）。広告（ASP）のバナー画像だけは元の大きさのまま角丸にしない（`.entry-content img.ad-image`）。
-- 本文の埋め込み HTML（広告タグ）は段落と同じ間隔をあけ、横にはみ出すときはその中だけ横に動かせる（`.entry-content .embed`）。
+- 本文の埋め込み HTML（広告タグ）は段落と同じ間隔をあけ、横にはみ出すときはその中だけ横に動かせる（`.entry-content .embed`）。段落ごとの埋め込みには、上に小さな「PR」のチップ（枠線・薄い文字）を付ける（`.entry-content .embed-label`）。
