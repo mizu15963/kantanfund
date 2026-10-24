@@ -1,6 +1,7 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
-// カテゴリの入口のページ。見出しと導入文は各ページのファイルで渡す（導入文はスロット）。下にそのカテゴリの記事をすべて並べる
+// カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
+// 上から: 見出し → 導入文 → ポイント → 始めるまでの流れ → そのカテゴリの記事すべて → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import BlogList from "@components/BlogList.astro";
@@ -17,8 +18,15 @@ interface Props {
   listHeading: string;
   // meta description
   description: string;
+  // 「ここがポイント」（3つ程度）
+  points: { title: string; text: string }[];
+  // 「始めるまでの流れ」（3〜4ステップ）
+  steps: { title: string; text: string }[];
+  // 「よくある質問」
+  faqs: { question: string; answer: string }[];
 }
-const { id, heading, listHeading, description } = Astro.props;
+const { id, heading, listHeading, description, points, steps, faqs } =
+  Astro.props;
 const hub = CATEGORY.hubs.find((hub) => hub.id === id)!;
 const otherHubs = CATEGORY.hubs.filter((hub) => hub.id !== id);
 
@@ -53,6 +61,46 @@ const Meta = { title: hub.title, description };
     </div>
 
     <section class="space-y-4">
+      <h2 class="text-xl font-black">ここがポイント</h2>
+      <ul class="space-y-3">
+        {
+          points.map((point, index) => (
+            <li class="rounded-box border-2 border-primary p-5">
+              <p class="flex items-start gap-3 font-black leading-snug">
+                <span class="grid size-7 shrink-0 place-items-center rounded-full bg-highlight text-sm text-highlight-foreground">
+                  {index + 1}
+                </span>
+                <span class="pt-0.5">{point.title}</span>
+              </p>
+              <p class="mt-2 text-sm leading-relaxed">{point.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="space-y-4 rounded-box bg-section p-5">
+      <h2 class="text-xl font-black">始めるまでの流れ</h2>
+      <ol class="space-y-5">
+        {
+          steps.map((step, index) => (
+            <li class="flex gap-4">
+              <span class="flex shrink-0 flex-col items-center">
+                <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white">
+                  STEP{index + 1}
+                </span>
+              </span>
+              <div>
+                <p class="font-black leading-snug">{step.title}</p>
+                <p class="mt-1 text-sm leading-relaxed">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="space-y-4">
       <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
       <BlogList blogs={blogs} />
       <a
@@ -61,6 +109,31 @@ const Meta = { title: hub.title, description };
       >
         記事一覧で見る
       </a>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-black">よくある質問</h2>
+      <div class="divide-y divide-line border-y border-line">
+        {
+          faqs.map((faq) => (
+            <details class="group py-4">
+              <summary class="flex cursor-pointer list-none items-start gap-3 font-bold leading-snug [&::-webkit-details-marker]:hidden">
+                <span class="grid size-6 shrink-0 place-items-center rounded-full bg-highlight text-xs text-highlight-foreground">
+                  Q
+                </span>
+                <span class="flex-1 pt-0.5">{faq.question}</span>
+                <span
+                  class="pt-0.5 text-lg leading-none transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 pl-9 text-sm leading-relaxed">{faq.answer}</p>
+            </details>
+          ))
+        }
+      </div>
     </section>
 
     <section class="space-y-4">

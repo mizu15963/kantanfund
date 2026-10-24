@@ -96,34 +96,38 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     }
     <slot name="head" />
   </head>
-  {
-    (
+  <body>
+    {
       /*
-      どの画面幅でも、スマホの画面幅の表示領域（max-w-app）を中央に置く（docs/design.md の「レイアウト」）。
-      左右の余った幅は黄色の背景（bg-outside）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
-    */
-
-      <body>
-        <div class="lg:grid lg:grid-cols-[1fr_var(--container-app)_1fr]">
-          <aside class="hidden lg:block">
-            <div class="sticky top-0 flex h-screen items-center justify-center px-10">
-              <SideNav />
-            </div>
-          </aside>
-          <div class="mx-auto flex min-h-screen w-full max-w-app flex-col bg-background lg:border-x-2 lg:border-x-primary">
-            <Header />
-            <main class:list={["flex-1", bleed ? "" : "px-5 pt-5 pb-14"]}>
-              <slot />
-            </main>
-            <Footer />
-          </div>
-          <aside class="hidden lg:block">
-            <div class="sticky top-0 flex h-screen items-center justify-center px-10">
-              <SideBanner />
-            </div>
-          </aside>
+        ヘッダー・フッターは画面幅いっぱい。その間は、どの画面幅でもスマホの画面幅の表示領域（max-w-app）を中央に置く（docs/design.md の「レイアウト」）
+        左右の余った幅は黄色の背景（bg-outside）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
+      */
+    }
+    <Header />
+    <div class="lg:grid lg:grid-cols-[1fr_var(--container-app)_1fr]">
+      <aside class="hidden lg:block">
+        <div
+          class="sticky top-16 flex h-[calc(100vh-4rem)] items-center justify-center px-10"
+        >
+          <SideNav />
         </div>
-      </body>
-    )
-  }
+      </aside>
+      <main
+        class:list={[
+          "mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-app bg-background lg:min-h-[calc(100vh-4rem)] lg:border-x-2 lg:border-x-primary",
+          bleed ? "" : "px-5 pt-5 pb-14",
+        ]}
+      >
+        <slot />
+      </main>
+      <aside class="hidden lg:block">
+        <div
+          class="sticky top-16 flex h-[calc(100vh-4rem)] items-center justify-center px-10"
+        >
+          <SideBanner />
+        </div>
+      </aside>
+    </div>
+    <Footer />
+  </body>
 </html>
