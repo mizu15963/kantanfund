@@ -69,10 +69,15 @@ for (const row of rows) {
       // www なし・http の転送は Cloudflare 側の設定なので、本番のドメインでだけ確かめる
       if (isProduction) {
         const path = `/${SAMPLE_SLUG}/?utm_source=check`;
-        cases.push({
-          url: from.replace("/*", path),
-          expected: to.replace("/*", path),
-        });
+        const expected = to.replace("/*", path);
+        // http://* は www あり・なしの両方で確かめる
+        const froms =
+          from === "http://*"
+            ? ["http://www.kantanfund.net/*", "http://kantanfund.net/*"]
+            : [from];
+        for (const url of froms) {
+          cases.push({ url: url.replace("/*", path), expected });
+        }
       }
       break;
     // query（/?p={記事ID}）は対応表ができてから足す（docs/redirects.md）
@@ -144,13 +149,32 @@ for (const url of locs) {
   }
 }
 
+// User-agent: * のグループに Disallow: / があるか（Cloudflare が AI のクローラー向けに足す行は対象外）
+const disallowsAll = (text) => {
+  let inAll = false;
+  let lastWasAgent = false;
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.replace(/#.*/, "").trim();
+    const [key, ...rest] = line.split(":");
+    const value = rest.join(":").trim();
+    if (/^user-agent$/i.test(key)) {
+      inAll = (lastWasAgent && inAll) || value === "*";
+      lastWasAgent = true;
+      continue;
+    }
+    lastWasAgent = false;
+    if (inAll && /^disallow$/i.test(key) && value === "/") return true;
+  }
+  return false;
+};
+
 // robots.txt が巡回を止めていないか（止めていると noindex の指定も検索エンジンに届かない）
 console.log("\n## robots.txt");
 const robots = await fetch(`${base}/robots.txt`)
   .then((r) => (r.ok ? r.text() : ""))
   .catch(() => "");
 if (!robots) fail(`${base}/robots.txt を取得できない`);
-else if (/^Disallow:\s*\/\s*$/m.test(robots)) {
+else if (disallowsAll(robots)) {
   fail(`${base}/robots.txt → Disallow: / になっている`);
 }
 
