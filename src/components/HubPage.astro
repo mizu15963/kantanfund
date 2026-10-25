@@ -7,9 +7,11 @@ import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import BlogList from "@components/BlogList.astro";
 import HubIcon from "@components/HubIcon.astro";
+import Faq from "@components/Faq.astro";
 import { BLOG, CATEGORY } from "@constants/index.ts";
 import { getAllBlogSummaries } from "@libs/microcms.ts";
 import { blogPublishedAt } from "@libs/format.ts";
+import type { FaqItem } from "@libs/structuredData.ts";
 
 interface Props {
   id: (typeof CATEGORY.hubs)[number]["id"];
@@ -26,7 +28,7 @@ interface Props {
   // 「始めるまでの流れ」（3〜4ステップ）
   steps: { title: string; text: string }[];
   // 「よくある質問」
-  faqs: { question: string; answer: string }[];
+  faqs: FaqItem[];
 }
 const {
   id,
@@ -180,30 +182,7 @@ const Meta = { title: hub.title, description };
       </ol>
     </section>
 
-    <section id="faq" class="scroll-mt-20 space-y-4">
-      <h2 data-reveal class="text-xl font-black">よくある質問</h2>
-      <div class="divide-y divide-line border-y border-line">
-        {
-          faqs.map((faq) => (
-            <details class="group py-4">
-              <summary class="flex cursor-pointer list-none items-start gap-3 font-bold leading-snug [&::-webkit-details-marker]:hidden">
-                <span class="grid size-6 shrink-0 place-items-center rounded-full bg-highlight text-xs text-highlight-foreground">
-                  Q
-                </span>
-                <span class="flex-1 pt-0.5">{faq.question}</span>
-                <span
-                  class="pt-0.5 text-lg leading-none transition-transform group-open:rotate-45"
-                  aria-hidden="true"
-                >
-                  +
-                </span>
-              </summary>
-              <p class="mt-3 pl-9 text-sm leading-relaxed">{faq.answer}</p>
-            </details>
-          ))
-        }
-      </div>
-    </section>
+    <Faq id="faq" faqs={faqs} />
 
     <section class="space-y-4">
       <h2 data-reveal class="text-lg font-black">ほかのカテゴリ</h2>

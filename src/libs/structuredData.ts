@@ -9,6 +9,9 @@ type JsonLd = Record<string, unknown>;
 // パンくずの1段（url がない段は、いま見ているページ）
 export type BreadcrumbItem = { name: string; url?: string };
 
+// よくある質問の1問
+export type FaqItem = { question: string; answer: string };
+
 // <script type="application/ld+json"> に入れる文字列。
 // 本文に「</script>」などが入っていても HTML として壊れないよう、< > & を \uXXXX に置き換える
 export const toJsonLdString = (data: JsonLd) =>
@@ -78,5 +81,16 @@ export const breadcrumbJsonLd = (
     position: index + 1,
     name: item.name,
     ...(item.url ? { item: absolute(item.url, site) } : {}),
+  })),
+});
+
+// よくある質問（FAQPage）。画面に表示する質問と同じ項目から作る（Faq 部品の中で出す）
+export const faqJsonLd = (faqs: FaqItem[]): JsonLd => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: { "@type": "Answer", text: faq.answer },
   })),
 });

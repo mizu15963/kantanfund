@@ -3,6 +3,7 @@
 import Layout from "@layouts/Layout.astro";
 import BlogList from "@components/BlogList.astro";
 import HubIcon from "@components/HubIcon.astro";
+import Faq from "@components/Faq.astro";
 import { BLOG, CATEGORY, SITE } from "@constants/index.ts";
 import { getAllBlogSummaries } from "@libs/microcms.ts";
 import { blogPublishedAt } from "@libs/format.ts";
@@ -21,6 +22,35 @@ const hubLeads: Record<(typeof CATEGORY.hubs)[number]["id"], string> = {
   estate: "少額から始める不動産投資",
   cryptocurrency: "取引所の選び方と注意点",
 };
+
+// よくある質問（画面の表示と構造化データ FAQPage の両方に使う）。ハブページの質問・運営者情報の注意事項と食い違わないようにする
+const faqs = [
+  {
+    question: "投資は何から始めればいいですか？",
+    answer:
+      "まず生活費の数か月分を預金で確保し、当面使わないお金で始めるのが基本です。はじめての方は、少額から積み立てられる投資信託から始める人が多いです。",
+  },
+  {
+    question: "少ない金額でも投資はできますか？",
+    answer:
+      "できます。証券会社によっては投資信託を月100円から積み立てられます。不動産クラウドファンディングや暗号資産も、少ない金額から始められるサービスがあります。",
+  },
+  {
+    question: "投資で損をすることはありますか？",
+    answer:
+      "あります。投資は元本が保証されておらず、買ったときより値下がりすることもあります。余裕のあるお金で、いくつかに分けて長く続けることが大切です。",
+  },
+  {
+    question: "株式・FX・不動産・暗号資産はどう違いますか？",
+    answer:
+      "株式は会社に、不動産は物件に投資し、FXは通貨の、暗号資産はビットコインなどの値動きで利益をねらいます。値動きの大きさやリスクがちがうので、各カテゴリのページで特徴を確認しましょう。",
+  },
+  {
+    question: "投資の相談はできますか？",
+    answer:
+      "運営者は金融商品取引業者・投資助言業者ではないため、個別の銘柄や資産運用のご相談にはお答えできません。投資の判断はご自身の責任でお願いします。",
+  },
+];
 
 const Meta = { title: SITE.title };
 const site = Astro.site ?? new URL(Astro.url.origin);
@@ -144,5 +174,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
         ></a
       >
     </section>
+
+    <Faq faqs={faqs} />
   </div>
 </Layout>
