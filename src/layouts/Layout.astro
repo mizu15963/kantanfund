@@ -18,6 +18,8 @@ interface Props {
   };
   // true のページは main の左右の余白を付けない（背景の帯を表示領域の幅いっぱいに敷くページ用。余白はページ側で付ける）
   bleed?: boolean;
+  // true のページは PC 幅の左右（キャッチコピー・カテゴリ・バナー）を出さない（運営者情報・プライバシーポリシーなどの格式ばったページ用）
+  plain?: boolean;
 }
 
 const siteTitle = SITE.title;
@@ -25,7 +27,7 @@ const siteDescription = SITE.description;
 // canonical は常に本番のドメイン（astro.config.mjs の site）。プレビューや workers.dev で開いても変わらない
 const url = new URL(Astro.url.pathname, Astro.site);
 const isHome = Astro.url.pathname === "/";
-const { Meta, bleed = false } = Astro.props;
+const { Meta, bleed = false, plain = false } = Astro.props;
 const pageTitle = isHome ? siteTitle : `${Meta.title} | ${siteTitle}`;
 const pageDescription = Meta.description ? Meta.description : siteDescription;
 const ogImage = new URL(Meta.image ? Meta.image : "/images/og.png", Astro.site);
@@ -104,7 +106,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     {
       /*
         ヘッダー・フッターは画面幅いっぱい。その間は、どの画面幅でもスマホの画面幅の表示領域（max-w-app）を中央に置く（docs/design.md の「レイアウト」）
-        左右の余った幅は薄いグレーの背景（bg-outside）。境目は影（shadow-app）。PC 幅（lg 以上）では左にロゴとカテゴリ、右にバナーを置く
+        左右の余った幅は薄いグレーの背景（bg-outside）。境目は影（shadow-app）。PC 幅（lg 以上）では左にキャッチコピーとカテゴリ、右にバナーを置く（plain のページは置かない）
       */
     }
     <Header />
@@ -113,7 +115,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
         <div
           class="sticky top-16 flex h-[calc(100vh-4rem)] items-center justify-center px-10"
         >
-          <SideNav />
+          {!plain && <SideNav />}
         </div>
       </aside>
       <main
@@ -128,7 +130,7 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
         <div
           class="sticky top-16 flex h-[calc(100vh-4rem)] items-center justify-center px-10"
         >
-          <SideBanner />
+          {!plain && <SideBanner />}
         </div>
       </aside>
     </div>
