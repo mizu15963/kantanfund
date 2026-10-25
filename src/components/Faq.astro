@@ -18,7 +18,7 @@ const { faqs, id } = Astro.props;
 <script type="application/ld+json" set:html={toJsonLdString(faqJsonLd(faqs))} />
 
 <section id={id} class="scroll-mt-20 space-y-4">
-  <h2 class="text-xl font-black">よくある質問</h2>
+  <h2 data-reveal class="text-xl font-black">よくある質問</h2>
   <div class="divide-y divide-line border-y border-line">
     {
       faqs.map((faq) => (

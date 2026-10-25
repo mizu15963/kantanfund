@@ -27,14 +27,17 @@ const { blogs }: Props = Astro.props;
             .join(" ")}
         >
           <a href={blogPath(blog)} class="group flex gap-4 py-4">
-            <img
-              src={blogThumbnail(blog, 480)}
-              alt=""
-              width="480"
-              height="270"
-              loading="lazy"
-              class="aspect-video w-28 shrink-0 self-start rounded-box border border-line object-cover"
-            />
+            {/* 画像はホバーで少し拡大する（枠の外にははみ出さない） */}
+            <span class="w-28 shrink-0 self-start overflow-hidden rounded-box border border-line">
+              <img
+                src={blogThumbnail(blog, 480)}
+                alt=""
+                width="480"
+                height="270"
+                loading="lazy"
+                class="aspect-video w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
+              />
+            </span>
             <div class="min-w-0">
               <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 <Date date={blogPublishedAt(blog)} />

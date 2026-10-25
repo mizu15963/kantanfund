@@ -211,3 +211,68 @@ body {
 .entry-content li {
   @apply mb-1.5;
 }
+
+/*
+  動き（docs/design.md の「動き」）
+  data-reveal を付けた要素は、画面に入ったときに下からふわっと出す（Layout.astro のスクリプトが is-revealed を付ける）。
+  同時に画面に入った要素は、上から順に少しずつ遅らせて出す。画面から出たら外すので、戻ってきたときにもう一度動く。
+  隠すのはスクリプトが動く（html に js が付く）ときだけ。動きを減らす設定の端末では動かさない。
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    translate: 0 1.5rem;
+    transition:
+      opacity 0.7s var(--ease-reveal) var(--reveal-delay, 0ms),
+      translate 0.7s var(--ease-reveal) var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal].is-revealed {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* 文字のマーカー（TOP の「わかる！」）: 親が出たあと、左から右へ引く */
+  .js [data-reveal] .marker-draw {
+    background-size: 0% 100%;
+    transition: background-size 0.8s var(--ease-reveal)
+      calc(var(--reveal-delay, 0ms) + 0.5s);
+  }
+
+  .js [data-reveal].is-revealed .marker-draw {
+    background-size: 100% 100%;
+  }
+
+  /* TOP のキャッチコピーの横の飾り: ゆっくり上下に揺らす */
+  .float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  .float-slow-delay {
+    animation: float-slow 7s ease-in-out -3s infinite;
+  }
+}
+
+:root {
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 文字のマーカー（下半分に水色） */
+.marker-draw {
+  background-image: linear-gradient(
+    transparent 55%,
+    var(--color-highlight) 55%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
