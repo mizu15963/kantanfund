@@ -103,14 +103,14 @@ Site Kit の連携は、公開日まで外さないでください（旧サイ�
 
 ### 転送とサイトマップ（コマンド）
 
-手元で次を実行すると、`data/redirects.csv` の転送がすべて 301 で正しい転送先に行くか、サイトマップの URL がすべて 200 で開けて noindex が付いていないかを確かめられます。問題があると `NG` の行が出ます。
+手元で次を実行すると、`data/redirects.csv` の転送がすべて 301 で正しい転送先に行くか、サイトマップの URL がすべて 200 で開けて noindex が付いていないか（`<meta name="robots">` と `X-Robots-Tag` の両方）、`robots.txt` が巡回を止めていないかを確かめられます。問題があると `NG` の行が出ます。
 
 ```sh
 npm run check:launch
 ```
 
 - www なし（`https://kantanfund.net/`）と `http://` の転送も確かめる（Cloudflare 側の設定）。
-- 公開前に workers.dev で確かめるときは `npm run check:launch -- https://kantan-fund.<アカウント名>.workers.dev`（www なし・http の転送と noindex は確かめない）。
+- 公開前に workers.dev で確かめるときは `npm run check:launch -- https://kantan-fund.<アカウント名>.workers.dev`（www なし・http の転送は確かめない。noindex は逆に、すべての URL に `X-Robots-Tag: noindex` が付いていることを確かめる）。転送は本番ドメインに切り替えるまで旧サイト（WordPress）が受け持つので、本番の結果で最終的に確かめる。
 - `/?p={記事ID}` の転送は、対応表ができてから確かめる対象に足す（[redirects.md](redirects.md)）。
 
 ## 5. 公開後に見ること

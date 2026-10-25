@@ -115,17 +115,34 @@ console.log(`\n## サイトマップの URL（${locs.length} 件）`);
 for (const url of locs) {
   try {
     const response = await fetch(url, { redirect: "manual" });
+    const robotsHeader = response.headers.get("x-robots-tag") ?? "";
     if (response.status !== 200) fail(`${url} → ${response.status}`);
     else if (isProduction) {
-      // 本番では noindex が残っていないことも見る（SITE.noindex の戻し忘れ）
+      // 本番では noindex が残っていないことも見る（SITE.noindex・X-Robots-Tag）
       const html = await response.text();
       if (/<meta name="robots" content="noindex/.test(html)) {
         fail(`${url} → noindex が付いている`);
       }
+      if (/noindex/.test(robotsHeader)) {
+        fail(`${url} → X-Robots-Tag: ${robotsHeader} が付いている`);
+      }
+    } else if (!/noindex/.test(robotsHeader)) {
+      // workers.dev は X-Robots-Tag で検索エンジンに載せない（docs/site.md の「プレビュー」）
+      fail(`${url} → X-Robots-Tag: noindex が付いていない`);
     }
   } catch (error) {
     fail(`${url} → ${error.message}`);
   }
+}
+
+// robots.txt が巡回を止めていないか（止めていると noindex の指定も検索エンジンに届かない）
+console.log("\n## robots.txt");
+const robots = await fetch(`${base}/robots.txt`)
+  .then((r) => (r.ok ? r.text() : ""))
+  .catch(() => "");
+if (!robots) fail(`${base}/robots.txt を取得できない`);
+else if (/^Disallow:\s*\/\s*$/m.test(robots)) {
+  fail(`${base}/robots.txt → Disallow: / になっている`);
 }
 
 console.log(
