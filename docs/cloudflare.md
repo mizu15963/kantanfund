@@ -60,7 +60,7 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
 | `kantanfund.net` | A | `182.48.49.30`（さくらのレンタルサーバー `www2120.sakura.ne.jp`） | A・**DNS のみ（灰色の雲）** |
 | `www` | CNAME | `kantanfund.net` | CNAME・**DNS のみ** |
 | `mail` | CNAME | `kantanfund.net` | **A `182.48.49.30` に変える**・DNS のみ |
-| `ftp` | CNAME | `kantanfund.net` | **A `182.48.49.30` に変える**・DNS のみ |
+| `ftp` | CNAME | `kantanfund.net` | そのまま・DNS のみ（旧サーバーへの FTP 用。公開日に `kantanfund.net` がプロキシになると使えなくなるので、旧サーバーを使わなくなったら消す） |
 | `kantanfund.net` | MX | `10 kantanfund.net` | **`10 mail.kantanfund.net` に変える** |
 | `kantanfund.net` | TXT | `v=spf1 a:www2120.sakura.ne.jp mx ~all` | そのまま写す |
 
@@ -74,7 +74,7 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
 1. Cloudflare ダッシュボード → **ドメインを追加（Add a domain）** → `kantanfund.net` を入れる。**DNS レコードの自動スキャン** を選び、Free プランを選ぶ。
 2. 取り込まれたレコードを上の表に合わせる。
    - すべての雲を **灰色（DNS のみ）** にする（自動スキャンだと A・CNAME がオレンジになることが多い）。
-   - `mail`・`ftp` を A `182.48.49.30` に、MX を `mail.kantanfund.net`（優先度 10）にする。
+   - `mail` を A `182.48.49.30` に、MX を `mail.kantanfund.net`（優先度 10）にする。
    - さくらのゾーン編集画面と見比べ、足りないレコード（TXT など）を足す。
 3. ネームサーバーを変える前に、Cloudflare が正しく答えるかを確かめる（Cloudflare が指定したネームサーバーに直接聞く）。
 
