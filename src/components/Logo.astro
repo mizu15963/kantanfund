@@ -1,5 +1,6 @@
 ---
-// ロゴ（文字のロゴ。黒い丸に黄色の「か」＋サイト名）。正式なロゴができたら差し替える（docs/design.md の「画像・アイコン」）
+// ロゴ（旧サイトから使い続けるロゴの画像。文字入りなので、サイト名の文字を横に並べない）（docs/design.md の「画像・アイコン」）
+// 画像は public/images/logo.png（白い背景用）と logo-white.png（黒い背景用。黒い文字を白にしたもの）。どちらも背景は透明
 import { SITE } from "@constants/index.ts";
 
 interface Props {
@@ -10,18 +11,10 @@ interface Props {
 const { inverted = false, class: className } = Astro.props;
 ---
 
-<span
-  class:list={[
-    "inline-flex items-center gap-2 font-black tracking-tight",
-    className,
-  ]}
->
-  <span
-    class:list={[
-      "grid size-8 shrink-0 place-items-center rounded-full text-base",
-      inverted ? "bg-brand-500 text-primary" : "bg-primary text-brand-500",
-    ]}
-    aria-hidden="true">か</span
-  >
-  <span class="text-lg leading-none">{SITE.title}</span>
-</span>
+<img
+  src={inverted ? "/images/logo-white.png" : "/images/logo.png"}
+  alt={SITE.title}
+  width="480"
+  height="106"
+  class:list={["h-10 w-auto", className]}
+/>
