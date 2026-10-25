@@ -33,9 +33,13 @@
 ## 画像・アイコン
 
 - ロゴは旧サイトから使い続けるロゴ（「かんたんファンド」の黒い文字＋「easy fund」、水色の飾り）。文字入りの画像なので、横にサイト名の文字を並べない（`Logo.astro`。画像の alt がサイト名）。
-  - 画像は `public/images/logo.png`（白い背景用）と `public/images/logo-white.png`（フッターなど黒い背景用。黒い文字を白にしたもの）。どちらも元の画像の余白を切り抜き、背景を透明にしたもの（480×106px）。
-- ファビコン（`public/favicon.svg`）とサムネイルのない記事の画像（`public/images/noimg.svg`）は、黒い丸に水色の「か」の仮のもの。
-- OG 画像（`public/images/og.png`）は旧デザインの仮のまま。ロゴで作り直す（docs/todo.md）。
+  - 画像は `public/images/logo.png`（白い背景用）と `public/images/logo-white.png`（フッターなど黒い背景用。黒い文字を白にしたもの）。どちらも元の画像の余白を切り抜き、線をなめらかに描き直して背景を透明にしたもの（960×212px）。
+- アイコンは、ロゴの「ン」の部分（水色の四角＋黒い斜め線）を取り出した形。ロゴは横長で線が細く、小さくすると読めないため、アイコンには使わない。
+  - ブラウザのタブ: `public/favicon.svg`（背景は透明）
+  - iPhone のホーム画面: `public/apple-touch-icon.png`（180×180、白い背景。`Layout.astro` の `apple-touch-icon`）
+  - Android: `public/images/icon-192.png`・`icon-512.png`（白い背景。`public/manifest.webmanifest`）
+- OG 画像（`public/images/og.png`、1200×630）は、白地の真ん中にロゴ、下に水色の帯。サムネイルのない記事・固定ページで使う。
+- サムネイルのない記事の画像（`public/images/noimg.svg`）は、灰色の背景にアイコンの形とサイト名。
 - カテゴリのアイコンは線のアイコン（`HubIcon.astro`）。
 - 記事の本文の画像は角丸（`rounded-box`）。広告（ASP）のバナー画像だけは元の大きさのまま角丸にしない（`.entry-content img.ad-image`）。
 
