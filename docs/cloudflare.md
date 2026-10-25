@@ -51,11 +51,12 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
 
 DNS はさくらインターネットから Cloudflare に移す前提です（ドメインの契約はさくらのまま）。
 
-1. Cloudflare に `kantanfund.net` を追加し、さくらの DNS レコードをすべて写す。**メール（MX・SPF などの TXT）のレコードを必ず写す**。
+1. Cloudflare に `kantanfund.net` を追加し、さくらの DNS レコードをすべて写す。**メール（MX・SPF などの TXT）と、Search Console の確認用（`google-site-verification=……`）の TXT レコードを必ず写す**。
 2. さくらのドメイン管理で、ネームサーバーを Cloudflare が指定するものに変える。反映を待つ（この時点では旧サイトのまま）。
 3. Worker の **設定 → ドメインとルート（Domains & Routes）→ 追加 → カスタムドメイン** に `www.kantanfund.net` を追加する。ここで新サイトに切り替わる。
 4. `kantanfund.net`（www なし）と http の転送を設定する（[redirects.md](redirects.md) の「Cloudflare 側で設定する転送」）。
-5. Search Console の確認用ファイル（`google*.html`）を旧サーバーから取り出して `public/` に置き、切り替え後も確認が通ることを見る。
-6. Search Console に `https://www.kantanfund.net/sitemap.xml` を送信する。
+5. GA4・Search Console・転送を確かめ、サイトマップを送信する（[analytics.md](analytics.md) の「4. 公開日の確認」。`npm run check:launch` で転送とサイトマップをまとめて確かめられる）。
+
+Search Console の所有権の確認は、切り替えの前に新サイトでも通るようにしておきます（[analytics.md](analytics.md) の「2. 確認方法ごとの対応」）。
 
 切り替えの前に、`SITE.noindex` を `false` に戻して `main` に出しておきます（[site.md](site.md) の「公開前の noindex」）。

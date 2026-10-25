@@ -70,6 +70,17 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     <meta name="twitter:image" content={ogImage} />
     <link rel="canonical" href={url} />
     {
+      /* Search Console の所有権の確認（docs/analytics.md）。値が空のあいだは出さない */
+    }
+    {
+      ANALYTICS.googleSiteVerification && (
+        <meta
+          name="google-site-verification"
+          content={ANALYTICS.googleSiteVerification}
+        />
+      )
+    }
+    {
       /*
       Google アナリティクス 4（docs/site.md の「アクセス解析」）。
       本番のドメイン（astro.config.mjs の site）で開いたときだけ計測する（手元の確認や workers.dev のアクセスを混ぜないため）

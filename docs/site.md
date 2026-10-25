@@ -86,4 +86,4 @@
 
 - 旧サイトと同じ GA4 の測定ID を `src/constants/index.ts` の `ANALYTICS.ga4MeasurementId` に入れる（未設定のあいだは計測しない）。
 - 本番のドメインで開いたときだけ計測する（手元の確認や workers.dev のアクセスを混ぜないため）。
-- Search Console は旧サイトの登録（URL プレフィックス）をそのまま使う（[cloudflare.md](cloudflare.md) の「本番ドメインへの切り替え」）。
+- Search Console は旧サイトのプロパティをそのまま使う。所有権の確認の引き継ぎ方・公開日の確認・公開後に見ることは [analytics.md](analytics.md)。
