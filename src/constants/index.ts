@@ -3,7 +3,8 @@
 // サイト全体の設定
 export const SITE = {
   title: "かんたんファンド",
-  // 仮の文。TOP のデザインが決まったら差し替える（docs/todo.md）
+  // キャッチコピー（旧サイトと同じ。TOP の見出しと PC 幅の左側に出す）
+  catchphrase: "投資の「わからない」を「わかる！」に変える",
   description:
     "かんたんファンドは、株式・FX・不動産・暗号資産の始め方や各サービスの特徴を、はじめての方にも分かるように解説する投資の情報メディアです。",
   // true にすると全ページを noindex にする。公開前は true のままにし、公開日に false にする（docs/todo.md・docs/site.md の「公開前の noindex」）
@@ -15,7 +16,7 @@ export const SITE = {
 export const BLOG = {
   // 記事一覧（カテゴリでの絞り込みもこのページだけで行う。docs/site.md の「記事一覧」）
   listPath: "/articles/",
-  // TOP とハブページに出す新着記事の数
+  // TOP とハブページに出す新着記事の数（続きは記事一覧で見る）
   latestCount: 6,
 } as const;
 

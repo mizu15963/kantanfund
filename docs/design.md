@@ -1,22 +1,51 @@
 # 見た目の決まり
 
-新デザインが決まるまでの仮の決まりです。色・形の書き方は参考プロジェクト（クラファンセレクト）と同じにしています。
+参考サイトは [みんなの銀行](https://www.minna-no-ginko.com/)。白・黒と、ロゴの水色の配色で、どの画面幅でもスマホと同じ見た目にします。色・形の書き方は参考プロジェクト（クラファンセレクト）と同じです。
+
+## レイアウト
+
+- ヘッダーとフッターは画面幅いっぱい（参考サイトと同じ）。その間の本文は、どの画面幅でもスマホの画面幅（`max-w-app`、440px）の表示領域を中央に置く。ページの中身はすべてこの中に入るので、PC 用のレイアウトは作らない。
+  - 表示領域の中では `sm:` `md:` `lg:` などの画面幅の指定を使わない（PC で開くと画面幅は広いが、表示領域はスマホ幅のままのため）。画面幅の指定を使うのはヘッダー・フッター・左右の部分だけ。
+- 表示領域の左右の余った幅は薄いグレーの背景（`bg-outside`、`#f4f4f5`）。PC 幅（`lg`、1024px 以上）では、左にキャッチコピー・カテゴリのボタン（`SideNav.astro`）、右にバナー（`SideBanner.astro`）を、画面に固定して置く。PC 幅では表示領域の境目に影（`shadow-app`）を落とす。
+  - 運営者情報・プライバシーポリシーなどの格式ばったページは、`Layout` の `plain` で左右の部分を出さない（グレーの背景と影は残す）。カテゴリへはヘッダーから移れる。
+  - 左のカテゴリのボタンは、白地に黒の太枠、左に水色の丸のアイコン、右に矢印。ホバーでボタン全体が水色になり（アイコンの丸は白に）、矢印が右に動く。
+  - 右のバナーはいまは「はじめての方へ」（株式投資のハブページへ）と記事一覧の2つ。広告を置くときに作り直す。
+- ヘッダーは画面の上に固定。左にロゴ。スマホ・タブレット幅は右にメニューのボタン（開くとカテゴリと記事一覧へのリンク）、PC 幅はメニューの項目を横に並べる。
+- フッターは黒地に白文字。PC 幅ではロゴと、リンクの2つのまとまり（カテゴリ・サイトについて）を横に並べる。
+- 表示領域の中の左右の余白は 20px（`px-5`）。区切り線などを表示領域の幅いっぱいに引くページ（TOP）は、`Layout` の `bleed` で余白を外し、ページ側で付ける。
 
 ## 配色
 
-- 色は `src/styles/global.css` の `@theme` で一括管理する。いまのイメージカラー（`brand-500` `#1a7f75`、緑みの青）は仮。
-- ページやコンポーネントでは役割ごとの色（`bg-primary`・`text-foreground`・`bg-section`・`bg-highlight`・`text-link`・`border-line` など）を使う。
-- `brand-500` は白文字とのコントラスト比 4.84、`link`（`brand-700`）は白背景とのコントラスト比 7.6。
-- `brand-500` の値は、CSS の変数を使えない `Layout.astro` の `theme-color` と `public/manifest.webmanifest`・`public/favicon.svg`・`public/images/noimg.svg` にも書いている。色を変えたらそちらも直す。
+- 色は `src/styles/global.css` の `@theme` で一括管理する。
+- イメージカラーは旧サイトから使い続けるロゴの水色（`brand-500` `#90e1e4`。ロゴの飾りの色）。主要ボタン・選択中のチップ・フッターは黒（`primary` `#111111`）。
+- 水色はワンポイントにだけ使い、広い面（背景の帯・大きな箱）には使わない。使うのは、目立たせたいボタン（記事一覧へのボタンなど。黒の太枠＋水色＋黒文字、ホバーで `bg-highlight-hover`）、カテゴリのバッジ、アイコンの丸、番号の丸（プライバシーポリシーの項目番号など）、文字のマーカー（TOP のキャッチコピーの「わかる！」）、記事の h2 の左の線。
+- 水色は白地の上の文字には使わない（白とのコントラスト比 1.5 で読めないため）。水色の背景（`bg-highlight`）に黒文字（`text-highlight-foreground`）を載せる（コントラスト比 12.7）。
+- リンク文字（`link`）は黒＋下線。
+- ページやコンポーネントでは役割ごとの色（`bg-primary`・`text-foreground`・`bg-section`・`bg-highlight`・`text-link`・`border-line`・`bg-outside` など）を使う。
+- `brand-500` の値は、CSS の変数を使えない `public/favicon.svg`・`public/images/noimg.svg` にも書いている。色を変えたらそちらも直す。ブラウザの `theme-color`（`Layout.astro`・`public/manifest.webmanifest`）は白。
 
 ## 形
 
-- 箱（カード・表・パネル）は `rounded-box`（4px）、ボタンは `rounded-button`（6px）。チップ・バッジだけ `rounded-full`。
-- 影は原則使わない。ホバーは枠線や文字の色の変化で表す。
-- スマホ幅（375px 前後）を基準にし、PC 幅は広げる形で対応する。
+- 箱（カード・表・パネル）は `rounded-box`（16px）、ボタンは `rounded-button`（ピル形）。チップ・バッジだけ `rounded-full`。
+- 枠線の箱・ボタンは黒の太線（`border-2 border-primary`）。区切り線は `border-line`。
+- 見出しは太め（`font-black`）。
+- 影は原則使わない（例外は表示領域の境目の `shadow-app` だけ）。ホバーは背景（`hover:bg-section`）・下線・文字の色の変化で表す。
 
 ## 画像・アイコン
 
-- ファビコン（`public/favicon.svg`）、OG 画像（`public/images/og.png`）、サムネイルのない記事の画像（`public/images/noimg.svg`）は仮。ロゴが決まったら差し替える。
+- ロゴは旧サイトから使い続けるロゴ（「かんたんファンド」の黒い文字＋「easy fund」、水色の飾り）。文字入りの画像なので、横にサイト名の文字を並べない（`Logo.astro`。画像の alt がサイト名）。
+  - ロゴはまた変わる可能性がある。差し替えるときは `public/images/logo.png`・`logo-white.png` を置き換え、縦横の比が変わったら `Logo.astro` の `width`・`height` を直す（ロゴを使っているのは `Logo.astro` だけ。OG 画像 `public/images/og.png` もロゴ入りなので作り直す）。
+  - 画像は `public/images/logo.png`（白い背景用）と `public/images/logo-white.png`（フッターなど黒い背景用。黒い文字を白にしたもの）。どちらも元の画像の余白を切り抜き、線をなめらかに描き直して背景を透明にしたもの（960×212px）。
+- アイコンは、ロゴの「ン」の部分（水色の四角＋黒い斜め線）を取り出した形。ロゴは横長で線が細く、小さくすると読めないため、アイコンには使わない。
+  - ブラウザのタブ: `public/favicon.svg`（背景は透明）
+  - iPhone のホーム画面: `public/apple-touch-icon.png`（180×180、白い背景。`Layout.astro` の `apple-touch-icon`）
+  - Android: `public/images/icon-192.png`・`icon-512.png`（白い背景。`public/manifest.webmanifest`）
+- OG 画像（`public/images/og.png`、1200×630）は、白地の真ん中にロゴ、下に水色の帯。サムネイルのない記事・固定ページで使う。
+- サムネイルのない記事の画像（`public/images/noimg.svg`）は、灰色の背景にアイコンの形とサイト名。
+- カテゴリのアイコンは線のアイコン（`HubIcon.astro`）。
 - 記事の本文の画像は角丸（`rounded-box`）。広告（ASP）のバナー画像だけは元の大きさのまま角丸にしない（`.entry-content img.ad-image`）。
 - 本文の埋め込み HTML（広告タグ）は段落と同じ間隔をあけ、横にはみ出すときはその中だけ横に動かせる（`.entry-content .embed`）。段落ごとの埋め込みには、上に小さな「PR」のチップ（枠線・薄い文字）を付ける（`.entry-content .embed-label`）。
+
+## 記事の本文
+
+- h2 は灰色の箱＋左に水色の線、h3 は左に黒い線。目次と引用は灰色の箱（`bg-section`）。

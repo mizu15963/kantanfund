@@ -62,7 +62,7 @@ const Meta = {
 };
 ---
 
-<Layout Meta={Meta} fullWidth>
+<Layout Meta={Meta}>
   <Fragment slot="head">
     <script
       type="application/ld+json"
@@ -71,7 +71,7 @@ const Meta = {
       )}
     />
   </Fragment>
-  <div class="mx-auto max-w-3xl space-y-6 pb-8">
+  <div class="space-y-5">
     <Breadcrumb
       items={[
         { name: "TOP", url: "/" },

@@ -1,0 +1,53 @@
+---
+// ハブページ（カテゴリ）のアイコン。線の色は文字の色（currentColor）
+interface Props {
+  id: string;
+  class?: string;
+}
+const { id, class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class={className}
+>
+  {
+    id === "stock" && (
+      <>
+        <path d="M3 3v18h18" />
+        <path d="m7 15 4-4 3 3 5-6" />
+      </>
+    )
+  }
+  {
+    id === "fx" && (
+      <>
+        <path d="M4 8h13l-3-3" />
+        <path d="M20 16H7l3 3" />
+      </>
+    )
+  }
+  {
+    id === "estate" && (
+      <>
+        <path d="m3 11 9-7 9 7" />
+        <path d="M5 10v10h14V10" />
+        <path d="M10 20v-6h4v6" />
+      </>
+    )
+  }
+  {
+    id === "cryptocurrency" && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M10 7v10M13 7v10M9 8h4.5a2 2 0 0 1 0 4H9h5a2 2 0 0 1 0 4H9" />
+      </>
+    )
+  }
+</svg>

@@ -1,50 +1,188 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
-// カテゴリの入口のページ。本文は新デザインで作る（docs/todo.md）。いまは新着記事と記事一覧へのリンクだけ
+// カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
+// 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの新着記事（BLOG.latestCount 本） → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
-import PageHeader from "@components/PageHeader.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import BlogList from "@components/BlogList.astro";
+import HubIcon from "@components/HubIcon.astro";
 import { BLOG, CATEGORY } from "@constants/index.ts";
 import { getAllBlogSummaries } from "@libs/microcms.ts";
+import { blogPublishedAt } from "@libs/format.ts";
 
 interface Props {
   id: (typeof CATEGORY.hubs)[number]["id"];
+  // ページの見出し（h1）
+  heading: string;
+  // 記事の並びの見出し
+  listHeading: string;
+  // meta description
+  description: string;
+  // 「ここがポイント」（3つ程度）
+  points: { title: string; text: string }[];
+  // 「始めるまでの流れ」（3〜4ステップ）
+  steps: { title: string; text: string }[];
+  // 「よくある質問」
+  faqs: { question: string; answer: string }[];
 }
-const { id } = Astro.props;
+const { id, heading, listHeading, description, points, steps, faqs } =
+  Astro.props;
 const hub = CATEGORY.hubs.find((hub) => hub.id === id)!;
+const otherHubs = CATEGORY.hubs.filter((hub) => hub.id !== id);
 
 const blogs = await getAllBlogSummaries({
   filters: `category[contains]${id}`,
-  orders: "-publishedAt",
 });
+// 新しい順（移行した記事は旧サイトの公開日で並べる）
+blogs.sort((a, b) => blogPublishedAt(b).localeCompare(blogPublishedAt(a)));
 
-const Meta = {
-  title: hub.title,
-  description: `${hub.title}の始め方や、各サービスの特徴をまとめています。`,
-};
+// ページ内の目次（見出しの下に並べる）
+const toc = [
+  { id: "articles", label: "記事" },
+  { id: "points", label: "ポイント" },
+  { id: "steps", label: "始め方" },
+  { id: "faq", label: "質問" },
+];
+
+const Meta = { title: hub.title, description };
 ---
 
-<Layout Meta={Meta} fullWidth>
-  <div class="max-w-3xl space-y-10 pb-8 md:space-y-14">
-    <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: hub.title }]} />
-    <PageHeader title={hub.title}>
-      <p
-        class="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base"
-      >
-        {Meta.description}
-      </p>
-    </PageHeader>
+<Layout Meta={Meta}>
+  <div class="space-y-10">
+    <div class="space-y-5">
+      <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: hub.title }]} />
+      {/* 見出し: 灰色の箱 */}
+      <header class="rounded-box bg-section p-5">
+        <span
+          class="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1 text-xs font-bold text-white"
+        >
+          <HubIcon id={id} class="size-4" />
+          {hub.title}
+        </span>
+        <h1 class="mt-4 text-[1.4rem] leading-snug font-black tracking-tight">
+          {heading}
+        </h1>
+      </header>
+      {
+        /* ページ内の目次（押すとその場所へ移動。ヘッダーに隠れないよう各 section に scroll-mt-20） */
+      }
+      <nav aria-label="このページの目次">
+        <ul class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
+          {
+            toc.map((item) => (
+              <li>
+                <a
+                  href={`#${item.id}`}
+                  class="block rounded-button border-2 border-primary py-2 hover:bg-highlight"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="space-y-4 text-[0.95rem] leading-loose">
+        <slot />
+      </div>
+    </div>
 
-    <section class="space-y-5">
-      <h2 class="text-lg font-bold md:text-xl">新着記事</h2>
+    <section id="articles" class="scroll-mt-20 space-y-4">
+      <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
       <BlogList blogs={blogs.slice(0, BLOG.latestCount)} />
       <a
         href={`${BLOG.listPath}?category=${id}`}
-        class="inline-block text-sm font-bold text-link hover:underline"
+        class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section"
       >
-        {hub.title}の記事をすべて見る →
+        記事一覧で見る
       </a>
+    </section>
+
+    <section id="points" class="scroll-mt-20 space-y-4">
+      <h2 class="text-xl font-black">ここがポイント</h2>
+      <ul class="space-y-3">
+        {
+          points.map((point, index) => (
+            <li class="rounded-box border-2 border-primary p-5">
+              <p class="flex items-start gap-3 font-black leading-snug">
+                <span class="grid size-7 shrink-0 place-items-center rounded-full bg-highlight text-sm text-highlight-foreground">
+                  {index + 1}
+                </span>
+                <span class="pt-0.5">{point.title}</span>
+              </p>
+              <p class="mt-2 text-sm leading-relaxed">{point.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section
+      id="steps"
+      class="scroll-mt-20 space-y-4 rounded-box bg-section p-5"
+    >
+      <h2 class="text-xl font-black">始めるまでの流れ</h2>
+      <ol class="space-y-5">
+        {
+          steps.map((step, index) => (
+            <li class="flex gap-4">
+              <span class="flex shrink-0 flex-col items-center">
+                <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-white">
+                  STEP{index + 1}
+                </span>
+              </span>
+              <div>
+                <p class="font-black leading-snug">{step.title}</p>
+                <p class="mt-1 text-sm leading-relaxed">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section id="faq" class="scroll-mt-20 space-y-4">
+      <h2 class="text-xl font-black">よくある質問</h2>
+      <div class="divide-y divide-line border-y border-line">
+        {
+          faqs.map((faq) => (
+            <details class="group py-4">
+              <summary class="flex cursor-pointer list-none items-start gap-3 font-bold leading-snug [&::-webkit-details-marker]:hidden">
+                <span class="grid size-6 shrink-0 place-items-center rounded-full bg-highlight text-xs text-highlight-foreground">
+                  Q
+                </span>
+                <span class="flex-1 pt-0.5">{faq.question}</span>
+                <span
+                  class="pt-0.5 text-lg leading-none transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 pl-9 text-sm leading-relaxed">{faq.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-black">ほかのカテゴリ</h2>
+      <ul class="flex flex-wrap gap-2">
+        {
+          otherHubs.map((other) => (
+            <li>
+              <a
+                href={`/${other.id}/`}
+                class="inline-flex items-center gap-2 rounded-full border-2 border-primary px-4 py-2 text-sm font-bold hover:bg-section"
+              >
+                <HubIcon id={other.id} class="size-4" />
+                {other.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </section>
   </div>
 </Layout>

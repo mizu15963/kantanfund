@@ -92,10 +92,9 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
 ---
 
 <article>
-  {/* 記事の見出し: ページ見出しの形（短い線＋太字）。上に日付とカテゴリ */}
-  <header class="pt-2 md:pt-6">
-    <span class="block h-1 w-10 bg-primary" aria-hidden="true"></span>
-    <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+  {/* 記事の見出し: ページ見出しの形（太字）。上に日付とカテゴリ */}
+  <header class="pt-2">
+    <p class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
       <Date date={publishedAt} />
       {
         showRevised && (
@@ -108,16 +107,14 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
         blog.category?.map((category) => (
           <a
             href={`${BLOG.listPath}?category=${category.id}`}
-            class="font-bold text-link hover:underline"
+            class="rounded-full bg-highlight px-3 py-0.5 text-xs font-bold text-highlight-foreground hover:underline"
           >
             {category.name}
           </a>
         ))
       }
     </p>
-    <h1
-      class="mt-3 text-[1.4rem] font-bold leading-snug tracking-tight sm:text-3xl md:leading-snug"
-    >
+    <h1 class="mt-3 text-[1.45rem] font-black leading-snug tracking-tight">
       {blog.title}
     </h1>
   </header>
@@ -133,7 +130,7 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
         alt=""
         width={blog.thumbnail.width}
         height={blog.thumbnail.height}
-        class="mt-8 h-auto w-full rounded-box"
+        class="mt-6 h-auto w-full rounded-box"
       />
     )
   }
@@ -141,19 +138,19 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
   {/* 目次: 枠線の箱。見出しの階層は字下げで表す */}
   {
     toc.length > 0 && (
-      <nav aria-label="目次" class="mt-8 rounded-box border border-line p-5">
+      <nav aria-label="目次" class="mt-8 rounded-box bg-section p-5">
         <p class="text-sm font-bold">目次</p>
         <ul class="mt-3 space-y-2 text-sm">
           {toc.map((item) => (
             <li
               class:list={[
-                "border-l-2 border-line pl-3",
+                "border-l-2 border-primary pl-3",
                 { 3: "ml-4" }[item.level] ?? "",
               ]}
             >
               <a
                 href={`#${item.id}`}
-                class="block leading-relaxed hover:text-link hover:underline"
+                class="block leading-relaxed hover:underline"
               >
                 {item.text}
               </a>
@@ -164,8 +161,5 @@ const showRevised = revisedAt.slice(0, 10) !== publishedAt.slice(0, 10);
     )
   }
 
-  <div
-    set:html={bodyHtml}
-    class="entry-content prose mt-8 max-w-none md:mt-10"
-  />
+  <div set:html={bodyHtml} class="entry-content prose mt-8 max-w-none" />
 </article>

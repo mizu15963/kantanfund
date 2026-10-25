@@ -1,5 +1,5 @@
 ---
-// 運営者情報（仕様: docs/site.md の「固定ページ」）。本文は旧サイトの内容をもとに新デザインで作る（docs/todo.md）
+// 運営者情報（仕様: docs/site.md の「固定ページ」）。本文は旧サイトの /operator/ をもとにしている
 import Layout from "@layouts/Layout.astro";
 import PageHeader from "@components/PageHeader.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
@@ -10,17 +10,57 @@ const Meta = {
   title: "運営者情報",
   description: `${SITE.title}の運営者情報です。`,
 };
+
+const profile = [
+  { label: "サイト名", value: SITE.title },
+  { label: "運営者代表", value: "伊藤 颯汰" },
+  { label: "サイトURL", value: "https://www.kantanfund.net/" },
+  // お問い合わせのページを作ったらリンクにする（docs/todo.md）
+  { label: "お問い合わせ", value: "お問い合わせフォームより受け付けています" },
+];
 ---
 
-<Layout Meta={Meta} fullWidth>
-  <div class="max-w-3xl space-y-10 pb-8">
-    <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: "運営者情報" }]} />
-    <PageHeader title="運営者情報">
-      <p
-        class="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base"
-      >
-        準備中です。
+<Layout Meta={Meta} plain>
+  <div class="space-y-10">
+    <div class="space-y-5">
+      <Breadcrumb items={[{ name: "TOP", url: "/" }, { name: "運営者情報" }]} />
+      <PageHeader title="運営者情報" />
+    </div>
+
+    <dl class="divide-y divide-line rounded-box border-2 border-primary">
+      {
+        profile.map((row) => (
+          <div class="px-4 py-3.5">
+            <dt class="text-xs font-bold text-muted-foreground">{row.label}</dt>
+            <dd class="mt-1 text-sm break-all">{row.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <section class="space-y-3">
+      <h2 class="text-xl font-black">サイトについて</h2>
+      <p class="text-[0.95rem] leading-loose">
+        {
+          SITE.title
+        }は、これから投資を始めたい方や、忙しい現役世代の方に向けて、株式・投資信託・暗号資産・FX・不動産などの情報を、わかりやすい言葉でお届けするサイトです。運営者は約9年間、投資を続けてきました。
       </p>
-    </PageHeader>
+    </section>
+
+    <section class="space-y-3 rounded-box bg-section p-5">
+      <h2 class="text-lg font-black">ご注意</h2>
+      <ul class="list-disc space-y-2 pl-5 text-sm leading-relaxed">
+        <li>
+          特定の金融商品をおすすめするものではありません。運営者は金融商品取引業者・投資助言業者ではないため、個別の銘柄の売買や資産運用の個別のご相談にはお答えできません。投資の判断はご自身の責任でお願いします。
+        </li>
+        <li>
+          アフィリエイトプログラムで証券口座や投資信託などを紹介していますが、商品の販売・発送・代金の受け取りは行っていません。商品についてのご質問は、販売元・提供元へお問い合わせください。
+        </li>
+        <li>サイト内の文章・画像の無断転載・複製はお断りします。</li>
+        <li>
+          運営者の個人情報は、お問い合わせフォームからご請求があれば、すみやかに開示します。
+        </li>
+      </ul>
+    </section>
   </div>
 </Layout>

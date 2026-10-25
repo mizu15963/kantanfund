@@ -1,20 +1,57 @@
 ---
-// src/components/Footer.astro
-// お問い合わせ・プライバシーポリシーは、ページを作ったらここにリンクを足す（docs/todo.md）
-const { title } = Astro.props;
+// フッター（画面幅いっぱい。黒地に白文字。仕様: docs/design.md の「レイアウト」）
+// お問い合わせは、ページを作ったらここにリンクを足す（docs/todo.md）
+import Logo from "@components/Logo.astro";
+import { BLOG, CATEGORY, SITE } from "@constants/index.ts";
+
+const groups = [
+  {
+    title: "カテゴリ",
+    links: CATEGORY.hubs.map((hub) => ({
+      href: `/${hub.id}/`,
+      label: hub.title,
+    })),
+  },
+  {
+    title: "サイトについて",
+    links: [
+      { href: BLOG.listPath, label: "記事一覧" },
+      { href: "/operator/", label: "運営者情報" },
+      { href: "/privacy-policy/", label: "プライバシーポリシー" },
+    ],
+  },
+];
 ---
 
-<footer class="bg-muted border-t border-line">
-  <div
-    class="container mx-auto px-4 md:px-6 py-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3"
-  >
-    <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-      <a href="/operator/" class="hover:text-link hover:underline">運営者情報</a
-      >
+<footer class="bg-primary px-5 pt-10 pb-8 text-white lg:px-10 lg:pt-14">
+  <div class="lg:flex lg:justify-between lg:gap-10">
+    <div>
+      <a href="/" class="inline-block"><Logo inverted /></a>
+      <p class="mt-3 text-xs leading-relaxed text-white/70">
+        {SITE.catchphrase}
+      </p>
+    </div>
+    <nav class="mt-8 grid grid-cols-2 gap-6 lg:mt-0 lg:gap-16">
+      {
+        groups.map((group) => (
+          <div>
+            <p class="text-xs font-bold text-white/60">{group.title}</p>
+            <ul class="mt-3 space-y-3 text-sm">
+              {group.links.map((link) => (
+                <li>
+                  <a href={link.href} class="hover:underline">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </nav>
-    <p class="text-sm text-muted-foreground">
-      &copy; {new Date().getFullYear()}
-      {title}
-    </p>
   </div>
+  <p class="mt-10 text-xs text-white/60 lg:mt-14">
+    &copy; {new Date().getFullYear()}
+    {SITE.title}
+  </p>
 </footer>

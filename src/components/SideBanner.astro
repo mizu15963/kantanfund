@@ -1,0 +1,35 @@
+---
+// PC 幅の右側（中央の表示領域の外）のバナー（仕様: docs/design.md の「レイアウト」）
+// スマホ・タブレット幅では出さない。広告のバナーを置くようになったらここに足す
+import { BLOG } from "@constants/index.ts";
+---
+
+<div class="w-full max-w-xs space-y-4">
+  <a
+    href="/stock/"
+    class="block rounded-box bg-primary p-7 text-white hover:bg-primary-hover"
+  >
+    <span
+      class="inline-block rounded-full bg-highlight px-3 py-1 text-xs font-bold text-highlight-foreground"
+      >はじめての方へ</span
+    >
+    <p class="mt-4 text-2xl leading-snug font-black">
+      「投資って何？」<br />から始めよう
+    </p>
+    <p class="mt-3 text-sm leading-relaxed text-white/70">
+      株式・投資信託のきほんを、やさしく解説しています。
+    </p>
+    <span class="mt-6 inline-block text-sm font-bold underline"
+      >読んでみる →</span
+    >
+  </a>
+  <a
+    href={BLOG.listPath}
+    class="block rounded-box border-2 border-primary bg-background p-7 hover:bg-section"
+  >
+    <p class="text-lg font-black">記事一覧</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+      すべての記事をカテゴリで絞り込んで探せます。
+    </p>
+  </a>
+</div>
