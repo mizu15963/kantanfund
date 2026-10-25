@@ -1,5 +1,5 @@
 ---
-// ロゴ（旧サイトから使い続けるロゴの画像。文字入りなので、サイト名の文字を横に並べない）（docs/design.md の「画像・アイコン」）
+// ロゴ（2026年10月に納品されたロゴの画像。文字入りなので、サイト名の文字を横に並べない）（docs/design.md の「画像・アイコン」）
 // 画像は public/images/logo.png（白い背景用）と logo-white.png（黒い背景用。黒い文字を白にしたもの）。どちらも背景は透明（表示の2倍の大きさで作っている）
 import { SITE } from "@constants/index.ts";
 
@@ -15,6 +15,6 @@ const { inverted = false, class: className } = Astro.props;
   src={inverted ? "/images/logo-white.png" : "/images/logo.png"}
   alt={SITE.title}
   width="960"
-  height="212"
+  height="201"
   class:list={["h-10 w-auto", className]}
 />
