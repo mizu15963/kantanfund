@@ -86,7 +86,7 @@ Worker のカスタムドメイン（6）は、Cloudflare でドメインが「�
    Resolve-DnsName www.kantanfund.net -Server 〇〇.ns.cloudflare.com        # 182.48.49.30（104.〜 や 172.〜 なら雲がオレンジ）
    ```
 
-4. さくらの会員メニューで、ドメイン `kantanfund.net` のネームサーバーを Cloudflare が指定する2つ（`〇〇.ns.cloudflare.com`）に変える。
+4. さくらの会員メニュー → ドメインコントロールパネル → `kantanfund.net` → **Whois** タブ →「ネームサーバを編集」で、ネームサーバーを Cloudflare が指定する2つ（`〇〇.ns.cloudflare.com`）に変える。
    - **さくら側のゾーン（DNS の設定）は消さない**。反映までの間（数時間〜最大2日ほど）は、さくらと Cloudflare のどちらにも問い合わせが来るため。
    - さくらのレンタルサーバーのコントロールパネルのドメイン設定もそのままにする（旧サイトとメールはそこで動いている）。
 5. Cloudflare に「有効（Active）」と出るまで待つ（メールでも届く）。
