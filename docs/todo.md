@@ -18,4 +18,6 @@
 - [ ] 公開日: `npm run check:launch` で転送とサイトマップを確かめ、Search Console にサイトマップを送信する（[analytics.md](analytics.md) の4）
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
 - [ ] 公開日: `SITE.noindex` を `false` に戻して `main` に出す（戻し忘れると検索結果から消える。[site.md](site.md) の「公開前の noindex」）
-- [ ] 公開日: DNS を Cloudflare に移し、本番ドメインに切り替える（[cloudflare.md](cloudflare.md) の5）
+- [ ] 公開日: 本番ドメインを新サイトに切り替える（[cloudflare.md](cloudflare.md) の6）
+- [ ] `@kantanfund.net` のメールは使っていない（先方のメールは別ドメイン `hive-member.jp`）。公開後に MX・`mail` を消し、なりすまし防止（MX なし・`v=spf1 -all`・DMARC）に変える
+- 公開後もさくらのレンタルサーバー（`www2120.sakura.ne.jp`）は解約しない。同じサーバーで `hive-member.jp` のメールが動いている
