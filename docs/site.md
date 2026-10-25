@@ -66,10 +66,13 @@
 
 手元のビルド（`WORKERS_CI_BRANCH` がない）は本番と同じ扱いです。
 
-## 公開前の noindex
+## サイト全体の noindex
 
-公開日までは `SITE.noindex`（`src/constants/index.ts`）を `true` にしていて、`main` のビルドも含めて全ページに `<meta name="robots" content="noindex, nofollow">` が入ります。
-**公開日に `false` に戻します**（戻し忘れると、本番のサイトが検索結果から消えます）。`robots.txt` は巡回を止めないので、noindex の指定は検索エンジンに届きます。
+`SITE.noindex`（`src/constants/index.ts`）を `true` にすると、`main` のビルドも含めて全ページに `<meta name="robots" content="noindex, nofollow">` が入ります。ふだんは `false` です（`true` のまま出すと、本番のサイトが検索結果から消えます）。
+
+- 公開前は `true` にしていたが、本番ドメインの切り替えより前に `false` に戻した。本番ドメインに切り替えるまで、新サイトは workers.dev のアドレスでしか開けず、そこには「プレビュー」の3の `X-Robots-Tag: noindex` が付くので、`false` でも検索エンジンには載らない。
+- 本番（`www.kantanfund.net`）で noindex になるのは、microCMS で「検索エンジンに載せない」をオンにした記事・404・お問い合わせの送信完了のページだけ。
+- `npm run check:launch` で、本番に noindex が残っていないこと・workers.dev に `X-Robots-Tag: noindex` が付いていることを確かめられる（[analytics.md](analytics.md) の「転送とサイトマップ（コマンド）」）。
 
 ## サイトマップ
 

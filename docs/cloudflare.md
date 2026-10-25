@@ -130,4 +130,4 @@ DNS は先に Cloudflare に移しておきます（5）。
 
 Search Console の所有権の確認は、切り替えの前に新サイトでも通るようにしておきます（[analytics.md](analytics.md) の「2. 確認方法ごとの対応」）。
 
-切り替えの前に、`SITE.noindex` を `false` に戻して `main` に出しておきます（[site.md](site.md) の「公開前の noindex」）。
+`SITE.noindex` は切り替えの前に `false` に戻してあります（[site.md](site.md) の「サイト全体の noindex」）。切り替えた後は `npm run check:launch` で、本番に noindex が残っていないことも確かめます。
