@@ -7,11 +7,9 @@ import { blogPath, blogPublishedAt, blogThumbnail } from "@libs/format.ts";
 
 interface Props {
   blogs: BlogSummary[];
-  // true のときは、各行を画面に入ったときに下から出す（docs/design.md の「動き」）
-  reveal?: boolean;
 }
 
-const { blogs, reveal = false }: Props = Astro.props;
+const { blogs }: Props = Astro.props;
 ---
 
 {
@@ -24,7 +22,6 @@ const { blogs, reveal = false }: Props = Astro.props;
       {blogs.map((blog) => (
         <li
           class="border-b border-line"
-          data-reveal={reveal || undefined}
           data-categories={(blog.category ?? [])
             .map((category) => category.id)
             .join(" ")}

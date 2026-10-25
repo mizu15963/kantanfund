@@ -37,7 +37,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
   {
     /*
       キャッチコピー: 「わかる！」に水色のマーカー
-      動き（docs/design.md の「動き」）: 開いたときに上から順に下からふわっと出し、出たあとにマーカーを左から引く。右上の飾りはゆっくり揺れる
+      動き（docs/design.md の「動き」）: 開いたときに見出し → ボタンの順に下からふわっと出し、出たあとにマーカーを左から引く。右上の飾りはゆっくり揺れる
     */
   }
   <section
@@ -57,7 +57,6 @@ const site = Astro.site ?? new URL(Astro.url.origin);
       ></span>
     </div>
     <span
-      data-reveal
       class="relative inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-white"
       >はじめての投資ガイド</span
     >
@@ -69,7 +68,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
         >「わかる！」</span
       >に変える
     </h1>
-    <p data-reveal class="relative mt-5 text-sm leading-relaxed">
+    <p class="relative mt-5 text-sm leading-relaxed">
       株式・FX・不動産・暗号資産の始め方や、各サービスの特徴を、はじめての方にもわかる言葉で解説しています。
     </p>
     <div data-reveal class="relative mt-8 flex flex-wrap gap-3">
@@ -100,7 +99,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
       <ul class="grid grid-cols-2 gap-3">
         {
           CATEGORY.hubs.map((hub) => (
-            <li data-reveal>
+            <li>
               {/* ホバーで少し浮き上がり、アイコンの丸が少し大きくなる（影は付けない） */}
               <a
                 href={`/${hub.id}/`}
@@ -122,17 +121,16 @@ const site = Astro.site ?? new URL(Astro.url.origin);
 
     <section class="space-y-4">
       <h2 data-reveal class="text-xl font-black">新着記事</h2>
-      <BlogList blogs={latest} reveal />
+      <BlogList blogs={latest} />
       <a
-        data-reveal
         href={BLOG.listPath}
         class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section active:scale-[0.98] motion-reduce:active:scale-100"
         >記事一覧へ</a
       >
     </section>
 
-    <section data-reveal class="rounded-box bg-section p-6">
-      <h2 class="text-lg font-black">{SITE.title}について</h2>
+    <section class="rounded-box bg-section p-6">
+      <h2 data-reveal class="text-lg font-black">{SITE.title}について</h2>
       <p class="mt-3 text-sm leading-relaxed">
         投資を始めたい方や、忙しい現役世代の方に向けて、投資の情報をわかりやすい言葉でお届けしています。運営者は約9年間、投資を続けてきました。
       </p>
