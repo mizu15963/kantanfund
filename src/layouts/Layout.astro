@@ -50,6 +50,12 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
     {/* テーマの色（background の白。CSS の変数は使えないため値を直接書く） */}
     <meta name="theme-color" content="#ffffff" />
     <meta name="generator" content={Astro.generator} />
+    {
+      /* スクリプトが動くときだけ、画面に入ったら出す要素（data-reveal）を最初に隠す（docs/design.md の「動き」）。描画の前に付けるため head に置く */
+    }
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -146,5 +152,28 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
       </aside>
     </div>
     <Footer />
+    <script>
+      // 画面に入った data-reveal の要素に is-revealed を付けて出す（docs/design.md の「動き」）
+      // 同時に入った要素は、上から順に 0.08 秒ずつ遅らせる。一度出したら見張りをやめる
+      const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries
+              .filter((entry) => entry.isIntersecting)
+              .forEach((entry, index) => {
+                const target = entry.target as HTMLElement;
+                target.style.setProperty("--reveal-delay", `${index * 80}ms`);
+                target.classList.add("is-revealed");
+                observer.unobserve(target);
+              });
+          },
+          { rootMargin: "0px 0px -10% 0px" }
+        );
+        targets.forEach((target) => observer.observe(target));
+      } else {
+        targets.forEach((target) => target.classList.add("is-revealed"));
+      }
+    </script>
   </body>
 </html>
