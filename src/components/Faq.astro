@@ -1,0 +1,43 @@
+---
+// よくある質問（開閉式）。構造化データ（FAQPage）も同じ項目からここで出す（src/libs/structuredData.ts）
+// Google は表示されていない質問をデータにだけ入れることを認めていないため、画面の質問とデータを必ず同じにする
+import {
+  faqJsonLd,
+  toJsonLdString,
+  type FaqItem,
+} from "@libs/structuredData.ts";
+
+interface Props {
+  faqs: FaqItem[];
+  // ページ内の目次から移動するときの id
+  id?: string;
+}
+const { faqs, id } = Astro.props;
+---
+
+<script type="application/ld+json" set:html={toJsonLdString(faqJsonLd(faqs))} />
+
+<section id={id} class="scroll-mt-20 space-y-4">
+  <h2 class="text-xl font-black">よくある質問</h2>
+  <div class="divide-y divide-line border-y border-line">
+    {
+      faqs.map((faq) => (
+        <details class="group py-4">
+          <summary class="flex cursor-pointer list-none items-start gap-3 font-bold leading-snug [&::-webkit-details-marker]:hidden">
+            <span class="grid size-6 shrink-0 place-items-center rounded-full bg-highlight text-xs text-highlight-foreground">
+              Q
+            </span>
+            <span class="flex-1 pt-0.5">{faq.question}</span>
+            <span
+              class="pt-0.5 text-lg leading-none transition-transform group-open:rotate-45"
+              aria-hidden="true"
+            >
+              +
+            </span>
+          </summary>
+          <p class="mt-3 pl-9 text-sm leading-relaxed">{faq.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
