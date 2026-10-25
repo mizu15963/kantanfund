@@ -26,6 +26,7 @@ export const GET: APIRoute = async ({ site }) => {
     ...CATEGORY.hubs.map((hub) => ({ path: `/${hub.id}/` })),
     { path: BLOG.listPath },
     { path: "/operator/" },
+    { path: "/privacy-policy/" },
     ...blogs
       .filter((blog) => !blog.noindex)
       .map((blog) => ({ path: blogPath(blog), lastmod: blogRevisedAt(blog) })),

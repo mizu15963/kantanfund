@@ -19,10 +19,11 @@
 | `/articles/` | 記事一覧 | `src/pages/articles/index.astro` |
 | `/{スラッグ}/` | 記事 | `src/pages/[slug].astro` |
 | `/operator/` | 運営者情報 | `src/pages/operator.astro` |
+| `/privacy-policy/` | プライバシーポリシー | `src/pages/privacy-policy.astro` |
 | `/sitemap.xml` | サイトマップ | `src/pages/sitemap.xml.ts` |
 | `/robots.txt` | robots.txt | `src/pages/robots.txt.ts` |
 
-- お問い合わせ・プライバシーポリシーは未作成（[todo.md](todo.md)）。
+- お問い合わせは未作成（[todo.md](todo.md)）。
 - 旧サイトのカテゴリ・タグ・月別アーカイブなどは作らず、ハブページなどへ転送する（[redirects.md](redirects.md)）。
 
 ## TOP
@@ -39,6 +40,12 @@
 ## 運営者情報
 
 - 旧サイトの `/operator/` の内容（運営者・サイトについて・注意事項）をもとにしている。お問い合わせのページを作ったら、表の「お問い合わせ」をリンクにする。
+
+## プライバシーポリシー
+
+- 旧サイトにはなかったページ（URL は参考プロジェクトと同じ `/privacy-policy/`）。フッターの「サイトについて」からリンクする。
+- 項目は、個人情報の利用目的・管理（お問い合わせは microCMS に保存）・第三者への提供・開示などの請求・アクセス解析（GA4）・広告（アフィリエイトと Cookie）・ポリシーの変更・お問い合わせ窓口。
+- 内容を変えたら、ページの下の改定日を足す。お問い合わせのページを作ったら、「お問い合わせ窓口」にフォームへのリンクを足す。
 
 ## 記事一覧
 
@@ -64,7 +71,7 @@
 
 ## サイトマップ
 
-- `/sitemap.xml` をビルド時に microCMS から作る。載せるのは TOP・ハブページ・記事一覧・運営者情報と、noindex でない記事。
+- `/sitemap.xml` をビルド時に microCMS から作る。載せるのは TOP・ハブページ・記事一覧・運営者情報・プライバシーポリシーと、noindex でない記事。
 - 記事の `lastmod` は [article.md](article.md) の更新日。
 - 旧サイトのサイトマップの URL（`/sitemap_index.xml` など）は `/sitemap.xml` に転送する。
 - microCMS からの取得に失敗したらビルドを止める（ページが抜けたサイトマップを公開しないため）。
