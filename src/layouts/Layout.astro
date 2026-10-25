@@ -39,7 +39,11 @@ const noindex = SITE.noindex || Meta.noindex || isPreviewBuild;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    {
+      /* アイコン（docs/design.md の「画像・アイコン」）。iPhone は SVG を使わないため、ホーム画面用に PNG も置く */
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     {/* テーマの色（background の白。CSS の変数は使えないため値を直接書く） */}
     <meta name="theme-color" content="#ffffff" />
