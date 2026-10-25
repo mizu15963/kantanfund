@@ -35,6 +35,16 @@ const CATEGORY_MAP = {
 const CONTENT_ID_MAP = {
   "🔰超初心者向け！株の始め方・やり方を4ステッ": "kabu-start-4steps",
 };
+// 旧サイトで直っていない記事の本文の直し（旧スラッグ → [直す前, 直した後]）。書き出した HTML を変換する前に置き換える
+const CONTENT_FIXES = {
+  // バナー画像とリンクが別の段落に分かれていて、画像を押しても広告に飛ばない
+  tsonvscloudbank: [
+    [
+      /<figure class="wp-block-image">(<img [^>]*src="https:\/\/www22\.a8\.net\/svt\/bgt\?[^"]*"[^>]*>)<\/figure>\s*<p class="wp-block-paragraph"><a href="(https:\/\/px\.a8\.net\/svt\/ejp\?a8mat=45G21N\+C08PYQ\+4PEW\+60WN5)"><\/a><br><\/p>/,
+      '<figure class="wp-block-image"><a href="$2" rel="nofollow">$1</a></figure>',
+    ],
+  ],
+};
 // Yoast の title の末尾に付いているサイト名（新サイトでは Layout で付ける）
 const SITE_SUFFIX = /\s*[|｜\-–—]\s*かんたんファンド\s*$/;
 
@@ -374,11 +384,41 @@ const contentIdOf = (slug) => {
 const isoDate = (gmt, local) =>
   new Date(gmt ? `${gmt}Z` : `${local}+09:00`).toISOString();
 
+// 要約の文字数の目安（検索結果に出るのは120字ほど）
+const DESCRIPTION_LENGTH = 120;
+// 要約に使わない段落（広告の注意書き・免責・登録の案内など）
+const NOT_DESCRIPTION =
+  /PR|広告|プロモーション|アフィリエイト|作成したものではありません|公式見解|リスクがあります|こちら|[▼↓＼]/;
+
+// 旧サイトの description は、どの記事も Yoast が抜粋から自動で作ったもの（末尾が「[…]」、【PR】の注意書きから始まるものもある）。
+// 自動のものは使わず、本文の最初の段落から注意書きを除いて作り直す
+const descriptionOf = (post, html) => {
+  const yoast = decodeEntities(post.seo_description ?? "").trim();
+  if (yoast && !/\[(?:…|\.\.\.)\]$/.test(yoast)) return yoast;
+  let text = "";
+  for (const [, inner] of html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)) {
+    if (/<a\b/i.test(inner)) continue;
+    const p = stripTags(inner.replace(/<br\s*\/?>/gi, "")).replace(/\s+/g, " ");
+    if (!p || NOT_DESCRIPTION.test(p)) continue;
+    text += p;
+    if (text.length >= DESCRIPTION_LENGTH) break;
+  }
+  if (text.length <= DESCRIPTION_LENGTH) return text;
+  // 長いときは、120字までの最後の「。」で切る（「。」がなければ120字で切って「…」）
+  const cut = text.lastIndexOf("。", DESCRIPTION_LENGTH - 1);
+  return cut >= 40 ? text.slice(0, cut + 1) : `${text.slice(0, DESCRIPTION_LENGTH)}…`;
+};
+
 const buildContent = async (post, warnings) => {
-  const html = fs.readFileSync(
+  let html = fs.readFileSync(
     path.join(EXPORT_DIR, "html", `${post.slug}.html`),
     "utf-8"
   );
+  for (const [from, to] of CONTENT_FIXES[post.slug] ?? []) {
+    const fixed = html.replace(from, to);
+    if (fixed === html) warnings.push("CONTENT_FIXES の直しが当てはまりませんでした");
+    html = fixed;
+  }
   const contentId = contentIdOf(post.slug);
   const title = stripTags(post.title);
   const seoTitle = post.seo_title
@@ -400,12 +440,7 @@ const buildContent = async (post, warnings) => {
     contentId,
     body: {
       title,
-      description:
-        decodeEntities(post.seo_description ?? "").trim() ||
-        // 抜粋は「&amp;hellip;」のように二重に符号化されていることがあるため、もう一度戻してから末尾の「[…]」を消す
-        decodeEntities(stripTags(post.excerpt))
-          .replace(/\s*\[(?:…|\.\.\.)\]\s*$/, "")
-          .trim(),
+      description: descriptionOf(post, html),
       content: await convertContent(html, warnings),
       // 確認だけのときは旧サイトの URL のまま（microCMS には送らない）
       thumbnail: thumbnail ?? undefined,

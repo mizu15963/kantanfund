@@ -10,9 +10,7 @@
 
 - [ ] microCMS に `categories`・`blog`・`contacts` を作り、ビルド用の API キーを発行する（[microcms.md](microcms.md)）
 - [ ] Cloudflare Workers Builds に接続し、変数を入れる（[cloudflare.md](cloudflare.md)）
-- [ ] 記事を3本だけ microCMS に入れて表示を確かめる（[migration.md](migration.md)）
-- [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（`npm run wp:export` を取り直してから `npm run wp:import -- --write --all`）
-- [ ] 旧サイトで Yoast の description がない記事は抜粋が入り、【PR】の注意書きから始まるものがある。全件を入れた後に microCMS で直すか決める
+- [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（[migration.md](migration.md) の「全件の取り込み」）
 - [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
 - [ ] DNS を Cloudflare に移した後、Search Console に TXT レコードでの所有権の確認も足す（おすすめ。[analytics.md](analytics.md) の2）
 - [ ] 公開日: `npm run check:launch` で転送とサイトマップを確かめ、Search Console にサイトマップを送信する（[analytics.md](analytics.md) の4）
