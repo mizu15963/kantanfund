@@ -76,12 +76,19 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
    - すべての雲を **灰色（DNS のみ）** にする（自動スキャンだと A・CNAME がオレンジになることが多い）。
    - `mail`・`ftp` を A `182.48.49.30` に、MX を `mail.kantanfund.net`（優先度 10）にする。
    - さくらのゾーン編集画面と見比べ、足りないレコード（TXT など）を足す。
-3. さくらの会員メニューで、ドメイン `kantanfund.net` のネームサーバーを Cloudflare が指定する2つ（`〇〇.ns.cloudflare.com`）に変える。
+3. ネームサーバーを変える前に、Cloudflare が正しく答えるかを確かめる（Cloudflare が指定したネームサーバーに直接聞く）。
+
+   ```powershell
+   Resolve-DnsName kantanfund.net -Type MX -Server 〇〇.ns.cloudflare.com   # 10 mail.kantanfund.net
+   Resolve-DnsName www.kantanfund.net -Server 〇〇.ns.cloudflare.com        # 182.48.49.30（104.〜 や 172.〜 なら雲がオレンジ）
+   ```
+
+4. さくらの会員メニューで、ドメイン `kantanfund.net` のネームサーバーを Cloudflare が指定する2つ（`〇〇.ns.cloudflare.com`）に変える。
    - **さくら側のゾーン（DNS の設定）は消さない**。反映までの間（数時間〜最大2日ほど）は、さくらと Cloudflare のどちらにも問い合わせが来るため。
    - さくらのレンタルサーバーのコントロールパネルのドメイン設定もそのままにする（旧サイトとメールはそこで動いている）。
-4. Cloudflare に「有効（Active）」と出るまで待つ（メールでも届く）。
-5. 下の「移した後の確認」をする。
-6. Cloudflare の **SSL/TLS** は、公開日まで触らない（灰色の雲のレコードには関係しないが、公開日に「フル（厳密）」にするか決める）。
+5. Cloudflare に「有効（Active）」と出るまで待つ（メールでも届く）。
+6. 下の「移した後の確認」をする。
+7. Cloudflare の **SSL/TLS** は、公開日まで触らない（灰色の雲のレコードには関係しないが、公開日に「フル（厳密）」にするか決める）。
 
 ### 移した後の確認
 
