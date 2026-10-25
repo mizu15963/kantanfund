@@ -135,6 +135,16 @@ body {
   @apply my-0 inline-block rounded-none;
 }
 
+/* 埋め込み HTML（ASP の広告タグなど）: 段落と同じ間隔をあけ、はみ出さないようにする */
+.entry-content .embed {
+  @apply mb-5 max-w-full overflow-x-auto;
+}
+
+/* 埋め込み HTML の上の「PR」ラベル（チップ） */
+.entry-content .embed-label {
+  @apply mb-1 block w-fit rounded-full border border-line px-2 text-xs leading-5 text-muted-foreground;
+}
+
 .entry-content figure {
   @apply mt-0 mb-6;
 }

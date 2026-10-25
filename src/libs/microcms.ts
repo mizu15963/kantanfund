@@ -27,7 +27,17 @@ export type Blog = {
   originalPublishedAt?: string | null;
   originalRevisedAt?: string | null;
   noindex?: boolean | null;
+  // 繰り返しフィールド（1記事に複数）。カスタムフィールド1つのときの形も読めるようにしている
+  embeds?: BlogEmbed | BlogEmbed[] | null;
 } & MicroCMSListContent;
+
+// 埋め込み HTML（blog の embeds。繰り返しフィールドのカスタムフィールド embed）
+// 本文の「［埋め込み:名前］」の場所に html をそのまま出す（docs/article.md の「埋め込み HTML」）
+export type BlogEmbed = {
+  fieldId: "embed";
+  name: string;
+  html?: string | null;
+};
 
 // カテゴリ（schema/categories.json）
 export type Category = {
@@ -53,7 +63,7 @@ const SUMMARY_FIELDS = [
   "revisedAt",
 ].join(",");
 
-export type BlogSummary = Omit<Blog, "content" | "seoTitle">;
+export type BlogSummary = Omit<Blog, "content" | "seoTitle" | "embeds">;
 
 // 記事をすべて取る（記事ページを作るとき）
 export const getAllBlogs = async (queries?: MicroCMSQueries) =>
