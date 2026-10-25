@@ -126,7 +126,8 @@ DNS は先に Cloudflare に移しておきます（5）。
 2. Cloudflare の DNS で、`www` の CNAME（旧サイト向け）を消す（すぐ次の3で新サイト向けのレコードが作られる。残っているとカスタムドメインを追加できない）。
 3. Worker の **設定 → ドメインとルート（Domains & Routes）→ 追加 → カスタムドメイン** に `www.kantanfund.net` を追加する。ここで新サイトに切り替わる。
 4. `kantanfund.net` の A レコードをプロキシ（オレンジの雲）にし、`kantanfund.net`（www なし）と http の転送を設定する（[redirects.md](redirects.md) の「Cloudflare 側で設定する転送」）。
-5. GA4・Search Console・転送を確かめ、サイトマップを送信する（[analytics.md](analytics.md) の「4. 公開日の確認」。`npm run check:launch` で転送とサイトマップをまとめて確かめられる）。
+5. Cloudflare が robots.txt に AI のクローラー向けの `Disallow: /` を足す設定（**セキュリティ → ボット**、または **AI Crawl Control** の「robots.txt の管理」）をオフにする。旧サイトと同じく AI のクローラーは止めない（2026-10-25 に決定。検索エンジン向けの `User-agent: *` には元から影響しない）。
+6. GA4・Search Console・転送を確かめ、サイトマップを送信する（[analytics.md](analytics.md) の「4. 公開日の確認」。`npm run check:launch` で転送とサイトマップをまとめて確かめられる）。
 
 Search Console の所有権の確認は、切り替えの前に新サイトでも通るようにしておきます（[analytics.md](analytics.md) の「2. 確認方法ごとの対応」）。
 
