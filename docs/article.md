@@ -45,6 +45,7 @@ microCMS の公開日時・更新日時は、移行した記事では「microCMS
 - 本文は microCMS のリッチエディタ（`content`）。旧サイトの本文をそのまま移す。
 - 見た目は `src/styles/global.css` の `.entry-content`。
 - h2・h3 から目次を作る。id のない見出し（移行した本文など）には `heading-{番号}` の id を付ける。
+- 本文中のサイトの外へのリンク（ASP のリンクを含む）は別タブで開く。表示するときに `target="_blank"` と `rel="noopener"` を付ける（`BlogPost.astro`。microCMS の本文は書き換えない）。リンクの URL は変えず、元の `rel`（`nofollow` など）は残す。参照元が届かなくなる `noreferrer` は付けない（ASP が参照元で計測することがあるため）。サイト内のリンク・`#見出し`・`mailto:` と、埋め込み HTML（`embeds`）の中は対象外。
 - 本文中のアフィリエイトリンク（tcs-asp.net・cs-a.jp など）はそのまま残す。記事の先頭に「本ページはプロモーション（広告）を含みます。」を出す。
 
 ## SEO の項目

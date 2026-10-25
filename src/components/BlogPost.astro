@@ -44,6 +44,26 @@ const headingIdTransformer: Transformer = ($) => {
   });
 };
 
+// サイトの外へのリンクは別タブで開く（docs/article.md の「本文」）
+// URL は変えない（ASP の計測のため）。rel は元の値（nofollow など）を残して noopener を足す。参照元を消す noreferrer は付けない
+const siteHost = (Astro.site?.hostname ?? "").replace(/^www\./, "");
+const externalLinkTransformer: Transformer = ($) => {
+  $("a[href]").each((_, link) => {
+    const $link = $(link);
+    let url: URL;
+    try {
+      url = new URL($link.attr("href") ?? "", Astro.site);
+    } catch {
+      return;
+    }
+    if (!/^https?:$/.test(url.protocol)) return;
+    if (url.hostname.replace(/^www\./, "") === siteHost) return;
+    const rel = new Set(($link.attr("rel") ?? "").split(/\s+/).filter(Boolean));
+    rel.add("noopener");
+    $link.attr({ target: "_blank", rel: [...rel].join(" ") });
+  });
+};
+
 // 本文の「［広告画像:URL|幅x高さ］」を ASP のバナー画像に戻す（microCMS には外部の画像を入れられないため。docs/article.md の「広告の画像」）
 const AD_IMAGE_MARK =
   /［広告画像:(https?:\/\/[^|］\s"<>]+)(?:\|(\d+)x(\d+))?］/g;
@@ -54,7 +74,11 @@ const content = (blog.content ?? "").replace(
 );
 
 const { html, data } = await microCMSRichEditorHandler(content, {
-  transformers: [microcmsImageTransformer, headingIdTransformer],
+  transformers: [
+    microcmsImageTransformer,
+    headingIdTransformer,
+    externalLinkTransformer,
+  ],
   extractors: {
     toc: [tocExtractor({ ignoreLevels: [1, 4, 5] })],
   },
