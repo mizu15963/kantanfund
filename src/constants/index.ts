@@ -16,7 +16,7 @@ export const SITE = {
 export const BLOG = {
   // 記事一覧（カテゴリでの絞り込みもこのページだけで行う。docs/site.md の「記事一覧」）
   listPath: "/articles/",
-  // TOP とハブページに出す新着記事の数
+  // TOP とハブページに出す新着記事の数（続きは記事一覧で見る）
   latestCount: 6,
 } as const;
 

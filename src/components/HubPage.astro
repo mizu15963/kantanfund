@@ -1,7 +1,7 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
 // カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
-// 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの記事すべて → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
+// 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの新着記事（BLOG.latestCount 本） → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import BlogList from "@components/BlogList.astro";
@@ -89,7 +89,7 @@ const Meta = { title: hub.title, description };
 
     <section id="articles" class="scroll-mt-20 space-y-4">
       <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
-      <BlogList blogs={blogs} />
+      <BlogList blogs={blogs.slice(0, BLOG.latestCount)} />
       <a
         href={`${BLOG.listPath}?category=${id}`}
         class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section"
