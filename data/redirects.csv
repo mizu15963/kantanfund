@@ -58,7 +58,8 @@ from,to,status,match,種別,メモ
 /sitemap-misc.xml,/sitemap.xml,301,exact,技術系,
 /sitemap.html,/,301,exact,技術系,HTMLサイトマップを作るならそのURLへ
 /feed/,/,301,exact,RSS,新サイトでRSSを出すならフィードURLへ変更
-/comments/feed/,/,301,exact,RSS,
+/comments/feed/,/,301,exact,RSS,Cloudflare では下の /{slug}/feed/ が先に効いて /comments/ に転送されるため、次の行で / に送る
+/comments/,/,301,exact,RSS,/comments/feed/ の転送の受け皿（旧サイトにこのページはない）
 /{slug}/feed/,/{slug}/,301,pattern,記事のRSS,記事47本すべてに適用
 /{slug}/amp/,/{slug}/,301,pattern,念のため,旧サイトでAMPは未確認。不要なら削除
 /?p={id},/{slug}/,301,query,WordPress短縮URL,IDとスラッグの対応は抽出結果 posts.json から生成

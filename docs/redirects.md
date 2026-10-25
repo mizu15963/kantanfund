@@ -14,6 +14,8 @@
 | `pattern`（`{slug}` を含む） | `{slug}` を `:slug` にする（例: `/:slug/feed/ /:slug/ 301`） |
 | `host`・`query` | 書けないので Cloudflare 側で設定する（下） |
 
+`:slug` を含む行は `_redirects` の後ろに並べるが、Cloudflare では並び順にかかわらず `:slug` の行が `exact` の行より先に効くことがある（`/comments/feed/` が `/:slug/feed/` で `/comments/` に転送された）。そうなる URL は、転送先（`/comments/`）にも `exact` の行を足して2段で正しい転送先に送る。`npm run check:launch` は 301 が続く限りたどって最後の転送先を確かめる。
+
 主な転送先:
 
 | 旧 URL | 転送先 |

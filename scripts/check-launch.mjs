@@ -90,12 +90,21 @@ for (const { url, expected } of cases) {
   try {
     const response = await fetch(url, { redirect: "manual" });
     const location = response.headers.get("location");
-    const actual = location ? new URL(location, url).href : "";
+    let actual = location ? new URL(location, url).href : "";
     if (expected === null) {
       if (response.status !== 200)
         fail(`${url} → ${response.status} ${actual}（期待: 200）`);
-    } else if (response.status !== 301 || actual !== new URL(expected).href) {
-      fail(`${url} → ${response.status} ${actual}（期待: 301 ${expected}）`);
+      continue;
+    }
+    // 転送が2段になるもの（/comments/feed/ → /comments/ → /）は、301 が続く限りたどって最後の転送先を見る
+    const status = response.status;
+    for (let hop = 0; status === 301 && actual !== new URL(expected).href && hop < 3; hop++) {
+      const next = await fetch(actual, { redirect: "manual" });
+      if (next.status !== 301) break;
+      actual = new URL(next.headers.get("location") ?? "", actual).href;
+    }
+    if (status !== 301 || actual !== new URL(expected).href) {
+      fail(`${url} → ${status} ${actual}（期待: 301 ${expected}）`);
     }
   } catch (error) {
     fail(`${url} → ${error.message}`);
