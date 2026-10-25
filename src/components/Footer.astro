@@ -1,8 +1,7 @@
 ---
 // フッター（画面幅いっぱい。黒地に白文字。仕様: docs/design.md の「レイアウト」）
-// お問い合わせは、ページを作ったらここにリンクを足す（docs/todo.md）
 import Logo from "@components/Logo.astro";
-import { BLOG, CATEGORY, SITE } from "@constants/index.ts";
+import { BLOG, CATEGORY, CONTACT, SITE } from "@constants/index.ts";
 
 const groups = [
   {
@@ -18,6 +17,7 @@ const groups = [
       { href: BLOG.listPath, label: "記事一覧" },
       { href: "/operator/", label: "運営者情報" },
       { href: "/privacy-policy/", label: "プライバシーポリシー" },
+      { href: CONTACT.path, label: "お問い合わせ" },
     ],
   },
 ];

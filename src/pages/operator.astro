@@ -3,7 +3,7 @@
 import Layout from "@layouts/Layout.astro";
 import PageHeader from "@components/PageHeader.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
-import { SITE } from "@constants/index.ts";
+import { CONTACT, SITE } from "@constants/index.ts";
 export const prerender = true;
 
 const Meta = {
@@ -15,9 +15,13 @@ const profile = [
   { label: "サイト名", value: SITE.title },
   { label: "運営者代表", value: "伊藤 颯汰" },
   { label: "サイトURL", value: "https://www.kantanfund.net/" },
-  // お問い合わせのページを作ったらリンクにする（docs/todo.md）
-  { label: "お問い合わせ", value: "お問い合わせフォームより受け付けています" },
-];
+  // href がある行は値をリンクにする
+  {
+    label: "お問い合わせ",
+    value: "お問い合わせフォームより受け付けています",
+    href: CONTACT.path,
+  },
+] as { label: string; value: string; href?: string }[];
 ---
 
 <Layout Meta={Meta} plain>
@@ -32,7 +36,18 @@ const profile = [
         profile.map((row) => (
           <div class="px-4 py-3.5">
             <dt class="text-xs font-bold text-muted-foreground">{row.label}</dt>
-            <dd class="mt-1 text-sm break-all">{row.value}</dd>
+            <dd class="mt-1 text-sm break-all">
+              {row.href ? (
+                <a
+                  href={row.href}
+                  class="font-bold underline hover:text-link-hover"
+                >
+                  {row.value}
+                </a>
+              ) : (
+                row.value
+              )}
+            </dd>
           </div>
         ))
       }

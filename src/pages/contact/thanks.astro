@@ -1,0 +1,36 @@
+---
+// お問い合わせの送信完了（仕様: docs/contact.md）
+// フォームから移動してくるだけのページなので、検索エンジンには載せない
+import Layout from "@layouts/Layout.astro";
+import PageHeader from "@components/PageHeader.astro";
+import { BLOG } from "@constants/index.ts";
+export const prerender = true;
+
+const Meta = {
+  title: "お問い合わせを受け付けました",
+  noindex: true,
+};
+---
+
+<Layout Meta={Meta} plain>
+  <div class="space-y-8 py-4">
+    <PageHeader title="お問い合わせを受け付けました">
+      <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
+        お問い合わせいただき、ありがとうございます。内容を確認のうえ、必要に応じてご入力のメールアドレスにご連絡します。お返事までお時間をいただく場合があります。
+      </p>
+    </PageHeader>
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/"
+        class="rounded-button border-2 border-primary bg-highlight px-5 py-3 text-sm font-bold text-highlight-foreground hover:bg-highlight-hover"
+        >TOP へ</a
+      >
+      <a
+        href={BLOG.listPath}
+        class="rounded-button border-2 border-primary px-5 py-3 text-sm font-bold hover:bg-section"
+      >
+        記事一覧へ
+      </a>
+    </div>
+  </div>
+</Layout>

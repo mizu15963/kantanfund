@@ -4,7 +4,7 @@
 import type { APIRoute } from "astro";
 import { getAllBlogSummaries } from "@libs/microcms.ts";
 import { blogPath, blogRevisedAt } from "@libs/format.ts";
-import { BLOG, CATEGORY } from "@constants/index.ts";
+import { BLOG, CATEGORY, CONTACT } from "@constants/index.ts";
 export const prerender = true;
 
 type Entry = { path: string; lastmod?: string };
@@ -20,13 +20,14 @@ export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL("https://www.kantanfund.net/");
   const blogs = await getAllBlogSummaries();
 
-  // 載せないページ: noindex の記事、404
+  // 載せないページ: noindex の記事、404、お問い合わせの送信完了
   const entries: Entry[] = [
     { path: "/" },
     ...CATEGORY.hubs.map((hub) => ({ path: `/${hub.id}/` })),
     { path: BLOG.listPath },
     { path: "/operator/" },
     { path: "/privacy-policy/" },
+    { path: CONTACT.path },
     ...blogs
       .filter((blog) => !blog.noindex)
       .map((blog) => ({ path: blogPath(blog), lastmod: blogRevisedAt(blog) })),

@@ -4,7 +4,7 @@
 import Layout from "@layouts/Layout.astro";
 import PageHeader from "@components/PageHeader.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
-import { SITE } from "@constants/index.ts";
+import { CONTACT, SITE } from "@constants/index.ts";
 export const prerender = true;
 
 const Meta = {
@@ -84,9 +84,11 @@ const sections: {
   },
   {
     title: "お問い合わせ窓口",
-    // お問い合わせのページを作ったら links にフォームへのリンクを足す（docs/todo.md）
     text: `個人情報の開示・訂正・削除などに関するお問い合わせは、お問い合わせフォームからご連絡ください。（運営者: ${SITE.title} 代表 伊藤 颯汰）`,
-    links: [{ href: "/operator/", label: "運営者情報" }],
+    links: [
+      { href: CONTACT.path, label: "お問い合わせフォーム" },
+      { href: "/operator/", label: "運営者情報" },
+    ],
   },
 ];
 ---
@@ -99,7 +101,9 @@ const sections: {
       />
       <PageHeader title="プライバシーポリシー">
         <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-          「{SITE.title}」（以下「当サイト」）は、お預かりした個人情報を、以下のプライバシーポリシー（個人情報保護方針）にしたがって適切に取り扱います。
+          「{
+            SITE.title
+          }」（以下「当サイト」）は、お預かりした個人情報を、以下のプライバシーポリシー（個人情報保護方針）にしたがって適切に取り扱います。
         </p>
       </PageHeader>
     </div>

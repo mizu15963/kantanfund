@@ -32,6 +32,23 @@ export const CATEGORY = {
   ],
 } as const;
 
+// お問い合わせフォーム（仕様: docs/contact.md）
+export const CONTACT = {
+  // フォームのページと、送信完了のページ
+  path: "/contact/",
+  thanksPath: "/contact/thanks/",
+  // microCMS の API のエンドポイント（項目定義は schema/contacts.json）
+  endpoint: "contacts",
+  // メールアドレスの形式チェック（サーバー側のチェックと、送信ボタンの有効化の両方で使う）
+  emailPattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+  // 入力の文字数の上限（いたずらや誤送信の防止）
+  maxLength: {
+    name: 50,
+    email: 254,
+    message: 3000,
+  },
+} as const;
+
 // アクセス解析
 export const ANALYTICS = {
   // 旧サイトと同じ GA4 の測定ID（G- で始まる。ページの HTML に載る公開値）。空のあいだは計測しない（docs/todo.md）

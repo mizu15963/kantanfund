@@ -1,7 +1,7 @@
 # Cloudflare への接続
 
 参考プロジェクト（クラファンセレクト）と同じく、**Cloudflare Workers Builds** で GitHub と接続し、ビルドとデプロイを Cloudflare だけで行います（GitHub Actions は使いません）。
-サイトはすべてビルド時に作るため、Worker は静的ファイルを配信するだけです（実行時の変数・シークレットは不要）。
+お問い合わせフォーム（`/contact/`）以外はビルド時に作るため、Worker はほぼ静的ファイルを配信するだけです。お問い合わせフォームだけは Worker が送信を受け取るので、実行時の変数が要ります（[contact.md](contact.md) の「設定の手順」）。
 
 アカウント側の操作（ログイン・GitHub 連携の許可・キーの入力）はご自身で行ってください。キーやデプロイフックの URL はチャットに貼らないでください。
 画面の表記は変わることがあります。
@@ -31,7 +31,7 @@ Worker の **設定（Settings）→ ビルド（Build）→ 変数とシーク�
 | `MICROCMS_API_KEY` | シークレット | ビルド用の API キー（`blog`・`categories` の GET のみ） |
 | `NODE_VERSION` | テキスト | `24` |
 
-- 実行時の変数（Settings → Variables and Secrets）は不要です（お問い合わせフォームを作るときに追加します）。
+- 実行時の変数（Settings → Variables and Secrets）は、お問い合わせフォーム用に別に入れます（[contact.md](contact.md) の「設定の手順」の5）。ビルド用の変数は実行時には読まれません。
 - `WORKERS_CI_BRANCH` は Cloudflare がビルド時に自動で入れます。`main` 以外のブランチのビルドは、全ページが noindex になります（[site.md](site.md) の「プレビュー」）。
 
 ## 3. 動作を確かめる

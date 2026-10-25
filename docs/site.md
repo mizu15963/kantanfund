@@ -10,7 +10,7 @@
 
 ## ページ構成
 
-すべてのページをビルド時に作ります（アクセス時に作るページはありません）。
+お問い合わせフォーム（`/contact/`）以外のすべてのページをビルド時に作ります。お問い合わせフォームだけは、送信を受け取るためアクセス時に作ります（[contact.md](contact.md)）。
 
 | URL | ページ | ファイル |
 |---|---|---|
@@ -20,10 +20,10 @@
 | `/{スラッグ}/` | 記事 | `src/pages/[slug].astro` |
 | `/operator/` | 運営者情報 | `src/pages/operator.astro` |
 | `/privacy-policy/` | プライバシーポリシー | `src/pages/privacy-policy.astro` |
+| `/contact/` `/contact/thanks/` | お問い合わせフォーム・送信完了 | `src/pages/contact/`（[contact.md](contact.md)） |
 | `/sitemap.xml` | サイトマップ | `src/pages/sitemap.xml.ts` |
 | `/robots.txt` | robots.txt | `src/pages/robots.txt.ts` |
 
-- お問い合わせは未作成（[todo.md](todo.md)）。
 - 旧サイトのカテゴリ・タグ・月別アーカイブなどは作らず、ハブページなどへ転送する（[redirects.md](redirects.md)）。
 
 ## TOP
@@ -39,13 +39,13 @@
 
 ## 運営者情報
 
-- 旧サイトの `/operator/` の内容（運営者・サイトについて・注意事項）をもとにしている。お問い合わせのページを作ったら、表の「お問い合わせ」をリンクにする。
+- 旧サイトの `/operator/` の内容（運営者・サイトについて・注意事項）をもとにしている。表の「お問い合わせ」はお問い合わせフォームへのリンク。
 
 ## プライバシーポリシー
 
 - 旧サイトにはなかったページ（URL は参考プロジェクトと同じ `/privacy-policy/`）。フッターの「サイトについて」からリンクする。
 - 項目は、個人情報の利用目的・管理（お問い合わせは microCMS に保存）・第三者への提供・開示などの請求・アクセス解析（GA4）・広告（アフィリエイトと Cookie）・ポリシーの変更・お問い合わせ窓口。
-- 内容を変えたら、ページの下の改定日を足す。お問い合わせのページを作ったら、「お問い合わせ窓口」にフォームへのリンクを足す。
+- 内容を変えたら、ページの下の改定日を足す。「お問い合わせ窓口」からお問い合わせフォームへリンクする。
 
 ## 記事一覧
 
@@ -60,7 +60,7 @@
 
 1. ビルド時に Cloudflare が入れる `WORKERS_CI_BRANCH` が `main` 以外なら、全ページに `<meta name="robots" content="noindex, nofollow">` を入れる（`src/libs/env.ts`）。
 2. 同じく `robots.txt` を `Disallow: /` にする。
-3. `public/_headers` で、`*.workers.dev` のアドレスで開いたときは `X-Robots-Tag: noindex` を付ける（本番のビルドを workers.dev のアドレスで開いた場合も含む）。
+3. `public/_headers` で、`*.workers.dev` のアドレスで開いたときは `X-Robots-Tag: noindex` を付ける（本番のビルドを workers.dev のアドレスで開いた場合も含む）。アクセス時に作るお問い合わせフォームには `_headers` が効かないため、ページの中で同じヘッダーを付ける。
 
 手元のビルド（`WORKERS_CI_BRANCH` がない）は本番と同じ扱いです。
 
@@ -71,7 +71,7 @@
 
 ## サイトマップ
 
-- `/sitemap.xml` をビルド時に microCMS から作る。載せるのは TOP・ハブページ・記事一覧・運営者情報・プライバシーポリシーと、noindex でない記事。
+- `/sitemap.xml` をビルド時に microCMS から作る。載せるのは TOP・ハブページ・記事一覧・運営者情報・プライバシーポリシー・お問い合わせと、noindex でない記事（送信完了のページは載せない）。
 - 記事の `lastmod` は [article.md](article.md) の更新日。
 - 旧サイトのサイトマップの URL（`/sitemap_index.xml` など）は `/sitemap.xml` に転送する。
 - microCMS からの取得に失敗したらビルドを止める（ページが抜けたサイトマップを公開しないため）。

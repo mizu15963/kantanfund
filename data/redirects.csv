@@ -46,6 +46,7 @@ from,to,status,match,種別,メモ
 /2025/10/,/,301,exact,月別アーカイブ,
 /2025/10/feed/,/,301,exact,月別アーカイブ（RSS）,新サイトでRSSを出すならフィードURLへ変更
 /sitemap/,/,301,exact,固定ページ,HTMLサイトマップは作らない（2026-10-24 決定）
+/support/,/contact/,301,exact,固定ページ,旧サイトのお問い合わせ（Google フォームへの案内）。新しいお問い合わせフォームへ
 /page/*,/,301,prefix,トップのページ送り,
 /sitemap_index.xml,/sitemap.xml,301,exact,技術系,新サイトのサイトマップURLに合わせて変更
 /wp-sitemap.xml,/sitemap.xml,301,exact,技術系,
