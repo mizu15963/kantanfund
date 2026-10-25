@@ -1,7 +1,7 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
 // カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
-// 動き（docs/design.md の「動き」）: 見出し（h1・h2）だけ、画面に入ったら下からふわっと出す（data-reveal）
+// 動き（docs/design.md の「動き」）: 見出し（h1・h2）だけ、画面に入ったら下からふわっと出す（data-reveal）。h1 の headingMarker の語句には、出たあとにマーカーを引く
 // 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの新着記事（BLOG.latestCount 本） → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
@@ -15,6 +15,8 @@ interface Props {
   id: (typeof CATEGORY.hubs)[number]["id"];
   // ページの見出し（h1）
   heading: string;
+  // 見出しの中で水色のマーカーを引く語句（heading に含まれる文字。TOP の「わかる！」と同じ）
+  headingMarker?: string;
   // 記事の並びの見出し
   listHeading: string;
   // meta description
@@ -26,8 +28,16 @@ interface Props {
   // 「よくある質問」
   faqs: { question: string; answer: string }[];
 }
-const { id, heading, listHeading, description, points, steps, faqs } =
-  Astro.props;
+const {
+  id,
+  heading,
+  headingMarker,
+  listHeading,
+  description,
+  points,
+  steps,
+  faqs,
+} = Astro.props;
 const hub = CATEGORY.hubs.find((hub) => hub.id === id)!;
 const otherHubs = CATEGORY.hubs.filter((hub) => hub.id !== id);
 
@@ -44,6 +54,17 @@ const toc = [
   { id: "steps", label: "始め方" },
   { id: "faq", label: "質問" },
 ];
+
+// 見出しをマーカーの前・マーカー・後ろに分ける（語句が見出しにないときはマーカーなし）
+const markerIndex = headingMarker ? heading.indexOf(headingMarker) : -1;
+const headingParts =
+  headingMarker && markerIndex >= 0
+    ? {
+        before: heading.slice(0, markerIndex),
+        marker: headingMarker,
+        after: heading.slice(markerIndex + headingMarker.length),
+      }
+    : null;
 
 const Meta = { title: hub.title, description };
 ---
@@ -64,7 +85,17 @@ const Meta = { title: hub.title, description };
           data-reveal
           class="mt-4 text-[1.4rem] leading-snug font-black tracking-tight"
         >
-          {heading}
+          {
+            headingParts ? (
+              <>
+                {headingParts.before}
+                <span class="marker-draw">{headingParts.marker}</span>
+                {headingParts.after}
+              </>
+            ) : (
+              heading
+            )
+          }
         </h1>
       </header>
       {
