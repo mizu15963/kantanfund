@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "redirects": "node scripts/build-redirects.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
     "wp:export": "node scripts/wp-export.mjs",
     "wp:import": "node scripts/wp-import.mjs"
   },

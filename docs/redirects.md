@@ -34,6 +34,10 @@
 | `http://*` | **SSL/TLS → エッジ証明書 → 常に HTTPS を使用** をオン |
 | `/?p={記事ID}`（WordPress の短縮 URL） | 記事を抜き出した後、記事IDとスラッグの対応表（`id_map.csv`）からリダイレクトルールを作る（[todo.md](todo.md)） |
 
+## 公開日の確認
+
+本番に切り替えたら `npm run check:launch` で、CSV の転送がすべて 301 で正しい転送先に行くかを確かめる（www なし・http の転送も含む。[analytics.md](analytics.md) の「4. 公開日の確認」）。
+
 ## 確かめたこと（手元の `wrangler dev`、仮データ）
 
 - `/category/fx/` → `/fx/`、`/category/fx/page/3/` → `/fx/`、`/start_nisa/feed/` → `/start_nisa/`、`/sitemap/` → `/`、`/sitemap_index.xml` → `/sitemap.xml` が 301。
