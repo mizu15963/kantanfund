@@ -51,8 +51,8 @@ export const CONTACT = {
 
 // アクセス解析
 export const ANALYTICS = {
-  // 旧サイトと同じ GA4 の測定ID（G- で始まる。ページの HTML に載る公開値）。空のあいだは計測しない（docs/todo.md）
-  ga4MeasurementId: "",
+  // 旧サイトと同じ GA4 の測定ID（ページの HTML に載る公開値）。空にすると計測しない（docs/analytics.md）
+  ga4MeasurementId: "G-1BD1TYK7XG",
   // Search Console の確認用 HTML タグ（<meta name="google-site-verification" content="..."> の content の値）。
   // 旧サイトの確認方法が HTML タグ（Site Kit が入れたもの）だったときだけ入れる。空のあいだはタグを出さない（docs/analytics.md）
   googleSiteVerification: "",

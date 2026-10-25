@@ -64,3 +64,4 @@ from,to,status,match,種別,メモ
 /?p={id},/{slug}/,301,query,WordPress短縮URL,IDとスラッグの対応は抽出結果 posts.json から生成
 https://kantanfund.net/*,https://www.kantanfund.net/*,301,host,非www→www,現状の挙動は未確認。新サイトでは必ず設定
 http://*,https://www.kantanfund.net/*,301,host,http→https,1ホップで www+https に
+/googlebd1b967076c9ab2f.html,/googlebd1b967076c9ab2f,200,exact,Search Console の確認用ファイル,転送ではなく中身を返す（200）。Cloudflare は /xxx.html を /xxx へ 307 で転送するため、転送させずに確認ファイルを返す（docs/analytics.md）

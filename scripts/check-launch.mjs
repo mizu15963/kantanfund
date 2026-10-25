@@ -48,7 +48,12 @@ for (const row of rows) {
   const to = row[column("to")];
   switch (row[column("match")]) {
     case "exact":
-      cases.push({ url: base + from, expected: base + to });
+      // status が 200 の行は転送せずに中身を返すもの（Search Console の確認用ファイル）。転送先ではなく 200 を期待する
+      cases.push(
+        row[column("status")] === "200"
+          ? { url: base + from, expected: null }
+          : { url: base + from, expected: base + to }
+      );
       break;
     case "prefix":
       // 「*」には適当な続き（ページ送りの2ページ目）を入れる
@@ -86,7 +91,10 @@ for (const { url, expected } of cases) {
     const response = await fetch(url, { redirect: "manual" });
     const location = response.headers.get("location");
     const actual = location ? new URL(location, url).href : "";
-    if (response.status !== 301 || actual !== new URL(expected).href) {
+    if (expected === null) {
+      if (response.status !== 200)
+        fail(`${url} → ${response.status} ${actual}（期待: 200）`);
+    } else if (response.status !== 301 || actual !== new URL(expected).href) {
       fail(`${url} → ${response.status} ${actual}（期待: 301 ${expected}）`);
     }
   } catch (error) {

@@ -8,8 +8,9 @@ Google の画面での操作はご自身で行ってください。画面の表�
 ## 旧サイトの状況（2026-10-25 に公開ページから確認）
 
 - 旧サイトには **Site Kit by Google**（WordPress のプラグイン、1.188.0）が入っている。GA4 のタグは Site Kit が入れていると考えられる。
-- 公開ページからは GA4 の測定ID と Search Console の確認方法を読み取れなかった（タグが JavaScript で入るため）。下の「1. 旧サイトで確かめること」で確かめる。
-- Site Kit で Search Console をつないだ場合、所有権の確認は Site Kit が入れた **HTML タグ**（`<meta name="google-site-verification">`）で通していることが多い。WordPress を止めるとこのタグが消え、確認が外れる。そのため、新サイトでも同じタグを出すか、DNS の TXT レコードでの確認を足す。
+- GA4 の測定ID は `G-1BD1TYK7XG`（2026-10-25 に先方から。新サイトにも入れ済み）。
+- Search Console の所有権の確認は **HTML ファイル**（`googlebd1b967076c9ab2f.html`。2026-10-25 に先方から）。新サイトにも同じファイルを置き済み（下の「確認用ファイルの配信」）。
+- （参考）Site Kit で Search Console をつなぐと、Site Kit が入れた **HTML タグ** で確認していることもある。その場合に備えて、タグを出す仕組み（`ANALYTICS.googleSiteVerification`）も用意している（いまは空）。
 
 ## 新サイトの作り（コード）
 
@@ -17,16 +18,24 @@ Google の画面での操作はご自身で行ってください。画面の表�
 |---|---|
 | GA4 のタグ（gtag.js） | `src/layouts/Layout.astro`。測定ID は `src/constants/index.ts` の `ANALYTICS.ga4MeasurementId` |
 | Search Console の確認用 HTML タグ | 同じく `Layout.astro`。値は `ANALYTICS.googleSiteVerification`（空のあいだは出さない） |
-| Search Console の確認用ファイル | `public/google*.html`（ファイルで確認している場合だけ置く） |
+| Search Console の確認用ファイル | `public/googlebd1b967076c9ab2f.html`（旧サイトと同じファイル）と、`data/redirects.csv` の 200 の行（下の「確認用ファイルの配信」） |
 | サイトマップ | `/sitemap.xml`（[site.md](site.md) の「サイトマップ」） |
 | robots.txt | `/robots.txt`。本番ではサイトマップの場所を書く |
 | 公開日の確認スクリプト | `npm run check:launch`（下の「4. 公開日の確認」） |
 
 - GA4 は、**本番のドメイン（`www.kantanfund.net`）で開いたときだけ**計測する。手元の確認・`*.workers.dev`・プレビューのアクセスは GA4 に送らない。
-- 測定ID が空のあいだは、どこで開いても計測しない。
+- 測定ID を空にすると、どこで開いても計測しない。
 - 記事一覧のカテゴリのチップを押すと URL（`?category=`）が変わる。GA4 の拡張計測機能の「ブラウザの履歴イベントに基づくページの変更」がオンなら、これも1ページビューとして数えられる（絞り込みの使われ方が分かるので、そのままにしている）。
 
-## 1. 旧サイトで確かめること（いますぐ。終わったら測定ID と確認方法を教えてください）
+### 確認用ファイルの配信
+
+Cloudflare の静的ファイルの配信は、`/xxx.html` で開くと `/xxx` へ 307 で転送する（URL から `.html` を外す動き）。
+確認用ファイルが転送されると Search Console の確認に失敗するおそれがあるため、`data/redirects.csv` に `/googlebd1b967076c9ab2f.html` → `/googlebd1b967076c9ab2f` の **200**（転送せずに中身を返す）の行を入れている。
+手元の `wrangler dev` で、`/googlebd1b967076c9ab2f.html` が転送されずに 200 でファイルの中身を返すことを確かめた（2026-10-25）。`npm run check:launch` でも確かめる。
+
+確認用ファイルを差し替えるときは、`public/` のファイルと CSV の行の両方を直し、`npm run redirects` を実行する。
+
+## 1. 旧サイトで確かめること（済み: 測定ID・確認方法とも 2026-10-25 に確認）
 
 ### GA4 の測定ID
 
