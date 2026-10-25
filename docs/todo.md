@@ -17,6 +17,5 @@
 - [ ] GA4 の測定ID を `ANALYTICS.ga4MeasurementId` に入れる
 - [ ] Search Console の確認用ファイル（`google*.html`）を `public/` に置く
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
-- [ ] お問い合わせフォームの設定（microCMS の `contacts` とキーの権限・メール通知、Turnstile、Worker の実行時の変数）をして、テスト送信する（[contact.md](contact.md) の「設定の手順」）
 - [ ] 公開日: `SITE.noindex` を `false` に戻して `main` に出す（戻し忘れると検索結果から消える。[site.md](site.md) の「公開前の noindex」）
 - [ ] 公開日: DNS を Cloudflare に移し、本番ドメインに切り替える（[cloudflare.md](cloudflare.md) の5）
