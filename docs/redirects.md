@@ -34,6 +34,10 @@
 | `http://*` | **SSL/TLS → エッジ証明書 → 常に HTTPS を使用** をオン |
 | `/?p={記事ID}`（WordPress の短縮 URL） | 記事を抜き出した後、記事IDとスラッグの対応表（`id_map.csv`）からリダイレクトルールを作る（[todo.md](todo.md)） |
 
+## 転送しない行（200）
+
+`status` が `200` の行は転送ではなく、その URL で別のファイルの中身を返す（URL は変わらない）。いまは Search Console の確認用ファイル（`/googlebd1b967076c9ab2f.html`）だけ。Cloudflare が `/xxx.html` を `/xxx` へ転送するのを避けるため（[analytics.md](analytics.md) の「確認用ファイルの配信」）。
+
 ## 公開日の確認
 
 本番に切り替えたら `npm run check:launch` で、CSV の転送がすべて 301 で正しい転送先に行くかを確かめる（www なし・http の転送も含む。[analytics.md](analytics.md) の「4. 公開日の確認」）。

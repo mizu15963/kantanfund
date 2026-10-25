@@ -14,8 +14,7 @@
 - [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（`npm run wp:export` を取り直してから `npm run wp:import -- --write --all`）
 - [ ] 旧サイトで Yoast の description がない記事は抜粋が入り、【PR】の注意書きから始まるものがある。全件を入れた後に microCMS で直すか決める
 - [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
-- [ ] 旧サイトの Search Console のプロパティの種類・所有権の確認方法を確かめる（[analytics.md](analytics.md) の1）
-- [ ] Search Console の確認方法に合わせて、確認用のタグ（`ANALYTICS.googleSiteVerification`）かファイル（`public/google*.html`）を入れる。DNS を移した後、TXT レコードでの確認も足す（[analytics.md](analytics.md) の2）
+- [ ] DNS を Cloudflare に移した後、Search Console に TXT レコードでの所有権の確認も足す（おすすめ。[analytics.md](analytics.md) の2）
 - [ ] 公開日: `npm run check:launch` で転送とサイトマップを確かめ、Search Console にサイトマップを送信する（[analytics.md](analytics.md) の4）
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
 - [ ] 公開日: `SITE.noindex` を `false` に戻して `main` に出す（戻し忘れると検索結果から消える。[site.md](site.md) の「公開前の noindex」）

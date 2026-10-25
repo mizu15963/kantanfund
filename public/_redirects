@@ -60,5 +60,6 @@
 /sitemap.html / 301
 /feed/ / 301
 /comments/feed/ / 301
+/googlebd1b967076c9ab2f.html /googlebd1b967076c9ab2f 200
 /:slug/feed/ /:slug/ 301
 /:slug/amp/ /:slug/ 301
