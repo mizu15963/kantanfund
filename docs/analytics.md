@@ -103,7 +103,7 @@ Site Kit の連携は、公開日まで外さないでください（旧サイ�
 
 ### 転送とサイトマップ（コマンド）
 
-手元で次を実行すると、`data/redirects.csv` の転送がすべて 301 で正しい転送先に行くか、サイトマップの URL がすべて 200 で開けて noindex が付いていないか（`<meta name="robots">` と `X-Robots-Tag` の両方）、`robots.txt` が巡回を止めていないかを確かめられます。問題があると `NG` の行が出ます。
+手元で次を実行すると、`data/redirects.csv` の転送がすべて 301 で正しい転送先に行くか、サイトマップの URL がすべて 200 で開けて noindex が付いていないか（`<meta name="robots">` と `X-Robots-Tag` の両方）、`robots.txt` が検索エンジン（`User-agent: *`）の巡回を止めていないかを確かめられます（Cloudflare が AI のクローラー向けに足す `Disallow: /` は対象外）。問題があると `NG` の行が出ます。
 
 ```sh
 npm run check:launch

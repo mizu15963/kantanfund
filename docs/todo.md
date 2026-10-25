@@ -8,13 +8,9 @@
 
 ## 作業
 
-- [ ] microCMS に `categories`・`blog`・`contacts` を作り、ビルド用の API キーを発行する（[microcms.md](microcms.md)）
-- [ ] Cloudflare Workers Builds に接続し、変数を入れる（[cloudflare.md](cloudflare.md)）
-- [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（[migration.md](migration.md) の「全件の取り込み」）
 - [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
 - [ ] DNS を Cloudflare に移した後、Search Console に TXT レコードでの所有権の確認も足す（おすすめ。[analytics.md](analytics.md) の2）
-- [ ] 公開日: `npm run check:launch` で転送とサイトマップを確かめ、Search Console にサイトマップを送信する（[analytics.md](analytics.md) の4）
+- [ ] Search Console にサイトマップを送信し、GA4 のリアルタイムと所有権の確認を見る（[analytics.md](analytics.md) の4。転送とサイトマップの確認は 2026-10-25 に済み）
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
-- [ ] 公開日: 本番ドメインを新サイトに切り替える（[cloudflare.md](cloudflare.md) の6）
 - [ ] `@kantanfund.net` のメールは使っていない（先方のメールは別ドメイン `hive-member.jp`）。公開後に MX・`mail` を消し、なりすまし防止（MX なし・`v=spf1 -all`・DMARC）に変える
 - 公開後もさくらのレンタルサーバー（`www2120.sakura.ne.jp`）は解約しない。同じサーバーで `hive-member.jp` のメールが動いている
