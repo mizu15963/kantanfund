@@ -86,7 +86,7 @@ Site Kit の連携は、公開日まで外さないでください（旧サイ�
 
 ## 4. 公開日の確認
 
-切り替え（[cloudflare.md](cloudflare.md) の5）が済んだら、上から順に確かめます。
+切り替え（[cloudflare.md](cloudflare.md) の6）が済んだら、上から順に確かめます。
 
 ### GA4
 

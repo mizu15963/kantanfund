@@ -30,7 +30,7 @@
 
 | 旧 URL | 設定 |
 |---|---|
-| `https://kantanfund.net/*`（www なし） | **ルール → リダイレクトルール** で `https://www.kantanfund.net/${1}` へ 301（パスとクエリを保持）。`kantanfund.net` の DNS レコードはプロキシ（オレンジの雲）にしておく |
+| `https://kantanfund.net/*`（www なし） | **ルール → リダイレクトルール** で `https://www.kantanfund.net/${1}` へ 301（パスとクエリを保持）。`kantanfund.net` の DNS レコードはプロキシ（オレンジの雲）にしておく（メールは先に `mail.kantanfund.net` に分けておく。[cloudflare.md](cloudflare.md) の5） |
 | `http://*` | **SSL/TLS → エッジ証明書 → 常に HTTPS を使用** をオン |
 | `/?p={記事ID}`（WordPress の短縮 URL） | 記事を抜き出した後、記事IDとスラッグの対応表（`id_map.csv`）からリダイレクトルールを作る（[todo.md](todo.md)） |
 
