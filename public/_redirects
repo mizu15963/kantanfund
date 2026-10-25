@@ -47,6 +47,7 @@
 /2025/10/ / 301
 /2025/10/feed/ / 301
 /sitemap/ / 301
+/support/ /contact/ 301
 /page/* / 301
 /sitemap_index.xml /sitemap.xml 301
 /wp-sitemap.xml /sitemap.xml 301

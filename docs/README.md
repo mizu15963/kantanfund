@@ -7,6 +7,7 @@
 | [microcms.md](microcms.md) | microCMS の API と項目、API キー、Webhook |
 | [cloudflare.md](cloudflare.md) | Cloudflare への接続手順と、本番ドメインへの切り替え |
 | [migration.md](migration.md) | 旧サイトの記事の取り込み（書き出し・microCMS への投入） |
+| [contact.md](contact.md) | お問い合わせフォーム（入力項目・送信の流れ・設定の手順） |
 | [redirects.md](redirects.md) | 旧サイトの URL の転送 |
 | [design.md](design.md) | 見た目の決まり（配色・形） |
 | [todo.md](todo.md) | やることリスト |

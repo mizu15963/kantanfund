@@ -22,6 +22,7 @@
 | `/author/hayata_ito/` | `/operator/` |
 | `/2026/10/` などの月別アーカイブ、`/feed/` | `/` |
 | `/sitemap/`（HTML のサイトマップ） | `/` |
+| `/support/`（旧サイトのお問い合わせ。Google フォームへの案内） | `/contact/` |
 | `/sitemap_index.xml` などのサイトマップ | `/sitemap.xml` |
 | `/{スラッグ}/feed/`・`/{スラッグ}/amp/` | `/{スラッグ}/` |
 

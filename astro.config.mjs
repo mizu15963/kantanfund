@@ -26,6 +26,18 @@ export default defineConfig({
         context: "server",
         access: "secret",
       }),
+      // Cloudflare Turnstile（お問い合わせフォームの自動送信よけ）のサイトキーとシークレットキー。Worker の実行時の変数に入れる。
+      // 未設定の間、お問い合わせフォームは「準備中」と表示する（docs/contact.md）。サイトキーは公開される値だが、実行時に読むためシークレットと同じ扱いにする
+      TURNSTILE_SITE_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      TURNSTILE_SECRET_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       // Cloudflare Workers Builds がビルド時に入れるブランチ名。main 以外（プレビュー）のときは全ページを noindex にする（docs/site.md の「プレビュー」）
       WORKERS_CI_BRANCH: envField.string({
         context: "server",
