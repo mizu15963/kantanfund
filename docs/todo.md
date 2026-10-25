@@ -14,8 +14,7 @@
 - [ ] 本番ドメインでの公開直前に、残りの記事をまとめて入れる（`npm run wp:export` を取り直してから `npm run wp:import -- --write --all`）
 - [ ] 旧サイトで Yoast の description がない記事は抜粋が入り、【PR】の注意書きから始まるものがある。全件を入れた後に microCMS で直すか決める
 - [ ] 全件を入れた後、使わなくなった `legacyThumbnail` を microCMS と `schema/blog.json`・コードから消すか決める
-- [ ] 旧サイトの GA4 の測定ID と、Search Console のプロパティの種類・所有権の確認方法を確かめる（[analytics.md](analytics.md) の1）
-- [ ] GA4 の測定ID を `ANALYTICS.ga4MeasurementId` に入れる
+- [ ] 旧サイトの Search Console のプロパティの種類・所有権の確認方法を確かめる（[analytics.md](analytics.md) の1）
 - [ ] Search Console の確認方法に合わせて、確認用のタグ（`ANALYTICS.googleSiteVerification`）かファイル（`public/google*.html`）を入れる。DNS を移した後、TXT レコードでの確認も足す（[analytics.md](analytics.md) の2）
 - [ ] 公開日: `npm run check:launch` で転送とサイトマップを確かめ、Search Console にサイトマップを送信する（[analytics.md](analytics.md) の4）
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
