@@ -20,3 +20,4 @@
 - [ ] 公開日: `SITE.noindex` を `false` に戻して `main` に出す（戻し忘れると検索結果から消える。[site.md](site.md) の「公開前の noindex」）
 - [ ] 公開前: DNS（ネームサーバー）を Cloudflare に移し、旧サイトとメールがそのまま動くか確かめる（[cloudflare.md](cloudflare.md) の5）
 - [ ] 公開日: 本番ドメインを新サイトに切り替える（[cloudflare.md](cloudflare.md) の6）
+- [ ] 先方に `@kantanfund.net` のメールを使っていないか確かめる。使っていなければ公開後に MX・`mail` を消し、なりすまし防止（MX なし・`v=spf1 -all`・DMARC）に変える
