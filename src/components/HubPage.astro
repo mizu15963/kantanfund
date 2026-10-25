@@ -1,6 +1,7 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
 // カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
+// 動き（docs/design.md の「動き」）: 見出し（h1・h2）だけ、画面に入ったら下からふわっと出す（data-reveal）
 // 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの新着記事（BLOG.latestCount 本） → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
@@ -59,7 +60,10 @@ const Meta = { title: hub.title, description };
           <HubIcon id={id} class="size-4" />
           {hub.title}
         </span>
-        <h1 class="mt-4 text-[1.4rem] leading-snug font-black tracking-tight">
+        <h1
+          data-reveal
+          class="mt-4 text-[1.4rem] leading-snug font-black tracking-tight"
+        >
           {heading}
         </h1>
       </header>
@@ -73,7 +77,7 @@ const Meta = { title: hub.title, description };
               <li>
                 <a
                   href={`#${item.id}`}
-                  class="block rounded-button border-2 border-primary py-2 hover:bg-highlight"
+                  class="block rounded-button border-2 border-primary py-2 transition-[background-color,scale] hover:bg-highlight active:scale-[0.95] motion-reduce:transition-none"
                 >
                   {item.label}
                 </a>
@@ -88,18 +92,22 @@ const Meta = { title: hub.title, description };
     </div>
 
     <section id="articles" class="scroll-mt-20 space-y-4">
-      <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
+      <h2 data-reveal class="text-xl leading-snug font-black">{listHeading}</h2>
       <BlogList blogs={blogs.slice(0, BLOG.latestCount)} />
       <a
         href={`${BLOG.listPath}?category=${id}`}
-        class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section"
+        class="group block rounded-button border-2 border-primary py-3 text-center text-sm font-bold transition-[background-color,scale] hover:bg-section active:scale-[0.98] motion-reduce:transition-none"
       >
-        記事一覧で見る
+        記事一覧で見る<span
+          aria-hidden="true"
+          class="ml-2 inline-block transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+          >→</span
+        >
       </a>
     </section>
 
     <section id="points" class="scroll-mt-20 space-y-4">
-      <h2 class="text-xl font-black">ここがポイント</h2>
+      <h2 data-reveal class="text-xl font-black">ここがポイント</h2>
       <ul class="space-y-3">
         {
           points.map((point, index) => (
@@ -121,7 +129,7 @@ const Meta = { title: hub.title, description };
       id="steps"
       class="scroll-mt-20 space-y-4 rounded-box bg-section p-5"
     >
-      <h2 class="text-xl font-black">始めるまでの流れ</h2>
+      <h2 data-reveal class="text-xl font-black">始めるまでの流れ</h2>
       <ol class="space-y-5">
         {
           steps.map((step, index) => (
@@ -142,7 +150,7 @@ const Meta = { title: hub.title, description };
     </section>
 
     <section id="faq" class="scroll-mt-20 space-y-4">
-      <h2 class="text-xl font-black">よくある質問</h2>
+      <h2 data-reveal class="text-xl font-black">よくある質問</h2>
       <div class="divide-y divide-line border-y border-line">
         {
           faqs.map((faq) => (
@@ -167,16 +175,19 @@ const Meta = { title: hub.title, description };
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-lg font-black">ほかのカテゴリ</h2>
+      <h2 data-reveal class="text-lg font-black">ほかのカテゴリ</h2>
       <ul class="flex flex-wrap gap-2">
         {
           otherHubs.map((other) => (
             <li>
               <a
                 href={`/${other.id}/`}
-                class="inline-flex items-center gap-2 rounded-full border-2 border-primary px-4 py-2 text-sm font-bold hover:bg-section"
+                class="group inline-flex items-center gap-2 rounded-full border-2 border-primary px-4 py-2 text-sm font-bold transition-[background-color,translate] duration-300 hover:-translate-y-0.5 hover:bg-section motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
-                <HubIcon id={other.id} class="size-4" />
+                <HubIcon
+                  id={other.id}
+                  class="size-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
+                />
                 {other.title}
               </a>
             </li>
