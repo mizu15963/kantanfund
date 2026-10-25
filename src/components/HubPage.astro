@@ -1,7 +1,7 @@
 ---
 // ハブページ（/stock/ /fx/ /estate/ /cryptocurrency/。仕様: docs/site.md の「ハブページ」）
 // カテゴリの入口のページ。見出し・導入文（スロット）・ポイント・始め方・よくある質問は各ページのファイルで渡す
-// 上から: 見出し → 導入文 → ポイント → 始めるまでの流れ → そのカテゴリの記事すべて → よくある質問 → ほかのカテゴリ
+// 上から: 見出し → ページ内の目次 → 導入文 → そのカテゴリの新着記事（BLOG.latestCount 本） → ポイント → 始めるまでの流れ → よくある質問 → ほかのカテゴリ
 import Layout from "@layouts/Layout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import BlogList from "@components/BlogList.astro";
@@ -36,6 +36,14 @@ const blogs = await getAllBlogSummaries({
 // 新しい順（移行した記事は旧サイトの公開日で並べる）
 blogs.sort((a, b) => blogPublishedAt(b).localeCompare(blogPublishedAt(a)));
 
+// ページ内の目次（見出しの下に並べる）
+const toc = [
+  { id: "articles", label: "記事" },
+  { id: "points", label: "ポイント" },
+  { id: "steps", label: "始め方" },
+  { id: "faq", label: "質問" },
+];
+
 const Meta = { title: hub.title, description };
 ---
 
@@ -55,12 +63,42 @@ const Meta = { title: hub.title, description };
           {heading}
         </h1>
       </header>
+      {
+        /* ページ内の目次（押すとその場所へ移動。ヘッダーに隠れないよう各 section に scroll-mt-20） */
+      }
+      <nav aria-label="このページの目次">
+        <ul class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
+          {
+            toc.map((item) => (
+              <li>
+                <a
+                  href={`#${item.id}`}
+                  class="block rounded-button border-2 border-primary py-2 hover:bg-highlight"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
       <div class="space-y-4 text-[0.95rem] leading-loose">
         <slot />
       </div>
     </div>
 
-    <section class="space-y-4">
+    <section id="articles" class="scroll-mt-20 space-y-4">
+      <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
+      <BlogList blogs={blogs.slice(0, BLOG.latestCount)} />
+      <a
+        href={`${BLOG.listPath}?category=${id}`}
+        class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section"
+      >
+        記事一覧で見る
+      </a>
+    </section>
+
+    <section id="points" class="scroll-mt-20 space-y-4">
       <h2 class="text-xl font-black">ここがポイント</h2>
       <ul class="space-y-3">
         {
@@ -79,7 +117,10 @@ const Meta = { title: hub.title, description };
       </ul>
     </section>
 
-    <section class="space-y-4 rounded-box bg-section p-5">
+    <section
+      id="steps"
+      class="scroll-mt-20 space-y-4 rounded-box bg-section p-5"
+    >
       <h2 class="text-xl font-black">始めるまでの流れ</h2>
       <ol class="space-y-5">
         {
@@ -100,18 +141,7 @@ const Meta = { title: hub.title, description };
       </ol>
     </section>
 
-    <section class="space-y-4">
-      <h2 class="text-xl leading-snug font-black">{listHeading}</h2>
-      <BlogList blogs={blogs} />
-      <a
-        href={`${BLOG.listPath}?category=${id}`}
-        class="block rounded-button border-2 border-primary py-3 text-center text-sm font-bold hover:bg-section"
-      >
-        記事一覧で見る
-      </a>
-    </section>
-
-    <section class="space-y-4">
+    <section id="faq" class="scroll-mt-20 space-y-4">
       <h2 class="text-xl font-black">よくある質問</h2>
       <div class="divide-y divide-line border-y border-line">
         {
