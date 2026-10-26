@@ -27,7 +27,9 @@ const organization = (site: URL): JsonLd => ({
   "@type": "Organization",
   "@id": absolute("/#organization", site),
   name: SITE.title,
+  alternateName: SITE.alternateNames,
   url: absolute("/", site),
+  logo: absolute(SITE.logo, site),
 });
 
 // サイト（WebSite）と運営者（Organization）。TOP にだけ出す（Google は TOP のデータからサイト名を決めるため）
@@ -38,6 +40,7 @@ export const siteJsonLd = (site: URL): JsonLd => ({
       "@type": "WebSite",
       "@id": absolute("/#website", site),
       name: SITE.title,
+      alternateName: SITE.alternateNames,
       url: absolute("/", site),
       description: SITE.description,
       inLanguage: "ja",

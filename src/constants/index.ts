@@ -3,6 +3,10 @@
 // サイト全体の設定
 export const SITE = {
   title: "かんたんファンド",
+  // サイト名の別の書き方（構造化データの alternateName。Google がサイト名を見分ける手がかりにする）
+  alternateNames: ["kantanfund", "Kantan Fund"],
+  // 構造化データの Organization に入れるロゴ
+  logo: "/images/logo.png",
   // キャッチコピー（旧サイトと同じ。TOP の見出しと PC 幅の左側に出す）
   catchphrase: "投資の「わからない」を「わかる！」に変える",
   description:
