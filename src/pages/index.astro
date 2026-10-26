@@ -98,8 +98,13 @@ const site = Astro.site ?? new URL(Astro.url.origin);
         >「わかる！」</span
       >に変える
     </h1>
+    {
+      /* サイト名で検索したときに TOP が上に出るよう、見出しのすぐ下の文にサイト名を入れる（docs/site.md の「TOP」） */
+    }
     <p class="relative mt-5 text-sm leading-relaxed">
-      株式・FX・不動産・暗号資産の始め方や、各サービスの特徴を、はじめての方にもわかる言葉で解説しています。
+      {
+        SITE.title
+      }は、株式・FX・不動産・暗号資産の始め方や、各サービスの特徴を、はじめての方にもわかる言葉で解説しています。
     </p>
     <div data-reveal class="relative mt-8 flex flex-wrap gap-3">
       <a
