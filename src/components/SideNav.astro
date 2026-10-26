@@ -5,7 +5,8 @@ import HubIcon from "@components/HubIcon.astro";
 import { CATEGORY } from "@constants/index.ts";
 ---
 
-<div class="w-full max-w-xs">
+{/* 大きい画面では左右の余白だけが広がって小さく見えるので、文字・ボタン・余白をまとめて拡大する（1536px 以上で 1.2 倍、1920px 以上で 1.4 倍） */}
+<div class="w-full max-w-xs min-[1536px]:[zoom:1.2] min-[1920px]:[zoom:1.4]">
   {
     /* キャッチコピー（SITE.catchphrase と同じ文。改行の位置を決めるため直接書く） */
   }
