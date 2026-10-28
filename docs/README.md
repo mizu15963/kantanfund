@@ -4,6 +4,7 @@
 |---|---|
 | [site.md](site.md) | サイト全体（URL・ページ構成・記事一覧・プレビュー・サイトマップ・アクセス解析） |
 | [article.md](article.md) | 記事ページ（URL の決まり方・日付・画像・本文の見た目） |
+| [embed-html.md](embed-html.md) | 埋め込み HTML（広告タグ）の使い方。記事を書く人向けの手順 |
 | [microcms.md](microcms.md) | microCMS の API と項目、API キー、Webhook |
 | [analytics.md](analytics.md) | GA4 と Search Console の引き継ぎ（確認方法ごとの対応・公開日の確認・公開後に見ること） |
 | [cloudflare.md](cloudflare.md) | Cloudflare への接続手順、DNS の移し方、本番ドメインへの切り替え |
