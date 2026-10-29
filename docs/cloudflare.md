@@ -166,9 +166,9 @@ Search Console の所有権の確認は、切り替えの前に新サイトで�
    - データベース: **Web サイト/データ → データベース** → 控えたデータベースの「管理ツール（phpMyAdmin）」→ **エクスポート**（そのまま「実行」）で `.sql` を保存する。
    - 2つのファイルは手元と別の場所（Google ドライブなど）にも置く。
 2. **レンタルサーバーからドメインを外す**: コントロールパネル →「ドメイン/SSL」→ `kantanfund.net` の行の「設定」から削除する。`hive-member.jp`・`kurafanguide.com` は触らない。SSL が「独自SSL」（2026-10-29 時点で有効期限 2026/12/28）なので、会員メニューの契約情報で有料の SSL の契約があれば、自動更新を止める。
-3. **旧サイトのファイルを外から開けない場所に移す**（2026-10-29 に、消さずに残すと決めた）。`~/www/kantanfund` は `hive-member.jp` の公開フォルダ（`~/www/`）の中なので、そのままだと `hive-member.jp/kantanfund/` などから古い WordPress が開けてしまう（更新されない WordPress が乗っ取られると、同じサーバーの `hive-member.jp` のメールや `kurafanguide.com` にも響く。記事が別の URL で重複する）。
-   - ファイルマネージャーで `kantanfund` フォルダだけを、ホームの直下（`~/`、`www` の外）に移す。
-   - `https://hive-member.jp/kantanfund/` が「見つかりません」になることを確かめる。
+3. **旧サイトのファイルを外から開けないようにする**（2026-10-29 に、消さずに残すと決めた）。`~/www/kantanfund` は `hive-member.jp` の公開フォルダ（`~/www/`）の中なので、そのままだと `hive-member.jp/kantanfund/` などから古い WordPress が開けてしまう（更新されない WordPress が乗っ取られると、同じサーバーの `hive-member.jp` のメールや `kurafanguide.com` にも響く。記事が別の URL で重複する）。
+   - さくらのファイルマネージャーは `www` の外に移せないので、`~/www/kantanfund/.htaccess` のいちばん上に `Require all denied` を足して、外から開けないようにする（WordPress の設定の行は残す。消せば元に戻る）。
+   - `http://hive-member.jp/kantanfund/` が 403 になることを確かめる。
    - データベースは外から見えないので残す。
 4. **さくらのゾーン（DNS）を消す**: ドメインコントロールパネル → `kantanfund.net` →「ゾーン」（ネームサーバサービス）の画面で、ゾーンを削除する。ネームサーバーは Cloudflare なので、消しても答えは変わらない。**Whois タブのネームサーバーは変えない**。
 5. **Cloudflare のメールのレコードを片付ける**（[メールのレコード](#メールのレコード)）。
