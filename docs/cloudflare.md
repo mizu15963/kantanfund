@@ -154,9 +154,9 @@ Search Console の所有権の確認は、切り替えの前に新サイトで�
    Resolve-DnsName kantanfund.net -Type SOA -Server 8.8.8.8     # PrimaryServer が 〇〇.ns.cloudflare.com（master.dns.ne.jp なら止める）
    ```
 
-3. Cloudflare の DNS で、さくらのサーバー（`182.48.49.30`）を指しているのが `mail` の A だけになっている。`kantanfund.net`（www なし）の A がプロキシ（オレンジの雲）か、を見る。**灰色の雲で `182.48.49.30` を指している場合は止める**（www なしがさくらで表示されているので、さくらから外すと開かなくなる。先に www への転送を直す）。
+3. Cloudflare の DNS で、`kantanfund.net`（www なし）の A をダミーの `192.0.2.1`（プロキシ・オレンジの雲のまま）に変える。転送は Cloudflare のリダイレクトルールが返すので、さくらのアドレスは要らない（`curl.exe -sI https://kantanfund.net/` で `301` と `Location: https://www.kantanfund.net/` が出ることを確かめる。2026-10-29 に変更）。これで、さくらのサーバーを指すのは `mail` の A だけになる。
 4. 新サイト（`https://www.kantanfund.net/`）と www なし・http の転送が、いまどおり動いている。
-5. レンタルサーバーのコントロールパネル →「ドメイン/SSL」の一覧で、`kantanfund.net`・`www.kantanfund.net` の**公開フォルダ**（例: `/home/〇〇/www/kantanfund`）を控える。`hive-member.jp` と同じフォルダでないことも見る。
+5. レンタルサーバーのコントロールパネル →「ドメイン/SSL」の一覧で、`kantanfund.net` の**公開フォルダ**を見る（2026-10-29 時点で `~/www/kantanfund`）。`hive-member.jp` と初期ドメインは `~/www/`（全体）、`kurafanguide.com` は `~/www/kurafanguide` なので、消すのは `~/www/kantanfund` だけ。`kurafanguide.com` も触らない。
 6. そのフォルダの `wp-config.php` を開き、`DB_NAME`（データベース名）を控える。`hive-member.jp` のサイトが同じデータベースを使っていないことを見る（`hive-member.jp` の公開フォルダにも `wp-config.php` があれば、その `DB_NAME` と比べる）。
 
 ### 手順
@@ -165,9 +165,9 @@ Search Console の所有権の確認は、切り替えの前に新サイトで�
    - ファイル: **ファイルマネージャー** で控えた公開フォルダを選び、圧縮（zip）してダウンロードする。
    - データベース: **Web サイト/データ → データベース** → 控えたデータベースの「管理ツール（phpMyAdmin）」→ **エクスポート**（そのまま「実行」）で `.sql` を保存する。
    - 2つのファイルは手元と別の場所（Google ドライブなど）にも置く。
-2. **レンタルサーバーからドメインを外す**: コントロールパネル →「ドメイン/SSL」→ `www.kantanfund.net` と `kantanfund.net` をそれぞれ選び、削除する（無料 SSL の設定も一緒に消える）。`hive-member.jp` は触らない。
+2. **レンタルサーバーからドメインを外す**: コントロールパネル →「ドメイン/SSL」→ `kantanfund.net` の行の「設定」から削除する。`hive-member.jp`・`kurafanguide.com` は触らない。SSL が「独自SSL」（2026-10-29 時点で有効期限 2026/12/28）なので、会員メニューの契約情報で有料の SSL の契約があれば、自動更新を止める。
 3. **旧サイトのファイルとデータベースを消す**（2が終わってから）。そのままにすると、さくらの初期ドメイン（`〇〇.sakura.ne.jp/kantanfund/` など）から古い WordPress が開けてしまい、更新されない WordPress が残る。
-   - ファイルマネージャーで、控えた公開フォルダを消す。
+   - ファイルマネージャーで、`~/www/kantanfund` だけを消す（`~/www` そのものは `hive-member.jp` の公開フォルダなので消さない）。
    - データベースの一覧で、控えたデータベースを消す。
    - 不安なら、2のあと数週間は残し、新サイトに問題がないのを見てから消してもよい（そのあいだは公開フォルダ名を変えておくと、外から開けなくなる）。
 4. **さくらのゾーン（DNS）を消す**: ドメインコントロールパネル → `kantanfund.net` →「ゾーン」（ネームサーバサービス）の画面で、ゾーンを削除する。ネームサーバーは Cloudflare なので、消しても答えは変わらない。**Whois タブのネームサーバーは変えない**。
