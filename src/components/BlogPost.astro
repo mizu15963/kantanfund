@@ -73,7 +73,43 @@ const content = (blog.content ?? "").replace(
     `<img src="${src}" alt=""${width ? ` width="${width}" height="${height}"` : ""} class="ad-image">`
 );
 
-const { html, data } = await microCMSRichEditorHandler(content, {
+// 本文の「［埋め込み:名前］」を、記事の埋め込み HTML（embeds）に置き換える（script・iframe の広告タグなど。リッチエディタには入れられないため。docs/article.md の「埋め込み HTML」）
+// 本文の変換（microCMSRichEditorHandler）は日本語を「&#x...;」の形にして出すため、印は変換の前に英数字だけの目印に置き換え、変換の後に HTML に戻す
+// （変換の後に印を探すと見つからない。埋め込み HTML を変換に通さないのは、外部リンクの別タブなどの書き換えを中に効かせないため）
+// 印だけの段落（前後の空白・改行は無視）は段落ごと置き換える。コロンは全角でもよい。名前が見つからない印は何も出さない
+const EMBED_MARK =
+  /(?:(<p>)(?:\s|&nbsp;)*)?［埋め込み[:：]([^］<]+)］(?:(?:\s|&nbsp;|<br\s*\/?>)*(<\/p>))?/g;
+const embeds = new Map(
+  [blog.embeds ?? []]
+    .flat()
+    .map((embed) => [embed.name.trim(), embed.html ?? ""])
+);
+const embedOutputs: string[] = [];
+const contentWithEmbedMarks = content.replace(
+  EMBED_MARK,
+  (_, open, name, close) => {
+    const embed = embeds.get(name.trim());
+    if (embed === undefined) {
+      console.warn(
+        `記事「${blog.title}」（${blog.id}）の埋め込み「${name}」がありません`
+      );
+    }
+    const mark = `kantanfund-embed-${embedOutputs.length}-end`;
+    // 段落ごとの広告には、広告だと分かるよう「PR」の小さなラベルを付ける
+    if (open && close) {
+      embedOutputs.push(
+        embed
+          ? `<div class="embed"><span class="embed-label">PR</span>${embed}</div>`
+          : ""
+      );
+      return mark;
+    }
+    embedOutputs.push(embed ?? "");
+    return `${open ?? ""}${mark}${close ?? ""}`;
+  }
+);
+
+const { html, data } = await microCMSRichEditorHandler(contentWithEmbedMarks, {
   transformers: [
     microcmsImageTransformer,
     headingIdTransformer,
@@ -85,29 +121,10 @@ const { html, data } = await microCMSRichEditorHandler(content, {
 });
 const toc = data.toc;
 
-// 本文の「［埋め込み:名前］」を、記事の埋め込み HTML（embeds）に置き換える（script・iframe の広告タグなど。リッチエディタには入れられないため。docs/article.md の「埋め込み HTML」）
-// 印だけの段落は段落ごと置き換える。名前が見つからない印は何も出さない
-const EMBED_MARK = /(<p>)?［埋め込み:([^］<]+)］(<\/p>)?/g;
-const embeds = new Map(
-  [blog.embeds ?? []]
-    .flat()
-    .map((embed) => [embed.name.trim(), embed.html ?? ""])
+const bodyHtml = html.replace(
+  /kantanfund-embed-(\d+)-end/g,
+  (_, index) => embedOutputs[Number(index)]
 );
-const bodyHtml = html.replace(EMBED_MARK, (_, open, name, close) => {
-  const embed = embeds.get(name.trim());
-  if (embed === undefined) {
-    console.warn(
-      `記事「${blog.title}」（${blog.id}）の埋め込み「${name}」がありません`
-    );
-  }
-  // 段落ごとの広告には、広告だと分かるよう「PR」の小さなラベルを付ける
-  if (open && close) {
-    return embed
-      ? `<div class="embed"><span class="embed-label">PR</span>${embed}</div>`
-      : "";
-  }
-  return `${open ?? ""}${embed ?? ""}${close ?? ""}`;
-});
 
 const publishedAt = blogPublishedAt(blog);
 const revisedAt = blogRevisedAt(blog);
