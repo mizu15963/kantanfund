@@ -132,3 +132,72 @@ DNS は先に Cloudflare に移しておきます（5）。
 Search Console の所有権の確認は、切り替えの前に新サイトでも通るようにしておきます（[analytics.md](analytics.md) の「2. 確認方法ごとの対応」）。
 
 `SITE.noindex` は切り替えの前に `false` に戻してあります（[site.md](site.md) の「サイト全体の noindex」）。切り替えた後は `npm run check:launch` で、本番に noindex が残っていないことも確かめます。
+
+## 7. さくら側の旧サイトの片付け
+
+公開後、さくら側に残っている旧サイト（WordPress）と `kantanfund.net` の設定を消します（2026-10-29 に、www なしの A のダミー化・ドメイン設定と独自 SSL の削除・旧サイトの `.htaccess` での封鎖・さくらのゾーンの削除まで済み。メールのレコードは見送り）。ここでいう「初期に戻す」は、**ドメインの契約は残したまま**、さくらのレンタルサーバーとさくらの DNS から `kantanfund.net` を外すことです。
+
+### 消さないもの
+
+- **さくらのレンタルサーバーの契約**（`www2120.sakura.ne.jp`）。同じサーバーで `hive-member.jp` のメールが動いている。
+- **`hive-member.jp` のドメイン設定・ゾーン・サイト**。
+- **メールアドレス（メールアカウント）**。さくらのレンタルサーバーでは、メールアドレスはサーバーに入れた全ドメインで共通（`info@kantanfund.net` と `info@hive-member.jp` は同じアカウント）。`kantanfund.net` のために作ったように見えるアドレスでも消さない。
+- **ドメインの契約**（さくらのドメインコントロールパネルの `kantanfund.net` そのもの。更新も続ける）と、**Whois タブのネームサーバー**（`april.ns.cloudflare.com`・`arch.ns.cloudflare.com` のまま）。
+
+### 事前の確認
+
+1. さくらの会員メニュー → ドメインコントロールパネル → `kantanfund.net` → **Whois** タブで、ネームサーバーが `april.ns.cloudflare.com`・`arch.ns.cloudflare.com` になっている。さくらの `ns1.dns.ne.jp`・`ns2.dns.ne.jp` なら、**ここで止める**（さくらのゾーンを消すとサイトが開かなくなる）。
+2. PowerShell で、外から見た答えが Cloudflare になっている。
+
+   ```powershell
+   Resolve-DnsName kantanfund.net -Type NS -Server 8.8.8.8      # april / arch.ns.cloudflare.com
+   Resolve-DnsName kantanfund.net -Type SOA -Server 8.8.8.8     # PrimaryServer が 〇〇.ns.cloudflare.com（master.dns.ne.jp なら止める）
+   ```
+
+3. Cloudflare の DNS で、`kantanfund.net`（www なし）の A をダミーの `192.0.2.1`（プロキシ・オレンジの雲のまま）に変える。転送は Cloudflare のリダイレクトルールが返すので、さくらのアドレスは要らない（`curl.exe -sI https://kantanfund.net/` で `301` と `Location: https://www.kantanfund.net/` が出ることを確かめる。2026-10-29 に変更）。これで、さくらのサーバーを指すのは `mail` の A だけになる。
+4. 新サイト（`https://www.kantanfund.net/`）と www なし・http の転送が、いまどおり動いている。
+5. レンタルサーバーのコントロールパネル →「ドメイン/SSL」の一覧で、`kantanfund.net` の**公開フォルダ**を見る（2026-10-29 時点で `~/www/kantanfund`）。`hive-member.jp` と初期ドメインは `~/www/`（全体）、`kurafanguide.com` は `~/www/kurafanguide` なので、消すのは `~/www/kantanfund` だけ。`kurafanguide.com` も触らない。
+6. そのフォルダの `wp-config.php` を開き、`DB_NAME`（データベース名）を控える。`hive-member.jp` のサイトが同じデータベースを使っていないことを見る（`hive-member.jp` の公開フォルダにも `wp-config.php` があれば、その `DB_NAME` と比べる）。
+
+### 手順
+
+1. **旧サイトを保存する**（記事は microCMS に移してあるが、念のため）。www は新サイトに向いているので、WordPress の管理画面からは保存できない。さくらのコントロールパネルから取る。
+   - ファイル: **ファイルマネージャー** で控えた公開フォルダを選び、圧縮（zip）してダウンロードする。
+   - データベース: **Web サイト/データ → データベース** → 控えたデータベースの「管理ツール（phpMyAdmin）」→ **エクスポート**（そのまま「実行」）で `.sql` を保存する。
+   - 2つのファイルは手元と別の場所（Google ドライブなど）にも置く。
+2. **レンタルサーバーからドメインを外す**: コントロールパネル →「ドメイン/SSL」→ `kantanfund.net` の行の「設定」から削除する。`hive-member.jp`・`kurafanguide.com` は触らない。SSL が「独自SSL」（2026-10-29 時点で有効期限 2026/12/28）なので、会員メニューの契約情報で有料の SSL の契約があれば、自動更新を止める。
+3. **旧サイトのファイルを外から開けないようにする**（2026-10-29 に、消さずに残すと決めた）。`~/www/kantanfund` は `hive-member.jp` の公開フォルダ（`~/www/`）の中なので、そのままだと `hive-member.jp/kantanfund/` などから古い WordPress が開けてしまう（更新されない WordPress が乗っ取られると、同じサーバーの `hive-member.jp` のメールや `kurafanguide.com` にも響く。記事が別の URL で重複する）。
+   - さくらのファイルマネージャーは `www` の外に移せないので、`~/www/kantanfund/.htaccess` のいちばん上に `Require all denied` を足して、外から開けないようにする（WordPress の設定の行は残す。消せば元に戻る）。
+   - `http://hive-member.jp/kantanfund/` が 403 になることを確かめる。
+   - データベースは外から見えないので残す。
+4. **さくらのゾーン（DNS）を消す**: ドメインコントロールパネル → `kantanfund.net` →「ゾーン」（ネームサーバサービス）の画面で、ゾーンを削除する。ネームサーバーは Cloudflare なので、消しても答えは変わらない。**Whois タブのネームサーバーは変えない**。
+5. **Cloudflare のメールのレコードを片付ける**（[メールのレコード](#メールのレコード)）。
+
+画面の表記は変わることがあります。
+
+### メールのレコード
+
+`kantanfund.net` のメールは使っていないので、受け取らない・送らないことをはっきり示し、なりすましを防ぎます。2でさくらからドメインを外すと、`@kantanfund.net` 宛てのメールはどのみち受け取れなくなります。Cloudflare の DNS で次のとおりにします。
+
+| 名前 | 種類 | 変更 |
+|---|---|---|
+| `kantanfund.net` | MX `10 mail.kantanfund.net` | 消す |
+| `mail` | A `182.48.49.30` | 消す |
+| `kantanfund.net` | MX | 足す: メールサーバー `.`、優先度 `0`（「メールを受け取らない」の印。Null MX） |
+| `kantanfund.net` | TXT `v=spf1 a:www2120.sakura.ne.jp mx ~all` | `v=spf1 -all` に変える |
+| `_dmarc` | TXT | 足す: `v=DMARC1; p=reject;` |
+
+- `hive-member.jp` の DNS はさくらのままで、ここを変えても影響しない。
+- Cloudflare の **Email Routing**（メール転送）は使わない（オンにすると MX が書き換わる）。
+
+### 片付けた後の確認
+
+```powershell
+Resolve-DnsName kantanfund.net -Type MX -Server 8.8.8.8          # 0 .
+Resolve-DnsName kantanfund.net -Type TXT -Server 8.8.8.8         # v=spf1 -all
+Resolve-DnsName _dmarc.kantanfund.net -Type TXT -Server 8.8.8.8  # v=DMARC1; p=reject;
+Resolve-DnsName mail.kantanfund.net -Server 8.8.8.8              # 見つからない
+```
+
+- `https://www.kantanfund.net/` が新サイトで開き、記事を2〜3本開ける。www なしと http が www の https へ転送される。
+- `hive-member.jp` のアドレスで、外（Gmail など）との送信・受信ができる。`hive-member.jp` のサイトがあれば、いままでどおり開ける。
