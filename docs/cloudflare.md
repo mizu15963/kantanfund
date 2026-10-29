@@ -132,3 +132,72 @@ DNS は先に Cloudflare に移しておきます（5）。
 Search Console の所有権の確認は、切り替えの前に新サイトでも通るようにしておきます（[analytics.md](analytics.md) の「2. 確認方法ごとの対応」）。
 
 `SITE.noindex` は切り替えの前に `false` に戻してあります（[site.md](site.md) の「サイト全体の noindex」）。切り替えた後は `npm run check:launch` で、本番に noindex が残っていないことも確かめます。
+
+## 7. さくら側の旧サイトの片付け
+
+公開後、さくら側に残っている旧サイト（WordPress）と `kantanfund.net` の設定を消します。ここでいう「初期に戻す」は、**ドメインの契約は残したまま**、さくらのレンタルサーバーとさくらの DNS から `kantanfund.net` を外すことです。
+
+### 消さないもの
+
+- **さくらのレンタルサーバーの契約**（`www2120.sakura.ne.jp`）。同じサーバーで `hive-member.jp` のメールが動いている。
+- **`hive-member.jp` のドメイン設定・ゾーン・サイト**。
+- **メールアドレス（メールアカウント）**。さくらのレンタルサーバーでは、メールアドレスはサーバーに入れた全ドメインで共通（`info@kantanfund.net` と `info@hive-member.jp` は同じアカウント）。`kantanfund.net` のために作ったように見えるアドレスでも消さない。
+- **ドメインの契約**（さくらのドメインコントロールパネルの `kantanfund.net` そのもの。更新も続ける）と、**Whois タブのネームサーバー**（`april.ns.cloudflare.com`・`arch.ns.cloudflare.com` のまま）。
+
+### 事前の確認
+
+1. さくらの会員メニュー → ドメインコントロールパネル → `kantanfund.net` → **Whois** タブで、ネームサーバーが `april.ns.cloudflare.com`・`arch.ns.cloudflare.com` になっている。さくらの `ns1.dns.ne.jp`・`ns2.dns.ne.jp` なら、**ここで止める**（さくらのゾーンを消すとサイトが開かなくなる）。
+2. PowerShell で、外から見た答えが Cloudflare になっている。
+
+   ```powershell
+   Resolve-DnsName kantanfund.net -Type NS -Server 8.8.8.8      # april / arch.ns.cloudflare.com
+   Resolve-DnsName kantanfund.net -Type SOA -Server 8.8.8.8     # PrimaryServer が 〇〇.ns.cloudflare.com（master.dns.ne.jp なら止める）
+   ```
+
+3. Cloudflare の DNS で、さくらのサーバー（`182.48.49.30`）を指しているのが `mail` の A だけになっている。`kantanfund.net`（www なし）の A がプロキシ（オレンジの雲）か、を見る。**灰色の雲で `182.48.49.30` を指している場合は止める**（www なしがさくらで表示されているので、さくらから外すと開かなくなる。先に www への転送を直す）。
+4. 新サイト（`https://www.kantanfund.net/`）と www なし・http の転送が、いまどおり動いている。
+5. レンタルサーバーのコントロールパネル →「ドメイン/SSL」の一覧で、`kantanfund.net`・`www.kantanfund.net` の**公開フォルダ**（例: `/home/〇〇/www/kantanfund`）を控える。`hive-member.jp` と同じフォルダでないことも見る。
+6. そのフォルダの `wp-config.php` を開き、`DB_NAME`（データベース名）を控える。`hive-member.jp` のサイトが同じデータベースを使っていないことを見る（`hive-member.jp` の公開フォルダにも `wp-config.php` があれば、その `DB_NAME` と比べる）。
+
+### 手順
+
+1. **旧サイトを保存する**（記事は microCMS に移してあるが、念のため）。www は新サイトに向いているので、WordPress の管理画面からは保存できない。さくらのコントロールパネルから取る。
+   - ファイル: **ファイルマネージャー** で控えた公開フォルダを選び、圧縮（zip）してダウンロードする。
+   - データベース: **Web サイト/データ → データベース** → 控えたデータベースの「管理ツール（phpMyAdmin）」→ **エクスポート**（そのまま「実行」）で `.sql` を保存する。
+   - 2つのファイルは手元と別の場所（Google ドライブなど）にも置く。
+2. **レンタルサーバーからドメインを外す**: コントロールパネル →「ドメイン/SSL」→ `www.kantanfund.net` と `kantanfund.net` をそれぞれ選び、削除する（無料 SSL の設定も一緒に消える）。`hive-member.jp` は触らない。
+3. **旧サイトのファイルとデータベースを消す**（2が終わってから）。そのままにすると、さくらの初期ドメイン（`〇〇.sakura.ne.jp/kantanfund/` など）から古い WordPress が開けてしまい、更新されない WordPress が残る。
+   - ファイルマネージャーで、控えた公開フォルダを消す。
+   - データベースの一覧で、控えたデータベースを消す。
+   - 不安なら、2のあと数週間は残し、新サイトに問題がないのを見てから消してもよい（そのあいだは公開フォルダ名を変えておくと、外から開けなくなる）。
+4. **さくらのゾーン（DNS）を消す**: ドメインコントロールパネル → `kantanfund.net` →「ゾーン」（ネームサーバサービス）の画面で、ゾーンを削除する。ネームサーバーは Cloudflare なので、消しても答えは変わらない。**Whois タブのネームサーバーは変えない**。
+5. **Cloudflare のメールのレコードを片付ける**（[メールのレコード](#メールのレコード)）。
+
+画面の表記は変わることがあります。
+
+### メールのレコード
+
+`kantanfund.net` のメールは使っていないので、受け取らない・送らないことをはっきり示し、なりすましを防ぎます。2でさくらからドメインを外すと、`@kantanfund.net` 宛てのメールはどのみち受け取れなくなります。Cloudflare の DNS で次のとおりにします。
+
+| 名前 | 種類 | 変更 |
+|---|---|---|
+| `kantanfund.net` | MX `10 mail.kantanfund.net` | 消す |
+| `mail` | A `182.48.49.30` | 消す |
+| `kantanfund.net` | MX | 足す: メールサーバー `.`、優先度 `0`（「メールを受け取らない」の印。Null MX） |
+| `kantanfund.net` | TXT `v=spf1 a:www2120.sakura.ne.jp mx ~all` | `v=spf1 -all` に変える |
+| `_dmarc` | TXT | 足す: `v=DMARC1; p=reject;` |
+
+- `hive-member.jp` の DNS はさくらのままで、ここを変えても影響しない。
+- Cloudflare の **Email Routing**（メール転送）は使わない（オンにすると MX が書き換わる）。
+
+### 片付けた後の確認
+
+```powershell
+Resolve-DnsName kantanfund.net -Type MX -Server 8.8.8.8          # 0 .
+Resolve-DnsName kantanfund.net -Type TXT -Server 8.8.8.8         # v=spf1 -all
+Resolve-DnsName _dmarc.kantanfund.net -Type TXT -Server 8.8.8.8  # v=DMARC1; p=reject;
+Resolve-DnsName mail.kantanfund.net -Server 8.8.8.8              # 見つからない
+```
+
+- `https://www.kantanfund.net/` が新サイトで開き、記事を2〜3本開ける。www なしと http が www の https へ転送される。
+- `hive-member.jp` のアドレスで、外（Gmail など）との送信・受信ができる。`hive-member.jp` のサイトがあれば、いままでどおり開ける。

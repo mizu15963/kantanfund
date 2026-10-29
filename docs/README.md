@@ -7,7 +7,7 @@
 | [embed-html.md](embed-html.md) | 埋め込み HTML（広告タグ）の使い方。記事を書く人向けの手順 |
 | [microcms.md](microcms.md) | microCMS の API と項目、API キー、Webhook |
 | [analytics.md](analytics.md) | GA4 と Search Console の引き継ぎ（確認方法ごとの対応・公開日の確認・公開後に見ること） |
-| [cloudflare.md](cloudflare.md) | Cloudflare への接続手順、DNS の移し方、本番ドメインへの切り替え |
+| [cloudflare.md](cloudflare.md) | Cloudflare への接続手順、DNS の移し方、本番ドメインへの切り替え、さくら側の旧サイトの片付け |
 | [migration.md](migration.md) | 旧サイトの記事の取り込み（書き出し・microCMS への投入） |
 | [contact.md](contact.md) | お問い合わせフォーム（入力項目・送信の流れ・設定の手順） |
 | [redirects.md](redirects.md) | 旧サイトの URL の転送 |

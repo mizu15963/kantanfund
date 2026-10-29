@@ -14,5 +14,5 @@
 - [ ] www なし（`kantanfund.net`）を開いても転送されず、同じページが出ている（2026-10-26 確認）。Cloudflare で `www.kantanfund.net` へ 301 で転送する（TOP の評価が2つに分かれないように）
 - [ ] 「かんたんファンド」で検索すると運営者情報が TOP より上に出る（旧サイトのころから）。Search Console の URL 検査で TOP のインデックス登録をリクエストし、数週間後に「検索パフォーマンス」でクエリ「かんたんファンド」の表示ページと順位を見る
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
-- [ ] `@kantanfund.net` のメールは使っていない（先方のメールは別ドメイン `hive-member.jp`）。公開後に MX・`mail` を消し、なりすまし防止（MX なし・`v=spf1 -all`・DMARC）に変える
+- [ ] さくら側の旧サイト（WordPress・ドメイン設定・ゾーン）を片付け、Cloudflare のメールのレコードをなりすまし防止（Null MX・`v=spf1 -all`・DMARC）に変える（[cloudflare.md](cloudflare.md) の7）
 - 公開後もさくらのレンタルサーバー（`www2120.sakura.ne.jp`）は解約しない。同じサーバーで `hive-member.jp` のメールが動いている
