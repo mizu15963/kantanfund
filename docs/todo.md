@@ -13,5 +13,5 @@
 - [ ] Search Console にサイトマップを送信し、GA4 のリアルタイムと所有権の確認を見る（[analytics.md](analytics.md) の4。転送とサイトマップの確認は 2026-10-25 に済み）
 - [ ] 「かんたんファンド」で検索すると運営者情報が TOP より上に出る（旧サイトのころから）。Search Console の URL 検査で TOP のインデックス登録をリクエストし、数週間後に「検索パフォーマンス」でクエリ「かんたんファンド」の表示ページと順位を見る
 - [ ] `/?p={記事ID}` の転送を作る（[redirects.md](redirects.md)）
-- [ ] さくら側の旧サイト（WordPress・ドメイン設定・ゾーン）を片付け、Cloudflare のメールのレコードをなりすまし防止（Null MX・`v=spf1 -all`・DMARC）に変える（[cloudflare.md](cloudflare.md) の7）
+- [ ] Cloudflare のメールのレコードを、なりすまし防止（Null MX・`v=spf1 -all`・DMARC）に変えるか決める（[cloudflare.md](cloudflare.md) の7の「メールのレコード」。さくら側の片付けは 2026-10-29 に済み、メールのレコードはいまは見送り）
 - 公開後もさくらのレンタルサーバー（`www2120.sakura.ne.jp`）は解約しない。同じサーバーで `hive-member.jp` のメールが動いている
