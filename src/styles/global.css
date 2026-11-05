@@ -140,6 +140,14 @@ body {
   @apply mb-5 max-w-full overflow-x-auto;
 }
 
+/*
+  埋め込み HTML の中の画像: 本文の画像の決まり（ブロック表示・上下の余白・角丸）を効かせず、広告タグのとおりに出す
+  （1x1 の計測画像が空白の行を作ったり、文中のテキスト広告が改行されたり、バナーが角丸になったりしないように）
+*/
+.entry-content :is(.embed, .embed-inline) img {
+  @apply m-0 inline max-w-full rounded-none;
+}
+
 /* 埋め込み HTML の上の「PR」ラベル（チップ） */
 .entry-content .embed-label {
   @apply mb-1 block w-fit rounded-full border border-line px-2 text-xs leading-5 text-muted-foreground;
