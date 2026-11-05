@@ -148,11 +148,6 @@ body {
   @apply m-0 inline max-w-full rounded-none;
 }
 
-/* 埋め込み HTML の上の「PR」ラベル（チップ） */
-.entry-content .embed-label {
-  @apply mb-1 block w-fit rounded-full border border-line px-2 text-xs leading-5 text-muted-foreground;
-}
-
 .entry-content figure {
   @apply mt-0 mb-6;
 }

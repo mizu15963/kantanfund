@@ -95,12 +95,11 @@ const contentWithEmbedMarks = content.replace(
       );
     }
     const mark = `kantanfund-embed-${embedOutputs.length}-end`;
-    // 段落ごとの広告には、広告だと分かるよう「PR」の小さなラベルを付ける
     // 本文の見た目（prose の余白・画像の角丸など）が広告の中に効かないよう、囲みに not-prose を付ける（global.css の「埋め込み HTML」）
     if (open && close) {
       embedOutputs.push(
         embed
-          ? `<div class="embed not-prose"><span class="embed-label">PR</span>${embed}</div>`
+          ? `<div class="embed not-prose">${embed}</div>`
           : ""
       );
       return mark;
