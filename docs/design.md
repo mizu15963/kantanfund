@@ -69,7 +69,7 @@
 - サムネイルのない記事の画像（`public/images/noimg.svg`）は、灰色の背景にアイコンの形とサイト名。
 - カテゴリのアイコンは線のアイコン（`HubIcon.astro`）。
 - 記事の本文の画像は角丸（`rounded-box`）。広告（ASP）のバナー画像だけは元の大きさのまま角丸にしない（`.entry-content img.ad-image`）。
-- 本文の埋め込み HTML（広告タグ）は段落と同じ間隔をあけ、横にはみ出すときはその中だけ横に動かせる（`.entry-content .embed`）。段落ごとの埋め込みには、上に小さな「PR」のチップ（枠線・薄い文字）を付ける（`.entry-content .embed-label`）。埋め込みの中の画像には本文の画像の決まり（ブロック表示・上下の余白・角丸）を効かせない（`.entry-content :is(.embed, .embed-inline) img`。囲みには typography の `not-prose` も付ける）。
+- 本文の埋め込み HTML（広告タグ）は段落と同じ間隔をあけ、横にはみ出すときはその中だけ横に動かせる（`.entry-content .embed`）。サイト側で「PR」のラベルは付けない。埋め込みの中の画像には本文の画像の決まり（ブロック表示・上下の余白・角丸）を効かせない（`.entry-content :is(.embed, .embed-inline) img`。囲みには typography の `not-prose` も付ける）。
 
 ## 記事の本文
 
